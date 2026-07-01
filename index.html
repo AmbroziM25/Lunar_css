@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lunar CSS — a dark, utility-first CSS framework</title>
+<meta name="description" content="Lunar CSS: a lightweight, utility-first CSS framework with a dark night-sky aesthetic. Pure CSS, zero build step, Tailwind-compatible." />
+<link rel="stylesheet" href="dist/lunar.css" />
+<style>
+  /* Docs-page-only styles (not part of the framework) */
+  .docs-nav-link.active { color: var(--lunar-text); }
+  .swatch { aspect-ratio: 1.6 / 1; display: flex; flex-direction: column; justify-content: flex-end; padding: var(--space-3); }
+  .effect-demo {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 7rem; text-align: center; padding: var(--space-4);
+  }
+  .copy-chip { border: none; cursor: pointer; }
+  .toc-anchor { scroll-margin-top: 5.5rem; }
+  code.inline { white-space: nowrap; }
+</style>
+</head>
+<body>
+
+<a href="#main" class="sr-only" style="position:absolute;left:-9999px;">Skip to content</a>
+
+<header class="navbar">
+  <a href="#hero" class="navbar-brand">
+    <span aria-hidden="true">🌙</span>
+    <span class="text-shimmer" style="font-weight:700;">Lunar CSS</span>
+  </a>
+  <nav class="navbar-nav">
+    <a class="navbar-link" href="#palette">Palette</a>
+    <a class="navbar-link" href="#typography">Typography</a>
+    <a class="navbar-link" href="#components">Components</a>
+    <a class="navbar-link" href="#effects">Effects</a>
+    <button class="btn btn-secondary btn-sm" id="theme-toggle" type="button" aria-label="Toggle light/dark theme">
+      ☾ / ☀
+    </button>
+  </nav>
+</header>
+
+<main id="main">
+
+  <!-- ============================== HERO ============================== -->
+  <section id="hero" class="toc-anchor starfield gradient-aurora" style="background-blend-mode: normal; padding: var(--space-24) 0 var(--space-20); opacity: 0.97;">
+    <div class="container" style="position:relative; z-index:1;">
+      <div class="fade-in" style="max-width: 42rem;">
+        <span class="badge badge-glow mb-4">v0.1.0 · MIT licensed</span>
+        <h1 class="mt-4" style="font-size: var(--text-6xl); color: var(--moon-50);">
+          Lunar <span class="text-shimmer">CSS</span>
+        </h1>
+        <p class="mt-4 text-lg" style="color: rgb(228 232 255 / 0.85); max-width: 36rem;">
+          A lightweight, utility-first CSS framework with a dark <strong>night-sky</strong> aesthetic —
+          deep space navys, moonlight whites, and soft indigo/violet glow. Pure CSS, zero build step,
+          drop-in Tailwind preset.
+        </p>
+        <div class="mt-6 flex gap-4 flex-wrap">
+          <a href="#components" class="btn btn-glow hover-lift">Explore components</a>
+          <a href="#effects" class="btn btn-secondary glass hover-glow">Browse effects</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container" style="padding-block: var(--space-16);">
+
+    <!-- ============================== PALETTE ============================== -->
+    <section id="palette" class="toc-anchor slide-up" style="margin-bottom: var(--space-20);">
+      <h2>Palette</h2>
+      <p class="text-muted mt-2 mb-8">The <code class="inline">--moon-*</code> scale plus signature accents — <code class="inline">--eclipse</code>, <code class="inline">--glow</code>, and <code class="inline">--tide</code>.</p>
+
+      <h3 class="mb-4" style="font-size: var(--text-lg);">Moon scale</h3>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-10">
+        <div class="swatch rounded-lg shadow-md" style="background-color:#f7f8fc; color:#14152a;"><small style="color:#3d4163;">--moon-50</small><strong>#f7f8fc</strong></div>
+        <div class="swatch rounded-lg shadow-md" style="background-color:#eceef7; color:#14152a;"><small style="color:#3d4163;">--moon-100</small><strong>#eceef7</strong></div>
+        <div class="swatch rounded-lg shadow-md" style="background-color:#d9dcee; color:#14152a;"><small style="color:#3d4163;">--moon-200</small><strong>#d9dcee</strong></div>
+        <div class="swatch rounded-lg shadow-md" style="background-color:#b9bfdd; color:#14152a;"><small style="color:#262844;">--moon-300</small><strong>#b9bfdd</strong></div>
+        <div class="swatch rounded-lg shadow-md" style="background-color:#9298bd; color:#0d0e1f;"><small style="color:#262844;">--moon-400</small><strong>#9298bd</strong></div>
+        <div class="swatch rounded-lg shadow-md" style="background-color:#6f76a0; color:#f7f8fc;"><small style="color:#d9dcee;">--moon-500</small><strong>#6f76a0</strong></div>
+        <div class="swatch rounded-lg shadow-md" style="background-color:#545a80; color:#f7f8fc;"><small style="color:#d9dcee;">--moon-600</small><strong>#545a80</strong></div>
+        <div class="swatch rounded-lg shadow-md" style="background-color:#3d4163; color:#f7f8fc;"><small style="color:#b9bfdd;">--moon-700</small><strong>#3d4163</strong></div>
+        <div class="swatch rounded-lg shadow-md" style="background-color:#262844; color:#f7f8fc;"><small style="color:#9298bd;">--moon-800</small><strong>#262844</strong></div>
+        <div class="swatch rounded-lg shadow-md" style="background-color:#14152a; color:#f7f8fc;"><small style="color:#6f76a0;">--moon-900</small><strong>#14152a</strong></div>
+        <div class="swatch rounded-lg shadow-md" style="background-color:#090913; color:#f7f8fc;"><small style="color:#545a80;">--moon-950</small><strong>#090913</strong></div>
+      </div>
+
+      <h3 class="mb-4" style="font-size: var(--text-lg);">Signature accents</h3>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+        <div class="swatch rounded-lg glow-sm" style="background-color:#0d0e1f; color:#f7f8fc;"><small style="color:#9298bd;">--eclipse</small><strong>#0d0e1f</strong></div>
+        <div class="swatch rounded-lg" style="background-color:#e4e8ff; color:#14152a;"><small style="color:#3d4163;">--glow</small><strong>#e4e8ff</strong></div>
+        <div class="swatch rounded-lg glow-md" style="background-color:#6c6ff0; color:#f7f8fc;"><small style="color:#e4e8ff;">--tide</small><strong>#6c6ff0</strong></div>
+        <div class="swatch rounded-lg" style="background-color:#818cf8; color:#14152a;"><small style="color:#22265e;">indigo-400</small><strong>#818cf8</strong></div>
+        <div class="swatch rounded-lg" style="background-color:#6366f1; color:#f7f8fc;"><small style="color:#e0e0ff;">indigo-500</small><strong>#6366f1</strong></div>
+        <div class="swatch rounded-lg" style="background-color:#4f46e5; color:#f7f8fc;"><small style="color:#e0e0ff;">indigo-600</small><strong>#4f46e5</strong></div>
+        <div class="swatch rounded-lg" style="background-color:#a78bfa; color:#14152a;"><small style="color:#3d2a6b;">violet-400</small><strong>#a78bfa</strong></div>
+        <div class="swatch rounded-lg" style="background-color:#8b5cf6; color:#f7f8fc;"><small style="color:#ece0ff;">violet-500</small><strong>#8b5cf6</strong></div>
+        <div class="swatch rounded-lg" style="background-color:#7c3aed; color:#f7f8fc;"><small style="color:#ece0ff;">violet-600</small><strong>#7c3aed</strong></div>
+        <div class="swatch rounded-lg" style="background-color:#d7dbea; color:#14152a;"><small style="color:#3d4163;">silver-300</small><strong>#d7dbea</strong></div>
+        <div class="swatch rounded-lg" style="background-color:#b7bcd6; color:#14152a;"><small style="color:#262844;">silver-400</small><strong>#b7bcd6</strong></div>
+      </div>
+    </section>
+
+    <!-- ============================== TYPOGRAPHY ============================== -->
+    <section id="typography" class="toc-anchor slide-up" style="margin-bottom: var(--space-20);">
+      <h2>Typography</h2>
+      <p class="text-muted mt-2 mb-8">Font sizes run on the <code class="inline">--text-*</code> scale; use <code class="inline">.text-{size}</code> utilities.</p>
+
+      <div class="card">
+        <div class="card-body">
+          <div class="flex items-baseline gap-4 mb-3"><code class="inline badge">.text-xs</code><span class="text-xs">The quiet hush before moonrise</span></div>
+          <div class="flex items-baseline gap-4 mb-3"><code class="inline badge">.text-sm</code><span class="text-sm">The quiet hush before moonrise</span></div>
+          <div class="flex items-baseline gap-4 mb-3"><code class="inline badge">.text-base</code><span class="text-base">The quiet hush before moonrise</span></div>
+          <div class="flex items-baseline gap-4 mb-3"><code class="inline badge">.text-lg</code><span class="text-lg">The quiet hush before moonrise</span></div>
+          <div class="flex items-baseline gap-4 mb-3"><code class="inline badge">.text-xl</code><span class="text-xl">The quiet hush before moonrise</span></div>
+          <div class="flex items-baseline gap-4 mb-3"><code class="inline badge">.text-2xl</code><span class="text-2xl">The quiet hush before moonrise</span></div>
+          <div class="flex items-baseline gap-4 mb-3"><code class="inline badge">.text-3xl</code><span class="text-3xl">Moonrise</span></div>
+          <div class="flex items-baseline gap-4 mb-3"><code class="inline badge">.text-4xl</code><span class="text-4xl">Moonrise</span></div>
+          <div class="flex items-baseline gap-4 mb-3"><code class="inline badge">.text-5xl</code><span class="text-5xl">Moonrise</span></div>
+          <div class="flex items-baseline gap-4"><code class="inline badge">.text-6xl</code><span class="text-6xl">Moonrise</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== COMPONENTS ============================== -->
+    <section id="components" class="toc-anchor slide-up" style="margin-bottom: var(--space-20);">
+      <h2>Components</h2>
+      <p class="text-muted mt-2 mb-8">Themeable via CSS variables, using the effect utilities internally.</p>
+
+      <!-- Buttons -->
+      <h3 class="mb-4" style="font-size: var(--text-lg);">Buttons</h3>
+      <div class="card mb-10">
+        <div class="card-body flex flex-wrap gap-4 items-center">
+          <button class="btn btn-primary">Primary</button>
+          <button class="btn btn-secondary">Secondary</button>
+          <button class="btn btn-ghost">Ghost</button>
+          <button class="btn btn-outline">Outline</button>
+          <button class="btn btn-glow">Glow</button>
+          <button class="btn btn-primary btn-sm">Small</button>
+          <button class="btn btn-primary btn-lg">Large</button>
+          <button class="btn btn-secondary" disabled>Disabled</button>
+        </div>
+      </div>
+
+      <!-- Cards -->
+      <h3 class="mb-4" style="font-size: var(--text-lg);">Cards</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div class="card hover-lift">
+          <div class="card-header">Standard card</div>
+          <div class="card-body">Uses <code class="inline">--lunar-bg-elevated</code> and <code class="inline">--shadow-md</code>. Add <code class="inline">.hover-lift</code> for a gentle bloom on hover.</div>
+          <div class="card-footer"><button class="btn btn-secondary btn-sm">Action</button></div>
+        </div>
+        <div class="card glass hover-glow">
+          <div class="card-header">Glass card</div>
+          <div class="card-body">Stack <code class="inline">.card</code> with <code class="inline">.glass</code> for a frosted panel.</div>
+          <div class="card-footer"><button class="btn btn-primary btn-sm">Action</button></div>
+        </div>
+        <div class="card eclipse-border">
+          <div class="card-header">Eclipse-border card</div>
+          <div class="card-body">Stack <code class="inline">.card</code> with <code class="inline">.eclipse-border</code> for an animated gradient ring.</div>
+          <div class="card-footer"><button class="btn btn-outline btn-sm">Action</button></div>
+        </div>
+      </div>
+
+      <!-- Inputs -->
+      <h3 class="mb-4" style="font-size: var(--text-lg);">Inputs</h3>
+      <div class="card mb-10">
+        <div class="card-body grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="form-group">
+            <label class="label" for="demo-input">Email</label>
+            <input class="input" id="demo-input" type="email" placeholder="you@example.com" />
+            <div class="form-hint">We'll never share your email.</div>
+          </div>
+          <div class="form-group">
+            <label class="label" for="demo-select">Phase</label>
+            <select class="select" id="demo-select">
+              <option>New moon</option>
+              <option>Waxing crescent</option>
+              <option>Full moon</option>
+            </select>
+          </div>
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label class="label" for="demo-textarea">Message</label>
+            <textarea class="textarea" id="demo-textarea" placeholder="Write something under the stars…"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="label" for="demo-disabled">Disabled</label>
+            <input class="input" id="demo-disabled" type="text" placeholder="Can't touch this" disabled />
+          </div>
+        </div>
+      </div>
+
+      <!-- Badges -->
+      <h3 class="mb-4" style="font-size: var(--text-lg);">Badges</h3>
+      <div class="card mb-10">
+        <div class="card-body flex flex-wrap gap-3 items-center">
+          <span class="badge">Default</span>
+          <span class="badge badge-primary">Primary</span>
+          <span class="badge badge-violet">Violet</span>
+          <span class="badge badge-outline">Outline</span>
+          <span class="badge badge-glow">Glow</span>
+        </div>
+      </div>
+
+      <!-- Modal + Toast + Tooltip -->
+      <h3 class="mb-4" style="font-size: var(--text-lg);">Modal, toast &amp; tooltip</h3>
+      <div class="card mb-10">
+        <div class="card-body flex flex-wrap gap-4 items-center">
+          <button class="btn btn-primary" id="open-modal">Open modal</button>
+          <button class="btn btn-secondary" id="show-toast">Show toast</button>
+          <button class="btn btn-outline" data-tooltip="I'm a pure-CSS tooltip">Hover me</button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ============================== EFFECTS GALLERY ============================== -->
+    <section id="effects" class="toc-anchor slide-up">
+      <h2>Effects gallery</h2>
+      <p class="text-muted mt-2 mb-8">One class = one complete effect. No hand-written keyframes or shadow stacks. Click any class name to copy it.</p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <div class="card">
+          <div class="effect-demo"><button class="btn btn-secondary glow-sm">Glow</button></div>
+          <div class="card-footer"><button class="badge copy-chip" data-copy="glow-sm">.glow-sm</button></div>
+        </div>
+
+        <div class="card">
+          <div class="effect-demo"><button class="btn btn-secondary glow-md">Glow</button></div>
+          <div class="card-footer"><button class="badge copy-chip" data-copy="glow-md">.glow-md</button></div>
+        </div>
+
+        <div class="card">
+          <div class="effect-demo"><button class="btn btn-secondary glow-lg">Glow</button></div>
+          <div class="card-footer"><button class="badge copy-chip" data-copy="glow-lg">.glow-lg</button></div>
+        </div>
+
+        <div class="card">
+          <div class="effect-demo"><button class="btn btn-secondary glow-violet">Glow</button></div>
+          <div class="card-footer"><button class="badge copy-chip" data-copy="glow-violet">.glow-violet</button></div>
+        </div>
+
+        <div class="card">
+          <div class="effect-demo"><button class="btn btn-secondary hover-lift">Hover me</button></div>
+          <div class="card-footer"><button class="badge copy-chip" data-copy="hover-lift">.hover-lift</button></div>
+        </div>
+
+        <div class="card">
+          <div class="effect-demo"><button class="btn btn-secondary hover-glow">Hover me</button></div>
+          <div class="card-footer"><button class="badge copy-chip" data-copy="hover-glow">.hover-glow</button></div>
+        </div>
+
+        <div class="card">
+          <div class="effect-demo"><span class="text-shimmer text-2xl" style="font-weight:700;">Shimmer</span></div>
+          <div class="card-footer"><button class="badge copy-chip" data-copy="text-shimmer">.text-shimmer</button></div>
+        </div>
+
+        <div class="card">
+          <div class="effect-demo"><span class="float" style="font-size: var(--text-3xl);">🌙</span></div>
+          <div class="card-footer"><button class="badge copy-chip" data-copy="float">.float</button></div>
+        </div>
+
+        <div class="card">
+          <div class="effect-demo"><button class="btn btn-primary pulse-glow">Breathing</button></div>
+          <div class="card-footer"><button class="badge copy-chip" data-copy="pulse-glow">.pulse-glow</button></div>
+        </div>
+
+        <div class="card starfield">
+          <div class="effect-demo" style="min-height:9rem; color: var(--moon-50);">Starfield</div>
+          <div class="card-footer"><button class="badge copy-chip" data-copy="starfield">.starfield</button></div>
+        </div>
+
+        <div class="card">
+          <div class="effect-demo glass" style="min-height:9rem;">Glass</div>
+          <div class="card-footer"><button class="badge copy-chip" data-copy="glass">.glass</button></div>
+        </div>
+
+        <div class="card starfield">
+          <div class="effect-demo glass-dark" style="min-height:9rem; color: var(--moon-50);">Glass dark</div>
+          <div class="card-footer"><button class="badge copy-chip" data-copy="glass-dark">.glass-dark</button></div>
+        </div>
+
+        <div class="card">
+          <div class="effect-demo gradient-aurora" style="min-height:9rem; color:#fff; font-weight:600;">Aurora</div>
+          <div class="card-footer"><button class="badge copy-chip" data-copy="gradient-aurora">.gradient-aurora</button></div>
+        </div>
+
+        <div class="card">
+          <div class="effect-demo"><div class="eclipse-border p-4 rounded-lg">Eclipse border</div></div>
+          <div class="card-footer"><button class="badge copy-chip" data-copy="eclipse-border">.eclipse-border</button></div>
+        </div>
+
+        <div class="card">
+          <div class="effect-demo"><span class="fade-in badge badge-primary">Fade in</span></div>
+          <div class="card-footer"><button class="badge copy-chip" data-copy="fade-in">.fade-in</button></div>
+        </div>
+
+        <div class="card">
+          <div class="effect-demo"><span class="slide-up badge badge-primary">Slide up</span></div>
+          <div class="card-footer"><button class="badge copy-chip" data-copy="slide-up">.slide-up</button></div>
+        </div>
+
+        <div class="card">
+          <div class="effect-demo"><span class="scale-in badge badge-primary">Scale in</span></div>
+          <div class="card-footer"><button class="badge copy-chip" data-copy="scale-in">.scale-in</button></div>
+        </div>
+
+        <div class="card">
+          <div class="effect-demo flex gap-2">
+            <span class="fade-in badge">1</span>
+            <span class="fade-in delay-1 badge">2</span>
+            <span class="fade-in delay-2 badge">3</span>
+            <span class="fade-in delay-3 badge">4</span>
+            <span class="fade-in delay-4 badge">5</span>
+          </div>
+          <div class="card-footer flex gap-2 flex-wrap">
+            <button class="badge copy-chip" data-copy="delay-1">.delay-1</button>
+            <button class="badge copy-chip" data-copy="delay-2">.delay-2</button>
+            <button class="badge copy-chip" data-copy="delay-3">.delay-3</button>
+            <button class="badge copy-chip" data-copy="delay-4">.delay-4</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<!-- Fixed-position overlays live outside `main` on purpose: an ancestor with
+     an active transform (e.g. a `.slide-up`/`.scale-in` section) creates a new
+     containing block for `position: fixed` descendants, which would trap these
+     inside that section instead of the viewport. -->
+<div class="modal-overlay" id="demo-modal">
+  <div class="modal scale-in">
+    <div class="modal-header">
+      <span>Confirm launch</span>
+      <button class="modal-close" id="close-modal" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body">This is <code class="inline">.modal-overlay</code> + <code class="inline">.modal</code>, toggled open by adding an <code class="inline">.is-open</code> class (see the inline script at the bottom of this page).</div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" id="cancel-modal">Cancel</button>
+      <button class="btn btn-primary">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-region" style="position: fixed; bottom: var(--space-6); right: var(--space-6); z-index: var(--z-toast); display: flex; flex-direction: column; gap: var(--space-3);"></div>
+
+<footer class="container" style="padding-block: var(--space-10); border-top: 1px solid var(--lunar-border); color: var(--lunar-text-muted); text-align:center;">
+  <p class="text-sm">Lunar CSS — MIT licensed. Built with Lunar CSS itself.</p>
+</footer>
+
+<script type="module">
+  // Theme toggle — using the framework's own framework-agnostic helper
+  // (see theme.js; the same import works from React, Vue, Angular, etc.)
+  import { initTheme, toggleTheme } from './theme.mjs';
+  initTheme();
+  document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+
+  // Modal open/close
+  (function () {
+    var overlay = document.getElementById('demo-modal');
+    document.getElementById('open-modal').addEventListener('click', function () { overlay.classList.add('is-open'); });
+    document.getElementById('close-modal').addEventListener('click', function () { overlay.classList.remove('is-open'); });
+    document.getElementById('cancel-modal').addEventListener('click', function () { overlay.classList.remove('is-open'); });
+    overlay.addEventListener('click', function (e) { if (e.target === overlay) overlay.classList.remove('is-open'); });
+  })();
+
+  // Toast trigger
+  (function () {
+    document.getElementById('show-toast').addEventListener('click', function () {
+      var region = document.getElementById('toast-region');
+      var toast = document.createElement('div');
+      toast.className = 'toast toast-success slide-up';
+      toast.innerHTML = '<div><div class="toast-title">Launched</div><div class="toast-message">Your changes are live under the stars.</div></div>';
+      region.appendChild(toast);
+      setTimeout(function () {
+        toast.style.transition = 'opacity 250ms ease-out';
+        toast.style.opacity = '0';
+        setTimeout(function () { toast.remove(); }, 250);
+      }, 3000);
+    });
+  })();
+
+  // Copy-to-clipboard for effect class chips
+  (function () {
+    document.querySelectorAll('.copy-chip').forEach(function (chip) {
+      var original = chip.textContent;
+      chip.addEventListener('click', function () {
+        var value = '.' + chip.getAttribute('data-copy');
+        navigator.clipboard && navigator.clipboard.writeText(value);
+        chip.textContent = 'Copied!';
+        setTimeout(function () { chip.textContent = original; }, 1200);
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>

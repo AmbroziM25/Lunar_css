@@ -1,0 +1,65 @@
+{
+  "name": "lunar-css",
+  "version": "0.1.0",
+  "description": "A lightweight, utility-first CSS framework with a dark \"night sky\" aesthetic — pure CSS, zero build step, with a Tailwind preset for drop-in integration.",
+  "main": "dist/lunar.css",
+  "style": "dist/lunar.css",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": "./dist/lunar.css",
+    "./min": "./dist/lunar.min.css",
+    "./lunar.css": "./dist/lunar.css",
+    "./lunar.min.css": "./dist/lunar.min.css",
+    "./tailwind-preset": "./tailwind-preset.js",
+    "./theme": "./theme.mjs",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "tailwind-preset.js",
+    "theme.mjs",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "node build.js"
+  },
+  "keywords": [
+    "css",
+    "css-framework",
+    "utility-first",
+    "tailwind",
+    "tailwindcss",
+    "dark-mode",
+    "dark-theme",
+    "design-system",
+    "ui-kit",
+    "glassmorphism",
+    "no-build",
+    "react",
+    "nextjs",
+    "vue",
+    "angular",
+    "framework-agnostic"
+  ],
+  "author": "",
+  "license": "MIT",
+  "homepage": "https://github.com/lunar-css/lunar-css#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lunar-css/lunar-css.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lunar-css/lunar-css/issues"
+  },
+  "peerDependencies": {
+    "tailwindcss": ">=3.4.0"
+  },
+  "peerDependenciesMeta": {
+    "tailwindcss": {
+      "optional": true
+    }
+  }
+}

@@ -1,0 +1,369 @@
+/*!
+ * Lunar CSS — components.css
+ * Prebuilt, themeable components. Every component reads from the same
+ * design tokens (base.css) and leans on the effect utilities (effects.css)
+ * for glow/motion, so it feels premium without any extra classes.
+ */
+
+@layer lunar-components {
+
+/* ---------------------------------------------------------------
+ * Buttons
+ * --------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 0.625rem 1.25rem;
+  font-family: inherit;
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  line-height: 1;
+  white-space: nowrap;
+  user-select: none;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  color: var(--lunar-text);
+  background-color: var(--lunar-surface);
+  transition: background-color var(--duration-base) var(--ease-out),
+              border-color var(--duration-base) var(--ease-out),
+              box-shadow var(--duration-base) var(--ease-out),
+              transform var(--duration-fast) var(--ease-out);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.btn-primary {
+  background-color: var(--tide);
+  color: var(--moon-50);
+  box-shadow: var(--shadow-glow-sm);
+}
+.btn-primary:hover:not(:disabled),
+.btn-primary:focus-visible:not(:disabled) {
+  background-color: var(--indigo-600);
+  box-shadow: var(--shadow-glow-md);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: var(--lunar-surface);
+  border-color: var(--lunar-border);
+  color: var(--lunar-text);
+}
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--lunar-surface-hover);
+}
+
+.btn-ghost {
+  background-color: transparent;
+  color: var(--lunar-text);
+}
+.btn-ghost:hover:not(:disabled) {
+  background-color: var(--lunar-surface);
+}
+
+.btn-outline {
+  background-color: transparent;
+  border-color: var(--tide);
+  color: var(--tide);
+}
+.btn-outline:hover:not(:disabled) {
+  background-color: rgb(108 111 240 / 0.1);
+}
+
+.btn-glow {
+  background-image: linear-gradient(135deg, var(--tide), var(--violet-500));
+  color: var(--moon-50);
+  box-shadow: var(--shadow-glow-violet);
+}
+.btn-glow:hover:not(:disabled) {
+  box-shadow: var(--shadow-glow-lg);
+  transform: translateY(-1px);
+}
+
+.btn-sm { padding: 0.375rem 0.875rem; font-size: var(--text-xs); }
+.btn-lg { padding: 0.875rem 1.75rem; font-size: var(--text-base); }
+
+/* ---------------------------------------------------------------
+ * Cards
+ * --------------------------------------------------------------- */
+.card {
+  background-color: var(--lunar-bg-elevated);
+  border: 1px solid var(--lunar-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  transition: transform var(--duration-base) var(--ease-out),
+              box-shadow var(--duration-base) var(--ease-out),
+              border-color var(--duration-base) var(--ease-out);
+}
+.card:hover { border-color: var(--moon-600); }
+
+.card-header {
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--lunar-border);
+  font-weight: var(--font-semibold);
+}
+.card-body { padding: var(--space-6); }
+.card-footer {
+  padding: var(--space-5) var(--space-6);
+  border-top: 1px solid var(--lunar-border);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* ---------------------------------------------------------------
+ * Inputs
+ * --------------------------------------------------------------- */
+.label {
+  display: block;
+  margin-bottom: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--lunar-text-muted);
+}
+
+.input, .textarea, .select {
+  display: block;
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  font-family: inherit;
+  font-size: var(--text-sm);
+  color: var(--lunar-text);
+  background-color: var(--lunar-surface);
+  border: 1px solid var(--lunar-border);
+  border-radius: var(--radius-md);
+  transition: border-color var(--duration-base) var(--ease-out),
+              box-shadow var(--duration-base) var(--ease-out);
+}
+
+.input::placeholder, .textarea::placeholder { color: var(--lunar-text-muted); }
+
+.input:focus, .textarea:focus, .select:focus {
+  outline: none;
+  border-color: var(--tide);
+  box-shadow: 0 0 0 3px rgb(108 111 240 / 0.25), var(--shadow-glow-sm);
+}
+
+.input:disabled, .textarea:disabled, .select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.textarea { min-height: 6rem; resize: vertical; }
+
+.form-group { margin-bottom: var(--space-5); }
+.form-hint {
+  margin-top: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--lunar-text-muted);
+}
+
+/* ---------------------------------------------------------------
+ * Badges
+ * --------------------------------------------------------------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0.2rem 0.625rem;
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  border-radius: var(--radius-full);
+  background-color: var(--lunar-surface);
+  color: var(--lunar-text);
+  border: 1px solid var(--lunar-border);
+}
+.badge-primary {
+  background-color: rgb(108 111 240 / 0.15);
+  color: var(--indigo-400);
+  border-color: rgb(108 111 240 / 0.3);
+}
+.badge-violet {
+  background-color: rgb(139 92 246 / 0.15);
+  color: var(--violet-400);
+  border-color: rgb(139 92 246 / 0.3);
+}
+.badge-outline { background-color: transparent; }
+.badge-glow {
+  background-color: var(--tide);
+  color: var(--moon-50);
+  border-color: transparent;
+  box-shadow: var(--shadow-glow-sm);
+}
+
+/* ---------------------------------------------------------------
+ * Navbar
+ * --------------------------------------------------------------- */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  padding: var(--space-4) var(--space-6);
+  background-color: rgb(9 9 19 / 0.7);
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  border-bottom: 1px solid var(--lunar-border);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+}
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: var(--font-semibold);
+  font-size: var(--text-lg);
+  color: var(--lunar-text);
+}
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.navbar-link {
+  color: var(--lunar-text-muted);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  transition: color var(--duration-base) var(--ease-out);
+}
+.navbar-link:hover, .navbar-link.is-active {
+  color: var(--lunar-text);
+  text-decoration: none;
+}
+.navbar-link.is-active { color: var(--tide); }
+
+/* ---------------------------------------------------------------
+ * Modal
+ * --------------------------------------------------------------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  background-color: rgb(9 9 19 / 0.7);
+  backdrop-filter: blur(4px);
+  z-index: var(--z-modal);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--duration-base) var(--ease-out), visibility var(--duration-base);
+}
+.modal-overlay.is-open { opacity: 1; visibility: visible; }
+
+.modal {
+  width: 100%;
+  max-width: 28rem;
+  background-color: var(--lunar-bg-elevated);
+  border: 1px solid var(--lunar-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl), var(--shadow-glow-sm);
+  transform: scale(0.95) translateY(8px);
+  transition: transform var(--duration-base) var(--ease-out);
+}
+.modal-overlay.is-open .modal { transform: scale(1) translateY(0); }
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--lunar-border);
+  font-weight: var(--font-semibold);
+}
+.modal-body { padding: var(--space-6); color: var(--lunar-text-muted); }
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-6);
+  border-top: 1px solid var(--lunar-border);
+}
+.modal-close {
+  font-size: var(--text-xl);
+  line-height: 1;
+  color: var(--lunar-text-muted);
+}
+.modal-close:hover { color: var(--lunar-text); }
+
+/* ---------------------------------------------------------------
+ * Toast
+ * --------------------------------------------------------------- */
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  max-width: 24rem;
+  padding: var(--space-4) var(--space-5);
+  background-color: var(--lunar-bg-elevated);
+  border: 1px solid var(--lunar-border);
+  border-left: 3px solid var(--tide);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  animation: lunar-slide-up var(--duration-slow) var(--ease-out) both;
+}
+.toast-title { font-weight: var(--font-semibold); font-size: var(--text-sm); }
+.toast-message { font-size: var(--text-sm); color: var(--lunar-text-muted); }
+.toast-success { border-left-color: #34d399; }
+.toast-error   { border-left-color: #f87171; }
+.toast-warning { border-left-color: #fbbf24; }
+.toast-info    { border-left-color: var(--indigo-400); }
+
+/* ---------------------------------------------------------------
+ * Tooltip — pure CSS via data-tooltip attribute
+ * --------------------------------------------------------------- */
+[data-tooltip] { position: relative; }
+
+[data-tooltip]::after,
+[data-tooltip]::before {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  transform: translateX(-50%) translateY(4px);
+  transition: opacity var(--duration-fast) var(--ease-out),
+              transform var(--duration-fast) var(--ease-out);
+  z-index: var(--z-tooltip);
+}
+
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  white-space: nowrap;
+  padding: 0.375rem 0.625rem;
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  color: var(--moon-50);
+  background-color: var(--moon-900);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+}
+
+[data-tooltip]::before {
+  content: "";
+  bottom: 100%;
+  border: 5px solid transparent;
+  border-top-color: var(--moon-900);
+}
+
+[data-tooltip]:hover::after, [data-tooltip]:hover::before,
+[data-tooltip]:focus-visible::after, [data-tooltip]:focus-visible::before {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+}

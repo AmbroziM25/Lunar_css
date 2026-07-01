@@ -1,0 +1,320 @@
+/*!
+ * Lunar CSS — base.css
+ * Design tokens + modern reset + base element styles.
+ * Night-sky aesthetic: deep space blacks/navys, moonlight whites,
+ * silver/indigo/violet glow accents.
+ */
+
+/* Layer order (declared once, populated across base/themes/effects/components/utilities).
+   Utilities intentionally win the cascade last, mirroring Tailwind's utility-first behavior. */
+@layer lunar-base, lunar-themes, lunar-effects, lunar-components, lunar-utilities;
+
+@layer lunar-base {
+
+:root {
+  color-scheme: dark;
+
+  /* ---------------------------------------------------------------
+   * Color scale — "moon" (deep space navy → moonlight white)
+   * --------------------------------------------------------------- */
+  --moon-50:  #f7f8fc;
+  --moon-100: #eceef7;
+  --moon-200: #d9dcee;
+  --moon-300: #b9bfdd;
+  --moon-400: #9298bd;
+  --moon-500: #6f76a0;
+  --moon-600: #545a80;
+  --moon-700: #3d4163;
+  --moon-800: #262844;
+  --moon-900: #14152a;
+  --moon-950: #090913;
+
+  /* Accent hues used across gradients, glows, and rings */
+  --indigo-400: #818cf8;
+  --indigo-500: #6366f1;
+  --indigo-600: #4f46e5;
+
+  --violet-400: #a78bfa;
+  --violet-500: #8b5cf6;
+  --violet-600: #7c3aed;
+
+  --silver-300: #d7dbea;
+  --silver-400: #b7bcd6;
+
+  /* Signature lunar accents */
+  --eclipse: #0d0e1f;          /* deep violet-black, used for shadow depth / rings */
+  --glow: #e4e8ff;             /* soft moonlight glow, near-white lavender */
+  --tide: #6c6ff0;             /* indigo-violet "tidal" accent, primary brand hue */
+
+  /* Semantic aliases (theme-independent defaults, overridden in themes.css) */
+  --lunar-bg: var(--moon-950);
+  --lunar-bg-elevated: var(--moon-900);
+  --lunar-surface: var(--moon-800);
+  --lunar-surface-hover: var(--moon-700);
+  --lunar-border: var(--moon-700);
+  --lunar-text: var(--moon-50);
+  --lunar-text-muted: var(--moon-400);
+  --lunar-accent: var(--tide);
+  --lunar-accent-2: var(--violet-500);
+
+  /* ---------------------------------------------------------------
+   * Spacing scale (0.25rem base unit)
+   * --------------------------------------------------------------- */
+  --space-0: 0;
+  --space-px: 1px;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-7: 1.75rem;
+  --space-8: 2rem;
+  --space-9: 2.25rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-14: 3.5rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+
+  /* ---------------------------------------------------------------
+   * Typography
+   * --------------------------------------------------------------- */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto,
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
+  --text-6xl: 3.75rem;
+
+  --leading-none: 1;
+  --leading-tight: 1.25;
+  --leading-snug: 1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  --leading-loose: 2;
+
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.02em;
+  --tracking-wider: 0.05em;
+
+  --font-thin: 100;
+  --font-light: 300;
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  --font-black: 900;
+
+  /* ---------------------------------------------------------------
+   * Radius
+   * --------------------------------------------------------------- */
+  --radius-none: 0;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* ---------------------------------------------------------------
+   * Shadows — ambient (neutral) + signature glow shadows
+   * --------------------------------------------------------------- */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.35);
+  --shadow-md: 0 4px 12px -2px rgb(0 0 0 / 0.45), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --shadow-lg: 0 12px 24px -4px rgb(0 0 0 / 0.5), 0 4px 8px -4px rgb(0 0 0 / 0.35);
+  --shadow-xl: 0 24px 48px -8px rgb(0 0 0 / 0.55), 0 8px 16px -8px rgb(0 0 0 / 0.4);
+
+  --glow-color-sm: rgb(228 232 255 / 0.25);
+  --glow-color-md: rgb(108 111 240 / 0.35);
+  --glow-color-lg: rgb(108 111 240 / 0.45);
+  --glow-color-violet: rgb(139 92 246 / 0.45);
+
+  --shadow-glow-sm: 0 0 12px 0 var(--glow-color-sm);
+  --shadow-glow-md: 0 0 24px 2px var(--glow-color-md);
+  --shadow-glow-lg: 0 0 48px 6px var(--glow-color-lg);
+  --shadow-glow-violet: 0 0 32px 4px var(--glow-color-violet);
+
+  /* ---------------------------------------------------------------
+   * Motion
+   * --------------------------------------------------------------- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 450ms;
+
+  /* z-index scale */
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+  --z-tooltip: 600;
+}
+
+/* ---------------------------------------------------------------
+ * Modern reset
+ * --------------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  border-color: var(--lunar-border);
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  tab-size: 4;
+  font-family: var(--font-sans);
+}
+
+body {
+  min-height: 100vh;
+  line-height: var(--leading-normal);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  color: var(--lunar-text);
+  background-color: var(--lunar-bg);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgb(108 111 240 / 0.12), transparent),
+    radial-gradient(ellipse 60% 40% at 100% 0%, rgb(139 92 246 / 0.08), transparent);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+input, button, textarea, select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: var(--font-semibold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--lunar-text);
+}
+
+h1 { font-size: var(--text-4xl); }
+h2 { font-size: var(--text-3xl); }
+h3 { font-size: var(--text-2xl); }
+h4 { font-size: var(--text-xl); }
+h5 { font-size: var(--text-lg); }
+h6 { font-size: var(--text-base); }
+
+a {
+  color: var(--lunar-accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+small {
+  font-size: var(--text-sm);
+  color: var(--lunar-text-muted);
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--lunar-border);
+  margin: var(--space-6) 0;
+}
+
+code, kbd, pre, samp {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+code {
+  background: var(--lunar-surface);
+  padding: 0.15em 0.4em;
+  border-radius: var(--radius-sm);
+}
+
+pre {
+  background: var(--lunar-surface);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+}
+
+ul, ol {
+  padding-left: 1.25em;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#root, #__next {
+  isolation: isolate;
+}
+
+::selection {
+  background: var(--tide);
+  color: var(--moon-50);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--lunar-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--lunar-surface-hover);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--moon-600);
+}
+
+:focus-visible {
+  outline: 2px solid var(--tide);
+  outline-offset: 2px;
+}
+
+}

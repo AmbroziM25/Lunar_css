@@ -1,0 +1,79 @@
+/*!
+ * Lunar CSS — themes.css
+ * Dark ("night sky") is the default and requires no attribute.
+ * Set data-theme="light" on <html> (or any ancestor) for the "daylight" variant.
+ * Set data-theme="dark" explicitly if you need to opt back in inside a light-scoped subtree.
+ */
+
+@layer lunar-themes {
+
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --lunar-bg: var(--moon-950);
+  --lunar-bg-elevated: var(--moon-900);
+  --lunar-surface: var(--moon-800);
+  --lunar-surface-hover: var(--moon-700);
+  --lunar-border: var(--moon-700);
+  --lunar-text: var(--moon-50);
+  --lunar-text-muted: var(--moon-400);
+  --lunar-accent: var(--tide);
+  --lunar-accent-2: var(--violet-500);
+
+  --lunar-shadow-ambient: var(--shadow-md);
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+
+  --lunar-bg: var(--moon-50);
+  --lunar-bg-elevated: #ffffff;
+  --lunar-surface: var(--moon-100);
+  --lunar-surface-hover: var(--moon-200);
+  --lunar-border: var(--moon-300);
+  --lunar-text: var(--moon-950);
+  --lunar-text-muted: var(--moon-600);
+  --lunar-accent: var(--indigo-600);
+  --lunar-accent-2: var(--violet-600);
+
+  --eclipse: var(--moon-100);
+  --glow: var(--indigo-500);
+
+  --glow-color-sm: rgb(79 70 229 / 0.12);
+  --glow-color-md: rgb(79 70 229 / 0.18);
+  --glow-color-lg: rgb(79 70 229 / 0.22);
+  --glow-color-violet: rgb(124 58 237 / 0.22);
+
+  --shadow-sm: 0 1px 2px 0 rgb(20 21 42 / 0.06);
+  --shadow-md: 0 4px 12px -2px rgb(20 21 42 / 0.1), 0 2px 4px -2px rgb(20 21 42 / 0.06);
+  --shadow-lg: 0 12px 24px -4px rgb(20 21 42 / 0.12), 0 4px 8px -4px rgb(20 21 42 / 0.08);
+  --shadow-xl: 0 24px 48px -8px rgb(20 21 42 / 0.16), 0 8px 16px -8px rgb(20 21 42 / 0.1);
+
+  --lunar-shadow-ambient: var(--shadow-sm);
+}
+
+[data-theme="light"] body {
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgb(99 102 241 / 0.08), transparent),
+    radial-gradient(ellipse 60% 40% at 100% 0%, rgb(124 58 237 / 0.05), transparent);
+}
+
+/* Daylight variant dims the more theatrical night-sky effects so they read
+   as gentle accents rather than a dark-mode effect transplanted onto a light page. */
+[data-theme="light"] .starfield::before,
+[data-theme="light"] .starfield::after {
+  opacity: 0.35;
+}
+
+[data-theme="light"] .glass {
+  background: rgb(255 255 255 / 0.6);
+  border-color: rgb(20 21 42 / 0.08);
+}
+
+[data-theme="light"] .glass-dark {
+  background: rgb(20 21 42 / 0.06);
+  border-color: rgb(20 21 42 / 0.08);
+}
+
+}
