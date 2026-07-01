@@ -1,5 +1,5 @@
 /*!
- * Lunar CSS — themes.css
+ * Lunara CSS — themes.css
  * Dark ("night sky") is the default and requires no attribute.
  * Set data-theme="light" on <html> (or any ancestor) for the "daylight" variant.
  * Set data-theme="dark" explicitly if you need to opt back in inside a light-scoped subtree.
@@ -77,7 +77,7 @@
 }
 
 /* ---------------------------------------------------------------
- * Lunar-reactive theming — glow intensity follows the real moon.
+ * Lunara-reactive theming — glow intensity follows the real moon.
  * Opt-in: these only apply when data-moon-phase is present on an
  * ancestor, which initMoonPhase() (theme.mjs) sets from the actual
  * lunar calendar. Dimmest at new moon, brightest at full moon.

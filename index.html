@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Lunar CSS — a dark, utility-first CSS framework</title>
-<meta name="description" content="Lunar CSS: a lightweight, utility-first CSS framework with a dark night-sky aesthetic. Pure CSS, zero build step, Tailwind-compatible." />
+<title>Lunara CSS — a dark, utility-first CSS framework</title>
+<meta name="description" content="Lunara CSS: a lightweight, utility-first CSS framework with a dark night-sky aesthetic. Pure CSS, zero build step, Tailwind-compatible." />
 <link rel="stylesheet" href="dist/lunar.css" />
 <style>
   /* Docs-page-only styles (not part of the framework) */
@@ -29,7 +29,7 @@
 <header class="navbar">
   <a href="#hero" class="navbar-brand">
     <span aria-hidden="true">🌙</span>
-    <span class="text-shimmer" style="font-weight:700;">Lunar CSS</span>
+    <span class="text-shimmer" style="font-weight:700;">Lunara CSS</span>
   </a>
   <nav class="navbar-nav">
     <a class="navbar-link" href="#palette">Palette</a>
@@ -50,9 +50,9 @@
   <section id="hero" class="toc-anchor starfield gradient-aurora" style="background-blend-mode: normal; padding: var(--space-24) 0 var(--space-20); opacity: 0.97;">
     <div class="container" style="position:relative; z-index:1;">
       <div class="fade-in" style="max-width: 42rem;">
-        <span class="badge badge-glow mb-4">v0.1.0 · MIT licensed</span>
+        <span class="badge badge-glow mb-4">v0.3.0 · MIT licensed</span>
         <h1 class="mt-4" style="font-size: var(--text-6xl); color: var(--moon-50);">
-          Lunar <span class="text-shimmer">CSS</span>
+          Lunara <span class="text-shimmer">CSS</span>
         </h1>
         <p class="mt-4 text-lg" style="color: rgb(228 232 255 / 0.85); max-width: 36rem;">
           A lightweight, utility-first CSS framework with a dark <strong>night-sky</strong> aesthetic —
@@ -406,7 +406,7 @@
 
 <div id="toast-region" style="position: fixed; bottom: var(--space-6); right: var(--space-6); z-index: var(--z-toast); display: flex; flex-direction: column; gap: var(--space-3);"></div>
 
-<!-- Zero-JS modal: native Popover API + Lunar's .modal styling. No script anywhere. -->
+<!-- Zero-JS modal: native Popover API + Lunara's .modal styling. No script anywhere. -->
 <div id="demo-popover" popover class="modal">
   <div class="modal-header">
     <span>Zero-JS modal</span>
@@ -416,7 +416,7 @@
     This modal uses the native Popover API — just <code class="inline">popover</code> and
     <code class="inline">popovertarget</code> attributes. Open/close, <kbd>Esc</kbd> to dismiss,
     click-outside light dismiss, and the blurred backdrop are all built into the browser.
-    Lunar styles it with <code class="inline">@starting-style</code> entrance/exit transitions.
+    Lunara styles it with <code class="inline">@starting-style</code> entrance/exit transitions.
     View source: there is no JavaScript for this modal at all.
   </div>
   <div class="modal-footer">
@@ -425,7 +425,7 @@
 </div>
 
 <footer class="container" style="padding-block: var(--space-10); border-top: 1px solid var(--lunar-border); color: var(--lunar-text-muted); text-align:center;">
-  <p class="text-sm">Lunar CSS — MIT licensed. Built with Lunar CSS itself.</p>
+  <p class="text-sm">Lunara CSS — MIT licensed. Built with Lunara CSS itself.</p>
 </footer>
 
 <script type="module">
@@ -435,7 +435,7 @@
   initTheme();
   document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
 
-  // Lunar-reactive theming: glow intensity + .moon-live follow the real moon
+  // Lunara-reactive theming: glow intensity + .moon-live follow the real moon
   const phase = initMoonPhase();
   document.getElementById('phase-label').textContent =
     phase.name.replace(/-/g, ' ') + ' · ' + phase.illumination + '% illuminated';

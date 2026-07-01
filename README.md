@@ -1,4 +1,4 @@
-# Lunar CSS 🌙
+# Lunara CSS 🌙
 
 A lightweight, utility-first CSS framework with a dark **"night sky"** aesthetic — deep space
 blacks and navys, soft moonlight whites, and subtle glow/gradient accents in silver, indigo, and
@@ -7,8 +7,9 @@ violet.
 - **Pure CSS, zero build step.** Drop in a `<link>` tag and go.
 - **Utility-first**, Tailwind-like class names (`bg-moon-900`, `text-glow`, `p-4`, `rounded-lg`) —
   muscle memory carries over either direction.
-- **Tailwind-compatible.** Ship your own Tailwind setup? `require('@velo0/lunar-css/tailwind-preset')`
-  and get the same tokens as a theme extension.
+- **Tailwind-native.** One preset line (`require('lunara-css/tailwind-preset')`) registers the
+  full palette **and every component/effect** as real Tailwind classes — tree-shaken, variant-aware
+  (`hover:glow-lg`), emitted by your own Tailwind build.
 - **One-line effect utilities.** Glow, glass, aurora, shimmer, starfields, entrance animations —
   no hand-written keyframes or box-shadow stacks.
 - **Prebuilt components.** Buttons, cards, inputs, badges, navbar, modal, toast, tooltip — all
@@ -16,11 +17,11 @@ violet.
 - **Dark-mode-first**, with a light "daylight" variant toggled via `data-theme`.
 - **Works with any framework.** Plain HTML, React, Next.js, Vue, Angular, or anything else — it's
   just CSS classes and an optional framework-agnostic JS helper for theme toggling.
-- **Lunar-reactive theming** 🌖 — opt in and the framework's glow intensity follows the *real*
+- **Lunara-reactive theming** 🌖 — opt in and the framework's glow intensity follows the *real*
   moon phase. Nobody else does this.
 - **Scroll-driven animations with zero JS** — reveal-on-scroll, parallax, and a reading progress
   bar, all pure CSS via `animation-timeline`.
-- **Zero-JavaScript modal** — Lunar styles the native Popover API, so two HTML attributes give
+- **Zero-JavaScript modal** — Lunara styles the native Popover API, so two HTML attributes give
   you a fully animated modal with backdrop blur, Esc, and light-dismiss. No script.
 
 [View the live component + effects gallery →](./index.html)
@@ -32,23 +33,23 @@ violet.
 ### CDN (no build step)
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@velo0/lunar-css/dist/lunar.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lunara-css/dist/lunar.min.css" />
 ```
 
 ### npm
 
 ```bash
-npm install @velo0/lunar-css
+npm install lunara-css
 ```
 
 ```css
 /* import the full framework */
-@import "@velo0/lunar-css/dist/lunar.css";
+@import "lunara-css/dist/lunar.css";
 ```
 
 ```js
 // or in a bundler entry point
-import "@velo0/lunar-css/dist/lunar.css";
+import "lunara-css/dist/lunar.css";
 ```
 
 That's it — no PostCSS, no build config. `dist/lunar.css` is the readable build; `dist/lunar.min.css`
@@ -62,12 +63,12 @@ is the minified production build.
 <!doctype html>
 <html lang="en" data-theme="dark">
 <head>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@velo0/lunar-css/dist/lunar.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lunara-css/dist/lunar.min.css" />
 </head>
 <body>
   <div class="card glow-sm hover-lift p-6 max-w-sm">
     <h2 class="text-shimmer">Welcome</h2>
-    <p class="text-muted mt-2">Built with Lunar CSS.</p>
+    <p class="text-muted mt-2">Built with Lunara CSS.</p>
     <button class="btn btn-primary mt-4">Get started</button>
   </div>
 </body>
@@ -81,13 +82,13 @@ container) — no attribute, or `data-theme="dark"`, gives you the default night
 
 ## Signature features — things no other framework ships
 
-### 🌖 Lunar-reactive theming
+### 🌖 Lunara-reactive theming
 
 Call one function and the framework's glow intensity tracks the **actual moon phase** — dimmest
 at new moon, brightest at full moon:
 
 ```js
-import { initMoonPhase } from "@velo0/lunar-css/theme";
+import { initMoonPhase } from "lunara-css/theme";
 
 const phase = initMoonPhase();
 // → { name: "waning-gibbous", age: 17.8, illumination: 96 }
@@ -136,7 +137,7 @@ show the content normally — nothing is ever hidden.
 
 ### 🪟 Zero-JS modal (native Popover API)
 
-Lunar's `.modal` is styled for the browser-native Popover API, so this is a complete, animated
+Lunara's `.modal` is styled for the browser-native Popover API, so this is a complete, animated
 modal — open/close, blurred backdrop, `Esc` to dismiss, click-outside light-dismiss, focus
 handling — with **no JavaScript whatsoever**:
 
@@ -165,7 +166,7 @@ once (a single delegated listener handles every current and future `.moonbeam` o
 ```
 
 ```js
-import { initMoonbeam } from "@velo0/lunar-css/theme";
+import { initMoonbeam } from "lunara-css/theme";
 initMoonbeam(); // returns a cleanup function
 ```
 
@@ -175,27 +176,62 @@ Without the JS it gracefully degrades to a centered glow on hover.
 
 ## Tailwind integration
 
-Lunar ships a preset that extends Tailwind's theme with its tokens (colors, spacing, radii,
-shadows, fonts, and a few signature keyframe animations) instead of replacing your setup.
+Lunara ships a preset that gives Tailwind projects the **whole framework** — not just the color
+palette, but every prebuilt component and effect utility, registered as native Tailwind classes:
 
 ```bash
-npm install @velo0/lunar-css tailwindcss
+npm install lunara-css tailwindcss
 ```
 
 ```js
 // tailwind.config.js
 module.exports = {
-  presets: [require("@velo0/lunar-css/tailwind-preset")],
+  presets: [require("lunara-css/tailwind-preset")],
   content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
 };
 ```
 
-You now get `bg-moon-900`, `text-tide`, `shadow-glow-lg`, `rounded-2xl`, `animate-float`, etc. as
-native Tailwind utilities, generated by Tailwind itself (so purging/JIT still works normally).
+One preset line gets you all of this, through Tailwind's own build:
+
+- **Design tokens** as theme values — `bg-moon-900`, `text-tide`, `shadow-glow-lg`,
+  `rounded-2xl`, `animate-float`, …
+- **Components** as Tailwind component classes — `btn btn-primary`, `card`, `badge-glow`,
+  `modal` (including the zero-JS popover styling), `toast`, `navbar`, `input`, the `.moon`
+  phase icons, …
+- **Effect utilities** as Tailwind utilities — `glow-md`, `glass`, `starfield`,
+  `gradient-aurora`, `eclipse-border`, `moonbeam`, `text-shimmer`, `scroll-reveal-up`,
+  `scroll-progress`, …
+- **Theme + moon-phase blocks** in base — `data-theme="light"` and `data-moon-phase` reactivity
+  work exactly like the plain-CSS build.
+
+Because they're registered through Tailwind's plugin API, the classes behave like native
+Tailwind: unused components are **tree-shaken** by content scanning, and **variants work** —
+`hover:glow-lg`, `md:scroll-reveal-up`, `focus:glow-violet` all do what you'd expect. No separate
+`<link>` tag, no second stylesheet: your one Tailwind pipeline emits everything.
+(Accessibility guards like `prefers-reduced-motion` blocks always ship alongside the animations
+they protect.)
+
+Under the hood the plugin parses Lunara's own built CSS at build time, so the Tailwind classes
+can never drift from the plain-CSS distribution.
+
+**Components only, no theme?** If you want Lunara's components on top of your own Tailwind theme,
+skip the preset and register just the plugin:
+
+```js
+// tailwind.config.js
+module.exports = {
+  plugins: [require("lunara-css/tailwind-plugin")],
+};
+```
+
+**Tailwind v4?** The preset/plugin target Tailwind v3's JS config. On v4's CSS-first setup,
+either load the config through `@config "./tailwind.config.js"`, or simply
+`@import "lunara-css/dist/lunar.css";` next to your Tailwind import — the class names are
+Tailwind-shaped either way.
 
 **Dark mode:** the preset sets `darkMode: ['selector', '[data-theme="dark"]']`, which points
-Tailwind's own `dark:` variant convention at the same `data-theme` attribute Lunar uses to toggle
-themes. Set `data-theme="dark"` on `<html>` and both Lunar's dark tokens and your `dark:` utilities
+Tailwind's own `dark:` variant convention at the same `data-theme` attribute Lunara uses to toggle
+themes. Set `data-theme="dark"` on `<html>` and both Lunara's dark tokens and your `dark:` utilities
 activate together; set `data-theme="light"` for daylight mode.
 
 If you only need the plain CSS utilities/components (no Tailwind build), skip this section
@@ -205,23 +241,23 @@ entirely and just link `dist/lunar.css`.
 
 ## Use with any framework
 
-Lunar's CSS has zero JS dependencies — it's just classes, attributes, and CSS variables — so it
+Lunara's CSS has zero JS dependencies — it's just classes, attributes, and CSS variables — so it
 drops into any stack the same way Tailwind or Bootstrap would: import the stylesheet once, then
 use the classes in whatever templating system you already have (JSX, Vue SFCs, Angular templates,
 plain HTML). The only thing that differs per framework is *how you toggle state* for things like
 the theme switch, `.modal-overlay.is-open`, or a toast list — that's ordinary UI state in your
-framework of choice, driving plain Lunar class names.
+framework of choice, driving plain Lunara class names.
 
-For the theme switch specifically, Lunar ships an optional, dependency-free ESM helper —
-`@velo0/lunar-css/theme` — so you don't have to re-write the same three `localStorage`/attribute lines in
+For the theme switch specifically, Lunara ships an optional, dependency-free ESM helper —
+`lunara-css/theme` — so you don't have to re-write the same three `localStorage`/attribute lines in
 every project. It's the same helper [the docs page itself uses](./index.html).
 
 ### Plain HTML
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@velo0/lunar-css/dist/lunar.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lunara-css/dist/lunar.min.css" />
 <script type="module">
-  import { initTheme, toggleTheme } from "https://cdn.jsdelivr.net/npm/@velo0/lunar-css/theme.mjs";
+  import { initTheme, toggleTheme } from "https://cdn.jsdelivr.net/npm/lunara-css/theme.mjs";
   initTheme();
   document.getElementById("theme-toggle").addEventListener("click", toggleTheme);
 </script>
@@ -231,12 +267,12 @@ every project. It's the same helper [the docs page itself uses](./index.html).
 
 ```jsx
 // main.jsx / App entry point
-import "@velo0/lunar-css/dist/lunar.css";
+import "lunara-css/dist/lunar.css";
 ```
 
 ```jsx
 import { useEffect } from "react";
-import { initTheme, toggleTheme } from "@velo0/lunar-css/theme";
+import { initTheme, toggleTheme } from "lunara-css/theme";
 
 function ThemeToggle() {
   useEffect(() => { initTheme(); }, []);
@@ -259,7 +295,7 @@ global CSS to be imported from one of those top-level files, not from an arbitra
 
 ```tsx
 // app/layout.tsx (App Router)
-import "@velo0/lunar-css/dist/lunar.css";
+import "lunara-css/dist/lunar.css";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -280,7 +316,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 ```tsx
 // pages/_app.tsx (Pages Router)
-import "@velo0/lunar-css/dist/lunar.css";
+import "lunara-css/dist/lunar.css";
 export default function MyApp({ Component, pageProps }) {
   return <Component {...pageProps} />;
 }
@@ -293,13 +329,13 @@ Client Components (`"use client"`) — the inline script only handles the pre-hy
 
 ```js
 // main.js
-import "@velo0/lunar-css/dist/lunar.css";
+import "lunara-css/dist/lunar.css";
 ```
 
 ```vue
 <script setup>
 import { onMounted } from "vue";
-import { initTheme, toggleTheme } from "@velo0/lunar-css/theme";
+import { initTheme, toggleTheme } from "lunara-css/theme";
 onMounted(initTheme);
 </script>
 
@@ -312,12 +348,12 @@ onMounted(initTheme);
 
 ```json
 // angular.json
-"styles": ["node_modules/@velo0/lunar-css/dist/lunar.css", "src/styles.css"]
+"styles": ["node_modules/lunara-css/dist/lunar.css", "src/styles.css"]
 ```
 
 ```ts
 import { Component, OnInit } from "@angular/core";
-import { initTheme, toggleTheme } from "@velo0/lunar-css/theme";
+import { initTheme, toggleTheme } from "lunara-css/theme";
 
 @Component({ selector: "app-root", templateUrl: "./app.component.html" })
 export class AppComponent implements OnInit {
@@ -337,8 +373,8 @@ export class AppComponent implements OnInit {
 ### Anything else
 
 Svelte, SolidJS, Astro, Nuxt, Qwik, plain jQuery — same two ingredients: import
-`@velo0/lunar-css/dist/lunar.css` (or the CDN link) once, and optionally `import` from `@velo0/lunar-css/theme`.
-Nothing in Lunar assumes a specific framework, bundler, or virtual DOM.
+`lunara-css/dist/lunar.css` (or the CDN link) once, and optionally `import` from `lunara-css/theme`.
+Nothing in Lunara assumes a specific framework, bundler, or virtual DOM.
 
 ---
 
@@ -429,8 +465,9 @@ lunar-css/
 ├── dist/                 # built output (generated, do not hand-edit)
 │   ├── lunar.css
 │   └── lunar.min.css
-├── tailwind-preset.js    # Tailwind theme extension
-├── theme.mjs             # optional framework-agnostic theme-toggle helper (ESM)
+├── tailwind-preset.js    # Tailwind theme extension (includes the components plugin)
+├── tailwind-plugin.js    # registers components/effects as native Tailwind classes
+├── theme.mjs             # optional framework-agnostic theme + moon-phase helpers (ESM)
 ├── index.html            # palette / typography / component / effects gallery
 ├── build.js              # concatenates + minifies src/ → dist/
 └── package.json

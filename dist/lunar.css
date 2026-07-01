@@ -1,12 +1,12 @@
 /*!
- * Lunar CSS v0.2.0
+ * Lunara CSS v0.3.0
  * A lightweight, utility-first CSS framework with a dark "night sky" aesthetic.
  * https://github.com/AmbroziM25/Lunar_css#readme
  * License: MIT
  */
 
 /*!
- * Lunar CSS — base.css
+ * Lunara CSS — base.css
  * Design tokens + modern reset + base element styles.
  * Night-sky aesthetic: deep space blacks/navys, moonlight whites,
  * silver/indigo/violet glow accents.
@@ -332,7 +332,7 @@ table {
 }
 
 /*!
- * Lunar CSS — themes.css
+ * Lunara CSS — themes.css
  * Dark ("night sky") is the default and requires no attribute.
  * Set data-theme="light" on <html> (or any ancestor) for the "daylight" variant.
  * Set data-theme="dark" explicitly if you need to opt back in inside a light-scoped subtree.
@@ -410,7 +410,7 @@ table {
 }
 
 /* ---------------------------------------------------------------
- * Lunar-reactive theming — glow intensity follows the real moon.
+ * Lunara-reactive theming — glow intensity follows the real moon.
  * Opt-in: these only apply when data-moon-phase is present on an
  * ancestor, which initMoonPhase() (theme.mjs) sets from the actual
  * lunar calendar. Dimmest at new moon, brightest at full moon.
@@ -431,7 +431,7 @@ table {
 }
 
 /*!
- * Lunar CSS — effects.css
+ * Lunara CSS — effects.css
  * One-line, no-custom-CSS effect utilities. Each class is a complete,
  * self-contained effect — no hand-written keyframes or shadow stacks required.
  * Entirely opt-in: nothing here applies unless the class is used.
@@ -724,7 +724,7 @@ table {
 }
 
 /*!
- * Lunar CSS — motion.css
+ * Lunara CSS — motion.css
  * Scroll-driven animation utilities — pure CSS, zero JavaScript.
  * Built on CSS scroll-driven animations (animation-timeline: view()/scroll()),
  * so there's no IntersectionObserver, no scroll listener, and no library:
@@ -828,7 +828,7 @@ table {
 }
 
 /*!
- * Lunar CSS — components.css
+ * Lunara CSS — components.css
  * Prebuilt, themeable components. Every component reads from the same
  * design tokens (base.css) and leans on the effect utilities (effects.css)
  * for glow/motion, so it feels premium without any extra classes.
@@ -1350,7 +1350,7 @@ table {
 }
 
 /*!
- * Lunar CSS — utilities.css
+ * Lunara CSS — utilities.css
  * Atomic, Tailwind-like utility classes. Works standalone via a plain
  * <link> tag — zero build step required. Utilities live in the last
  * cascade layer so they always win over components.

@@ -1,19 +1,19 @@
 /**
- * Lunar CSS — Tailwind preset
+ * Lunara CSS — Tailwind preset
  *
- * Exposes Lunar's design tokens (colors, spacing, radii, shadows, fonts,
+ * Exposes Lunara's design tokens (colors, spacing, radii, shadows, fonts,
  * animations) as a Tailwind theme extension, so an existing Tailwind setup
- * gets the same night-sky palette and utility values Lunar ships standalone.
+ * gets the same night-sky palette and utility values Lunara ships standalone.
  *
  * `dark:` keeps working exactly the way Tailwind's docs describe it — this
  * preset just points Tailwind's built-in selector-based dark mode at the
- * same `data-theme="dark"` attribute Lunar itself toggles, so one attribute
- * switch drives both Lunar's own theme and any `dark:` utilities you write.
+ * same `data-theme="dark"` attribute Lunara itself toggles, so one attribute
+ * switch drives both Lunara's own theme and any `dark:` utilities you write.
  *
  * Usage (tailwind.config.js):
  *
  *   module.exports = {
- *     presets: [require('@velo0/lunar-css/tailwind-preset')],
+ *     presets: [require('lunara-css/tailwind-preset')],
  *     content: ['./src/**\/*.{html,js,jsx,ts,tsx}'],
  *   };
  */
@@ -132,5 +132,7 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  // Registers Lunara's prebuilt components and effect utilities as native
+  // Tailwind classes (tree-shaken, variant-compatible). See tailwind-plugin.js.
+  plugins: [require('./tailwind-plugin')],
 };

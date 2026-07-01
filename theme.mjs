@@ -1,11 +1,11 @@
 /**
- * Lunar CSS — theme helper.
+ * Lunara CSS — theme helper.
  * Tiny, framework-agnostic ESM utility for toggling/persisting the
- * data-theme attribute Lunar's CSS reads. No dependencies, no build step —
+ * data-theme attribute Lunara's CSS reads. No dependencies, no build step —
  * works the same from plain <script type="module">, React, Vue, Angular,
  * Svelte, or anything else that can `import` an ES module.
  *
- * This is entirely optional: Lunar's CSS only ever reads the `data-theme`
+ * This is entirely optional: Lunara's CSS only ever reads the `data-theme`
  * attribute, so you can set it however you like (including not using this
  * file at all).
  */

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 /**
- * Lunar CSS build script.
+ * Lunara CSS build script.
  * Concatenates the modular /src files (in cascade order) into a single
  * dist/lunar.css, then produces a minified dist/lunar.min.css.
  * No external dependencies — keeps `npm install` unnecessary for consumers
@@ -22,7 +22,7 @@ const FILES = ['base.css', 'themes.css', 'effects.css', 'motion.css', 'component
 const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
 
 const banner = `/*!
- * Lunar CSS v${pkg.version}
+ * Lunara CSS v${pkg.version}
  * A lightweight, utility-first CSS framework with a dark "night sky" aesthetic.
  * ${pkg.homepage || ''}
  * License: MIT

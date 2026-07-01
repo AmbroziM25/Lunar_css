@@ -1,6 +1,6 @@
 {
-  "name": "@velo0/lunar-css",
-  "version": "0.2.0",
+  "name": "lunara-css",
+  "version": "0.3.0",
   "publishConfig": {
     "access": "public"
   },
@@ -16,13 +16,16 @@
     "./lunar.css": "./dist/lunar.css",
     "./lunar.min.css": "./dist/lunar.min.css",
     "./tailwind-preset": "./tailwind-preset.js",
+    "./tailwind-plugin": "./tailwind-plugin.js",
     "./theme": "./theme.mjs",
+    "./theme.mjs": "./theme.mjs",
     "./package.json": "./package.json"
   },
   "files": [
     "dist",
     "src",
     "tailwind-preset.js",
+    "tailwind-plugin.js",
     "theme.mjs",
     "README.md"
   ],
@@ -41,6 +44,7 @@
     "ui-kit",
     "glassmorphism",
     "no-build",
+    "lunara",
     "react",
     "nextjs",
     "vue",
