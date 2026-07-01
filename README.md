@@ -26,6 +26,15 @@ violet.
 
 [View the live component + effects gallery →](./index.html)
 
+**Full documentation site** (Next.js, built with Lunara itself) lives on the
+[`docs-site` branch](https://github.com/AmbroziM25/Lunar_css/tree/docs-site):
+
+```bash
+git switch docs-site
+npm install
+npm run dev   # http://localhost:3000
+```
+
 ---
 
 ## Install

@@ -15,6 +15,8 @@
     "./min": "./dist/lunar.min.css",
     "./lunar.css": "./dist/lunar.css",
     "./lunar.min.css": "./dist/lunar.min.css",
+    "./dist/lunar.css": "./dist/lunar.css",
+    "./dist/lunar.min.css": "./dist/lunar.min.css",
     "./tailwind-preset": "./tailwind-preset.js",
     "./tailwind-plugin": "./tailwind-plugin.js",
     "./theme": "./theme.mjs",
