@@ -299,6 +299,62 @@
 .modal-close:hover { color: var(--lunar-text); }
 
 /* ---------------------------------------------------------------
+ * Zero-JS modal — the same .modal styled for the native Popover API.
+ *
+ *   <button popovertarget="m">Open</button>
+ *   <div id="m" popover class="modal">…</div>
+ *
+ * The browser provides open/close, Esc-to-dismiss, click-outside
+ * (light dismiss), focus handling, and the ::backdrop — no script.
+ * Entrance/exit transitions use @starting-style + allow-discrete.
+ * --------------------------------------------------------------- */
+.modal[popover] {
+  margin: auto;
+  padding: 0;
+  width: min(28rem, 100vw - 3rem);
+  border: 1px solid var(--lunar-border);
+  opacity: 0;
+  transform: scale(0.95) translateY(8px);
+  transition:
+    opacity var(--duration-base) var(--ease-out),
+    transform var(--duration-base) var(--ease-out),
+    overlay var(--duration-base) allow-discrete,
+    display var(--duration-base) allow-discrete;
+}
+
+.modal[popover]:popover-open {
+  opacity: 1;
+  transform: none;
+}
+
+@starting-style {
+  .modal[popover]:popover-open {
+    opacity: 0;
+    transform: scale(0.95) translateY(8px);
+  }
+}
+
+.modal[popover]::backdrop {
+  background-color: rgb(9 9 19 / 0.7);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  transition:
+    background-color 250ms ease-out,
+    -webkit-backdrop-filter 250ms ease-out,
+    backdrop-filter 250ms ease-out,
+    overlay 250ms allow-discrete,
+    display 250ms allow-discrete;
+}
+
+@starting-style {
+  .modal[popover]:popover-open::backdrop {
+    background-color: rgb(9 9 19 / 0);
+    -webkit-backdrop-filter: blur(0);
+    backdrop-filter: blur(0);
+  }
+}
+
+/* ---------------------------------------------------------------
  * Toast
  * --------------------------------------------------------------- */
 .toast {
@@ -320,6 +376,102 @@
 .toast-error   { border-left-color: #f87171; }
 .toast-warning { border-left-color: #fbbf24; }
 .toast-info    { border-left-color: var(--indigo-400); }
+
+/* ---------------------------------------------------------------
+ * Moon-phase icons — astronomically shaped moon glyphs in pure CSS.
+ * No images, no SVG. Size via --moon-size (default 3rem).
+ *
+ *   <span class="moon moon-waxing-gibbous"></span>
+ *
+ * ::before paints the shadowed half; ::after is the terminator — an
+ * ellipse squeezed with scaleX() that bulges the shadow (crescent)
+ * or the light (gibbous) across the center line.
+ *
+ * .moon-live mirrors whatever [data-moon-phase] an ancestor carries
+ * (set by initMoonPhase() in theme.mjs), so it always shows tonight's
+ * actual moon.
+ * --------------------------------------------------------------- */
+.moon {
+  --moon-size: 3rem;
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  width: var(--moon-size);
+  height: var(--moon-size);
+  border-radius: var(--radius-full);
+  background-color: var(--glow);
+  overflow: hidden;
+  box-shadow:
+    inset 0 0 calc(var(--moon-size) / 10) rgb(9 9 19 / 0.25),
+    var(--shadow-glow-sm);
+}
+
+.moon::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background-color: var(--moon-800);
+  display: none;
+}
+
+.moon::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-full);
+  background-color: var(--moon-800);
+  transform: scaleX(0);
+}
+
+/* Fully dark / fully lit */
+.moon-new::before,
+[data-moon-phase="new"] .moon-live::before {
+  display: block;
+  left: 0;
+  right: 0;
+  width: auto;
+}
+
+/* Waxing phases: shadow on the left, light grows on the right */
+.moon-waxing-crescent::before,
+.moon-first-quarter::before,
+.moon-waxing-gibbous::before,
+[data-moon-phase="waxing-crescent"] .moon-live::before,
+[data-moon-phase="first-quarter"] .moon-live::before,
+[data-moon-phase="waxing-gibbous"] .moon-live::before {
+  display: block;
+  left: 0;
+}
+
+/* Waning phases: shadow on the right, light shrinks from the left */
+.moon-waning-gibbous::before,
+.moon-last-quarter::before,
+.moon-waning-crescent::before,
+[data-moon-phase="waning-gibbous"] .moon-live::before,
+[data-moon-phase="last-quarter"] .moon-live::before,
+[data-moon-phase="waning-crescent"] .moon-live::before {
+  display: block;
+  right: 0;
+}
+
+/* Crescents: the shadow bulges past the center line */
+.moon-waxing-crescent::after,
+.moon-waning-crescent::after,
+[data-moon-phase="waxing-crescent"] .moon-live::after,
+[data-moon-phase="waning-crescent"] .moon-live::after {
+  transform: scaleX(0.65);
+}
+
+/* Gibbous: the light bulges past the center line */
+.moon-waxing-gibbous::after,
+.moon-waning-gibbous::after,
+[data-moon-phase="waxing-gibbous"] .moon-live::after,
+[data-moon-phase="waning-gibbous"] .moon-live::after {
+  transform: scaleX(0.65);
+  background-color: var(--glow);
+}
 
 /* ---------------------------------------------------------------
  * Tooltip — pure CSS via data-tooltip attribute

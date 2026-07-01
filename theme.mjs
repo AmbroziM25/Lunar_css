@@ -45,3 +45,68 @@ export function initTheme() {
   }
   if (saved) document.documentElement.setAttribute('data-theme', saved);
 }
+
+/* ------------------------------------------------------------------
+ * Moon phase — lunar-reactive theming.
+ * ------------------------------------------------------------------ */
+
+const SYNODIC_MONTH = 29.53058867; // days, mean synodic month
+const KNOWN_NEW_MOON = Date.UTC(2000, 0, 6, 18, 14); // reference new moon
+
+const PHASE_NAMES = [
+  'new',
+  'waxing-crescent',
+  'first-quarter',
+  'waxing-gibbous',
+  'full',
+  'waning-gibbous',
+  'last-quarter',
+  'waning-crescent',
+];
+
+/**
+ * Compute the moon's phase for a given date (defaults to now).
+ * Returns { name, age, illumination }:
+ *   name         — one of the eight PHASE_NAMES (kebab-case)
+ *   age          — days since the last new moon (0–29.53)
+ *   illumination — lit fraction as a 0–100 percentage
+ */
+export function getMoonPhase(date = new Date()) {
+  const days = (date.getTime() - KNOWN_NEW_MOON) / 86400000;
+  const age = ((days % SYNODIC_MONTH) + SYNODIC_MONTH) % SYNODIC_MONTH;
+  const index = Math.round(age / (SYNODIC_MONTH / 8)) % 8;
+  const illumination = Math.round(((1 - Math.cos((2 * Math.PI * age) / SYNODIC_MONTH)) / 2) * 100);
+  return { name: PHASE_NAMES[index], age, illumination };
+}
+
+/**
+ * Set data-moon-phase on <html> from the real lunar calendar, making the
+ * framework's glow intensity track the actual moon (via --lunar-moonlight)
+ * and any .moon-live icons render tonight's phase. Returns the phase object.
+ */
+export function initMoonPhase(date) {
+  const phase = getMoonPhase(date);
+  document.documentElement.setAttribute('data-moon-phase', phase.name);
+  return phase;
+}
+
+/* ------------------------------------------------------------------
+ * Moonbeam — cursor-tracking glow for .moonbeam elements.
+ * ------------------------------------------------------------------ */
+
+/**
+ * Enable cursor tracking for every .moonbeam element via one delegated
+ * pointermove listener (elements added later just work). Returns a
+ * cleanup function that removes the listener.
+ */
+export function initMoonbeam(root = document) {
+  const onMove = (e) => {
+    const el = e.target && e.target.closest && e.target.closest('.moonbeam');
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    el.style.setProperty('--beam-x', (((e.clientX - rect.left) / rect.width) * 100).toFixed(2) + '%');
+    el.style.setProperty('--beam-y', (((e.clientY - rect.top) / rect.height) * 100).toFixed(2) + '%');
+  };
+  root.addEventListener('pointermove', onMove, { passive: true });
+  return () => root.removeEventListener('pointermove', onMove);
+}

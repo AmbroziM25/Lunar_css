@@ -7,7 +7,7 @@
 
 /* Layer order (declared once, populated across base/themes/effects/components/utilities).
    Utilities intentionally win the cascade last, mirroring Tailwind's utility-first behavior. */
-@layer lunar-base, lunar-themes, lunar-effects, lunar-components, lunar-utilities;
+@layer lunar-base, lunar-themes, lunar-effects, lunar-motion, lunar-components, lunar-utilities;
 
 @layer lunar-base {
 
@@ -137,10 +137,15 @@
   --shadow-lg: 0 12px 24px -4px rgb(0 0 0 / 0.5), 0 4px 8px -4px rgb(0 0 0 / 0.35);
   --shadow-xl: 0 24px 48px -8px rgb(0 0 0 / 0.55), 0 8px 16px -8px rgb(0 0 0 / 0.4);
 
-  --glow-color-sm: rgb(228 232 255 / 0.25);
-  --glow-color-md: rgb(108 111 240 / 0.35);
-  --glow-color-lg: rgb(108 111 240 / 0.45);
-  --glow-color-violet: rgb(139 92 246 / 0.45);
+  /* Global glow intensity dial (0 = no glow, 1 = default, ~1.5 = max).
+     Driven automatically by [data-moon-phase] when initMoonPhase() is used,
+     or set it yourself to tune the whole framework's luminosity at once. */
+  --lunar-moonlight: 1;
+
+  --glow-color-sm: rgb(228 232 255 / calc(0.25 * var(--lunar-moonlight)));
+  --glow-color-md: rgb(108 111 240 / calc(0.35 * var(--lunar-moonlight)));
+  --glow-color-lg: rgb(108 111 240 / calc(0.45 * var(--lunar-moonlight)));
+  --glow-color-violet: rgb(139 92 246 / calc(0.45 * var(--lunar-moonlight)));
 
   --shadow-glow-sm: 0 0 12px 0 var(--glow-color-sm);
   --shadow-glow-md: 0 0 24px 2px var(--glow-color-md);

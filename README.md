@@ -16,6 +16,12 @@ violet.
 - **Dark-mode-first**, with a light "daylight" variant toggled via `data-theme`.
 - **Works with any framework.** Plain HTML, React, Next.js, Vue, Angular, or anything else — it's
   just CSS classes and an optional framework-agnostic JS helper for theme toggling.
+- **Lunar-reactive theming** 🌖 — opt in and the framework's glow intensity follows the *real*
+  moon phase. Nobody else does this.
+- **Scroll-driven animations with zero JS** — reveal-on-scroll, parallax, and a reading progress
+  bar, all pure CSS via `animation-timeline`.
+- **Zero-JavaScript modal** — Lunar styles the native Popover API, so two HTML attributes give
+  you a fully animated modal with backdrop blur, Esc, and light-dismiss. No script.
 
 [View the live component + effects gallery →](./index.html)
 
@@ -70,6 +76,100 @@ is the minified production build.
 
 Switch to the light "daylight" theme by setting `data-theme="light"` on `<html>` (or any
 container) — no attribute, or `data-theme="dark"`, gives you the default night-sky theme.
+
+---
+
+## Signature features — things no other framework ships
+
+### 🌖 Lunar-reactive theming
+
+Call one function and the framework's glow intensity tracks the **actual moon phase** — dimmest
+at new moon, brightest at full moon:
+
+```js
+import { initMoonPhase } from "@velo0/lunar-css/theme";
+
+const phase = initMoonPhase();
+// → { name: "waning-gibbous", age: 17.8, illumination: 96 }
+```
+
+This sets `data-moon-phase="waning-gibbous"` (etc.) on `<html>`, which drives the
+`--lunar-moonlight` multiplier baked into every glow token. It's fully opt-in — skip the call
+and nothing changes. You can also grab `getMoonPhase(date)` for just the astronomy (phase name,
+age in days, illumination %) with no DOM side effects.
+
+`--lunar-moonlight` also works as a **manual glow dial**: set it to `0` to kill every glow in the
+framework at once, or `1.5` to crank them, from one custom property.
+
+### 🌙 Pure-CSS moon-phase icons
+
+Astronomically shaped moon glyphs with no images and no SVG — shadow half plus an elliptical
+terminator, all border-radius and transforms:
+
+```html
+<span class="moon moon-waxing-gibbous"></span>
+<span class="moon moon-live"></span> <!-- always shows tonight's actual phase -->
+```
+
+All eight phases: `moon-new`, `moon-waxing-crescent`, `moon-first-quarter`, `moon-waxing-gibbous`,
+`moon-full`, `moon-waning-gibbous`, `moon-last-quarter`, `moon-waning-crescent`. Size with
+`--moon-size` (default `3rem`). `.moon-live` mirrors whatever `data-moon-phase` an ancestor
+carries, so pair it with `initMoonPhase()` for a live moon widget.
+
+### 📜 Scroll-driven motion, zero JavaScript
+
+Powered by CSS `animation-timeline` — no IntersectionObserver, no scroll listeners, no library.
+The browser scrubs the animation directly from scroll position, off the main thread:
+
+| Class | Effect |
+|---|---|
+| `.scroll-reveal` | Fades in as the element scrolls into view (scrubs back out if you scroll up) |
+| `.scroll-reveal-up` | Fade + rise on scroll into view |
+| `.scroll-reveal-scale` | Fade + scale on scroll into view |
+| `.scroll-reveal-blur` | Fade + un-blur on scroll into view |
+| `.scroll-parallax` | Gentle parallax drift across the viewport |
+| `.scroll-progress` | Reading progress bar — one `<div class="scroll-progress"></div>`, done |
+
+Progressive enhancement: it's all inside `@supports (animation-timeline: view())`, so browsers
+without support (see [caniuse](https://caniuse.com/mdn-css_properties_animation-timeline)) simply
+show the content normally — nothing is ever hidden.
+
+### 🪟 Zero-JS modal (native Popover API)
+
+Lunar's `.modal` is styled for the browser-native Popover API, so this is a complete, animated
+modal — open/close, blurred backdrop, `Esc` to dismiss, click-outside light-dismiss, focus
+handling — with **no JavaScript whatsoever**:
+
+```html
+<button class="btn btn-primary" popovertarget="hello">Open</button>
+
+<div id="hello" popover class="modal">
+  <div class="modal-header">Hello</div>
+  <div class="modal-body">Two HTML attributes. Zero script.</div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" popovertarget="hello" popovertargetaction="hide">Close</button>
+  </div>
+</div>
+```
+
+Entrance/exit transitions use `@starting-style` + `transition-behavior: allow-discrete` — the
+new-school CSS way to animate things that start at `display: none`.
+
+### ✨ Moonbeam — cursor-tracking glow
+
+The "spotlight card" effect as a one-liner. Add `.moonbeam` to any element, call `initMoonbeam()`
+once (a single delegated listener handles every current and future `.moonbeam` on the page):
+
+```html
+<div class="card moonbeam">…</div>
+```
+
+```js
+import { initMoonbeam } from "@velo0/lunar-css/theme";
+initMoonbeam(); // returns a cleanup function
+```
+
+Without the JS it gracefully degrades to a centered glow on hover.
 
 ---
 
@@ -297,6 +397,11 @@ plain elements. See the [live gallery](./index.html#effects) for interactive dem
 | `.slide-up` | One-line slide-up entrance animation |
 | `.scale-in` | One-line scale-in entrance animation |
 | `.delay-1` / `.delay-2` / `.delay-3` / `.delay-4` | Stagger any of the entrance animations (100ms–400ms) |
+| `.moonbeam` | Cursor-tracking moonlight glow (pair with `initMoonbeam()`; centered hover glow without JS) |
+| `.scroll-reveal` / `-up` / `-scale` / `-blur` | Scroll-scrubbed entrance — pure CSS, zero JS |
+| `.scroll-parallax` | Scroll-scrubbed parallax drift |
+| `.scroll-progress` | Fixed reading progress bar driven by page scroll |
+| `.moon` + `.moon-<phase>` / `.moon-live` | Pure-CSS moon-phase icons (see Signature features) |
 
 All animations respect `prefers-reduced-motion: reduce`.
 
@@ -318,7 +423,8 @@ lunar-css/
 │   ├── base.css          # design tokens + reset + base elements
 │   ├── themes.css        # dark (default) + data-theme="light" daylight variant
 │   ├── effects.css       # one-line effect utilities + keyframes
-│   ├── components.css    # buttons, cards, inputs, badges, navbar, modal, toast, tooltip
+│   ├── motion.css        # scroll-driven animation utilities (pure CSS)
+│   ├── components.css    # buttons, cards, inputs, badges, navbar, modal, toast, tooltip, moon icons
 │   └── utilities.css     # atomic utility classes (spacing, flex/grid, typography, borders…)
 ├── dist/                 # built output (generated, do not hand-edit)
 │   ├── lunar.css
@@ -347,6 +453,15 @@ the framework.
 
 Uses modern, broadly-supported CSS: cascade layers (`@layer`), `backdrop-filter`, and CSS custom
 properties. Targets current versions of Chrome, Edge, Firefox, and Safari.
+
+The signature features are progressive enhancements on newer platform APIs:
+
+- **Scroll-driven motion** (`animation-timeline`) — Chrome/Edge 115+, Safari 26+; wrapped in
+  `@supports`, so unsupported browsers show content normally, just without the scroll effects.
+- **Zero-JS modal** (Popover API + `@starting-style`) — Chrome/Edge 125+, Safari 17.4+,
+  Firefox 129+ for the full animated experience; the popover itself works wherever the Popover
+  API does.
+- **Moon-phase icons and lunar theming** — plain CSS + a tiny JS helper; works everywhere.
 
 ## License
 

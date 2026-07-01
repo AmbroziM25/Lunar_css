@@ -226,6 +226,36 @@
 }
 
 /* ---------------------------------------------------------------
+ * Moonbeam — a soft moonlight glow that follows the cursor across
+ * the element. Pair with initMoonbeam() from theme.mjs (one global
+ * listener updates --beam-x/--beam-y). Without the JS, it degrades
+ * to a centered glow on hover.
+ * --------------------------------------------------------------- */
+.moonbeam {
+  position: relative;
+}
+
+.moonbeam::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--duration-slow) var(--ease-out);
+  background: radial-gradient(
+    260px circle at var(--beam-x, 50%) var(--beam-y, 50%),
+    rgb(228 232 255 / 0.12),
+    transparent 65%
+  );
+}
+
+.moonbeam:hover::after,
+.moonbeam:focus-within::after {
+  opacity: 1;
+}
+
+/* ---------------------------------------------------------------
  * Entrance animations
  * --------------------------------------------------------------- */
 .fade-in   { animation: lunar-fade-in var(--duration-slow) var(--ease-out) both; }

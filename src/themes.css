@@ -40,10 +40,10 @@
   --eclipse: var(--moon-100);
   --glow: var(--indigo-500);
 
-  --glow-color-sm: rgb(79 70 229 / 0.12);
-  --glow-color-md: rgb(79 70 229 / 0.18);
-  --glow-color-lg: rgb(79 70 229 / 0.22);
-  --glow-color-violet: rgb(124 58 237 / 0.22);
+  --glow-color-sm: rgb(79 70 229 / calc(0.12 * var(--lunar-moonlight)));
+  --glow-color-md: rgb(79 70 229 / calc(0.18 * var(--lunar-moonlight)));
+  --glow-color-lg: rgb(79 70 229 / calc(0.22 * var(--lunar-moonlight)));
+  --glow-color-violet: rgb(124 58 237 / calc(0.22 * var(--lunar-moonlight)));
 
   --shadow-sm: 0 1px 2px 0 rgb(20 21 42 / 0.06);
   --shadow-md: 0 4px 12px -2px rgb(20 21 42 / 0.1), 0 2px 4px -2px rgb(20 21 42 / 0.06);
@@ -75,5 +75,24 @@
   background: rgb(20 21 42 / 0.06);
   border-color: rgb(20 21 42 / 0.08);
 }
+
+/* ---------------------------------------------------------------
+ * Lunar-reactive theming — glow intensity follows the real moon.
+ * Opt-in: these only apply when data-moon-phase is present on an
+ * ancestor, which initMoonPhase() (theme.mjs) sets from the actual
+ * lunar calendar. Dimmest at new moon, brightest at full moon.
+ * --------------------------------------------------------------- */
+[data-moon-phase="new"] { --lunar-moonlight: 0.45; }
+
+[data-moon-phase="waxing-crescent"],
+[data-moon-phase="waning-crescent"] { --lunar-moonlight: 0.62; }
+
+[data-moon-phase="first-quarter"],
+[data-moon-phase="last-quarter"] { --lunar-moonlight: 0.8; }
+
+[data-moon-phase="waxing-gibbous"],
+[data-moon-phase="waning-gibbous"] { --lunar-moonlight: 1; }
+
+[data-moon-phase="full"] { --lunar-moonlight: 1.25; }
 
 }

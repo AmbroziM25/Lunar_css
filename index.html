@@ -21,6 +21,9 @@
 </head>
 <body>
 
+<!-- Reading progress bar — one element, zero JS (scroll-driven animation) -->
+<div class="scroll-progress" aria-hidden="true"></div>
+
 <a href="#main" class="sr-only" style="position:absolute;left:-9999px;">Skip to content</a>
 
 <header class="navbar">
@@ -32,6 +35,8 @@
     <a class="navbar-link" href="#palette">Palette</a>
     <a class="navbar-link" href="#typography">Typography</a>
     <a class="navbar-link" href="#components">Components</a>
+    <a class="navbar-link" href="#moon">Moon</a>
+    <a class="navbar-link" href="#motion">Motion</a>
     <a class="navbar-link" href="#effects">Effects</a>
     <button class="btn btn-secondary btn-sm" id="theme-toggle" type="button" aria-label="Toggle light/dark theme">
       ☾ / ☀
@@ -206,11 +211,60 @@
       <div class="card mb-10">
         <div class="card-body flex flex-wrap gap-4 items-center">
           <button class="btn btn-primary" id="open-modal">Open modal</button>
+          <button class="btn btn-glow" popovertarget="demo-popover">Zero-JS modal</button>
           <button class="btn btn-secondary" id="show-toast">Show toast</button>
           <button class="btn btn-outline" data-tooltip="I'm a pure-CSS tooltip">Hover me</button>
         </div>
       </div>
 
+    </section>
+
+    <!-- ============================== MOON PHASES ============================== -->
+    <section id="moon" class="toc-anchor" style="margin-bottom: var(--space-20);">
+      <h2>Moon phases</h2>
+      <p class="text-muted mt-2 mb-8">
+        Pure-CSS moon glyphs — no images, no SVG. And <em>lunar-reactive theming</em>: call
+        <code class="inline">initMoonPhase()</code> and the framework's glow intensity follows the real moon
+        via <code class="inline">--lunar-moonlight</code>. Tonight: <strong id="phase-label" class="text-glow">…</strong>
+      </p>
+      <div class="card">
+        <div class="card-body flex flex-wrap gap-6 justify-between">
+          <div class="text-center"><span class="moon moon-new"></span><br /><small><code class="inline">.moon-new</code></small></div>
+          <div class="text-center"><span class="moon moon-waxing-crescent"></span><br /><small><code class="inline">.moon-waxing-crescent</code></small></div>
+          <div class="text-center"><span class="moon moon-first-quarter"></span><br /><small><code class="inline">.moon-first-quarter</code></small></div>
+          <div class="text-center"><span class="moon moon-waxing-gibbous"></span><br /><small><code class="inline">.moon-waxing-gibbous</code></small></div>
+          <div class="text-center"><span class="moon moon-full"></span><br /><small><code class="inline">.moon-full</code></small></div>
+          <div class="text-center"><span class="moon moon-waning-gibbous"></span><br /><small><code class="inline">.moon-waning-gibbous</code></small></div>
+          <div class="text-center"><span class="moon moon-last-quarter"></span><br /><small><code class="inline">.moon-last-quarter</code></small></div>
+          <div class="text-center"><span class="moon moon-waning-crescent"></span><br /><small><code class="inline">.moon-waning-crescent</code></small></div>
+          <div class="text-center"><span class="moon moon-live pulse-glow"></span><br /><small><code class="inline">.moon-live</code> (tonight)</small></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== SCROLL MOTION ============================== -->
+    <section id="motion" class="toc-anchor" style="margin-bottom: var(--space-20);">
+      <h2>Scroll-driven motion</h2>
+      <p class="text-muted mt-2 mb-8">
+        Pure-CSS scroll animations via <code class="inline">animation-timeline</code> — zero JavaScript, no
+        IntersectionObserver. Scroll down and back up: the reveal scrubs with you. The bar at the very top
+        of this page is one element: <code class="inline">.scroll-progress</code>. Browsers without support
+        simply show content normally.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="card scroll-reveal-up">
+          <div class="effect-demo">Rises in as it enters the viewport</div>
+          <div class="card-footer"><button class="badge copy-chip" data-copy="scroll-reveal-up">.scroll-reveal-up</button></div>
+        </div>
+        <div class="card scroll-reveal-scale">
+          <div class="effect-demo">Scales in as it enters the viewport</div>
+          <div class="card-footer"><button class="badge copy-chip" data-copy="scroll-reveal-scale">.scroll-reveal-scale</button></div>
+        </div>
+        <div class="card scroll-reveal-blur">
+          <div class="effect-demo">Un-blurs as it enters the viewport</div>
+          <div class="card-footer"><button class="badge copy-chip" data-copy="scroll-reveal-blur">.scroll-reveal-blur</button></div>
+        </div>
+      </div>
     </section>
 
     <!-- ============================== EFFECTS GALLERY ============================== -->
@@ -290,6 +344,11 @@
           <div class="card-footer"><button class="badge copy-chip" data-copy="eclipse-border">.eclipse-border</button></div>
         </div>
 
+        <div class="card moonbeam">
+          <div class="effect-demo" style="min-height:9rem;">Move your cursor over this card</div>
+          <div class="card-footer"><button class="badge copy-chip" data-copy="moonbeam">.moonbeam</button></div>
+        </div>
+
         <div class="card">
           <div class="effect-demo"><span class="fade-in badge badge-primary">Fade in</span></div>
           <div class="card-footer"><button class="badge copy-chip" data-copy="fade-in">.fade-in</button></div>
@@ -347,6 +406,24 @@
 
 <div id="toast-region" style="position: fixed; bottom: var(--space-6); right: var(--space-6); z-index: var(--z-toast); display: flex; flex-direction: column; gap: var(--space-3);"></div>
 
+<!-- Zero-JS modal: native Popover API + Lunar's .modal styling. No script anywhere. -->
+<div id="demo-popover" popover class="modal">
+  <div class="modal-header">
+    <span>Zero-JS modal</span>
+    <button class="modal-close" popovertarget="demo-popover" popovertargetaction="hide" aria-label="Close">&times;</button>
+  </div>
+  <div class="modal-body">
+    This modal uses the native Popover API — just <code class="inline">popover</code> and
+    <code class="inline">popovertarget</code> attributes. Open/close, <kbd>Esc</kbd> to dismiss,
+    click-outside light dismiss, and the blurred backdrop are all built into the browser.
+    Lunar styles it with <code class="inline">@starting-style</code> entrance/exit transitions.
+    View source: there is no JavaScript for this modal at all.
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" popovertarget="demo-popover" popovertargetaction="hide">Close</button>
+  </div>
+</div>
+
 <footer class="container" style="padding-block: var(--space-10); border-top: 1px solid var(--lunar-border); color: var(--lunar-text-muted); text-align:center;">
   <p class="text-sm">Lunar CSS — MIT licensed. Built with Lunar CSS itself.</p>
 </footer>
@@ -354,9 +431,17 @@
 <script type="module">
   // Theme toggle — using the framework's own framework-agnostic helper
   // (see theme.js; the same import works from React, Vue, Angular, etc.)
-  import { initTheme, toggleTheme } from './theme.mjs';
+  import { initTheme, toggleTheme, initMoonPhase, initMoonbeam } from './theme.mjs';
   initTheme();
   document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+
+  // Lunar-reactive theming: glow intensity + .moon-live follow the real moon
+  const phase = initMoonPhase();
+  document.getElementById('phase-label').textContent =
+    phase.name.replace(/-/g, ' ') + ' · ' + phase.illumination + '% illuminated';
+
+  // Cursor-tracking glow for .moonbeam elements (one delegated listener)
+  initMoonbeam();
 
   // Modal open/close
   (function () {

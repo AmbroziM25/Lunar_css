@@ -17,7 +17,7 @@ const DIST_DIR = path.join(ROOT, 'dist');
 // Cascade order matters: tokens/reset first, then theme overrides, then
 // effects (keyframes + effect classes), then components, utilities last
 // so utility classes can always win (Tailwind-style utility precedence).
-const FILES = ['base.css', 'themes.css', 'effects.css', 'components.css', 'utilities.css'];
+const FILES = ['base.css', 'themes.css', 'effects.css', 'motion.css', 'components.css', 'utilities.css'];
 
 const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
 

@@ -1,0 +1,103 @@
+/*!
+ * Lunar CSS — motion.css
+ * Scroll-driven animation utilities — pure CSS, zero JavaScript.
+ * Built on CSS scroll-driven animations (animation-timeline: view()/scroll()),
+ * so there's no IntersectionObserver, no scroll listener, and no library:
+ * the browser drives the animation directly from scroll position, off the
+ * main thread.
+ *
+ * Progressive enhancement: everything is wrapped in @supports, so browsers
+ * without animation-timeline simply show the content normally — nothing is
+ * ever hidden from them.
+ */
+
+@layer lunar-motion {
+
+@keyframes lunar-scroll-reveal {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes lunar-scroll-reveal-up {
+  from { opacity: 0; transform: translateY(48px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes lunar-scroll-reveal-scale {
+  from { opacity: 0; transform: scale(0.88); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes lunar-scroll-reveal-blur {
+  from { opacity: 0; filter: blur(12px); }
+  to   { opacity: 1; filter: blur(0); }
+}
+
+@keyframes lunar-scroll-parallax {
+  from { transform: translateY(48px); }
+  to   { transform: translateY(-48px); }
+}
+
+@keyframes lunar-scroll-grow-x {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@supports (animation-timeline: view()) {
+
+  /* Reveal-on-scroll: the element animates in as it enters the viewport,
+     and scrubs back out if the user scrolls back up. */
+  .scroll-reveal,
+  .scroll-reveal-up,
+  .scroll-reveal-scale,
+  .scroll-reveal-blur {
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: view();
+    animation-range: entry 10% entry 70%;
+  }
+
+  .scroll-reveal       { animation-name: lunar-scroll-reveal; }
+  .scroll-reveal-up    { animation-name: lunar-scroll-reveal-up; }
+  .scroll-reveal-scale { animation-name: lunar-scroll-reveal-scale; }
+  .scroll-reveal-blur  { animation-name: lunar-scroll-reveal-blur; }
+
+  /* Gentle parallax drift across the element's whole time on screen. */
+  .scroll-parallax {
+    animation: lunar-scroll-parallax linear both;
+    animation-timeline: view();
+    animation-range: cover 0% cover 100%;
+  }
+
+  /* Reading progress bar — drop one element anywhere, done:
+     <div class="scroll-progress"></div> */
+  .scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    z-index: var(--z-toast);
+    pointer-events: none;
+    transform-origin: 0 50%;
+    background-image: linear-gradient(90deg, var(--tide), var(--violet-500), var(--glow));
+    box-shadow: 0 0 8px var(--glow-color-md);
+    animation: lunar-scroll-grow-x linear both;
+    animation-timeline: scroll(root);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-reveal,
+    .scroll-reveal-up,
+    .scroll-reveal-scale,
+    .scroll-reveal-blur,
+    .scroll-parallax {
+      animation: none;
+    }
+    /* .scroll-progress is scrubbed directly by the user's own scrolling
+       (no autonomous motion), so it stays on under reduced motion. */
+  }
+
+}
+
+}
