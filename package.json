@@ -1,6 +1,9 @@
 {
-  "name": "lunar-css",
+  "name": "@velo0/lunar-css",
   "version": "0.1.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "A lightweight, utility-first CSS framework with a dark \"night sky\" aesthetic — pure CSS, zero build step, with a Tailwind preset for drop-in integration.",
   "main": "dist/lunar.css",
   "style": "dist/lunar.css",

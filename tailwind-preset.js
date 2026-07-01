@@ -13,7 +13,7 @@
  * Usage (tailwind.config.js):
  *
  *   module.exports = {
- *     presets: [require('lunar-css/tailwind-preset')],
+ *     presets: [require('@velo0/lunar-css/tailwind-preset')],
  *     content: ['./src/**\/*.{html,js,jsx,ts,tsx}'],
  *   };
  */

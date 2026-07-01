@@ -7,7 +7,7 @@ violet.
 - **Pure CSS, zero build step.** Drop in a `<link>` tag and go.
 - **Utility-first**, Tailwind-like class names (`bg-moon-900`, `text-glow`, `p-4`, `rounded-lg`) —
   muscle memory carries over either direction.
-- **Tailwind-compatible.** Ship your own Tailwind setup? `require('lunar-css/tailwind-preset')`
+- **Tailwind-compatible.** Ship your own Tailwind setup? `require('@velo0/lunar-css/tailwind-preset')`
   and get the same tokens as a theme extension.
 - **One-line effect utilities.** Glow, glass, aurora, shimmer, starfields, entrance animations —
   no hand-written keyframes or box-shadow stacks.
@@ -26,23 +26,23 @@ violet.
 ### CDN (no build step)
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lunar-css/dist/lunar.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@velo0/lunar-css/dist/lunar.min.css" />
 ```
 
 ### npm
 
 ```bash
-npm install lunar-css
+npm install @velo0/lunar-css
 ```
 
 ```css
 /* import the full framework */
-@import "lunar-css/dist/lunar.css";
+@import "@velo0/lunar-css/dist/lunar.css";
 ```
 
 ```js
 // or in a bundler entry point
-import "lunar-css/dist/lunar.css";
+import "@velo0/lunar-css/dist/lunar.css";
 ```
 
 That's it — no PostCSS, no build config. `dist/lunar.css` is the readable build; `dist/lunar.min.css`
@@ -56,7 +56,7 @@ is the minified production build.
 <!doctype html>
 <html lang="en" data-theme="dark">
 <head>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lunar-css/dist/lunar.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@velo0/lunar-css/dist/lunar.min.css" />
 </head>
 <body>
   <div class="card glow-sm hover-lift p-6 max-w-sm">
@@ -79,13 +79,13 @@ Lunar ships a preset that extends Tailwind's theme with its tokens (colors, spac
 shadows, fonts, and a few signature keyframe animations) instead of replacing your setup.
 
 ```bash
-npm install lunar-css tailwindcss
+npm install @velo0/lunar-css tailwindcss
 ```
 
 ```js
 // tailwind.config.js
 module.exports = {
-  presets: [require("lunar-css/tailwind-preset")],
+  presets: [require("@velo0/lunar-css/tailwind-preset")],
   content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
 };
 ```
@@ -113,15 +113,15 @@ the theme switch, `.modal-overlay.is-open`, or a toast list — that's ordinary 
 framework of choice, driving plain Lunar class names.
 
 For the theme switch specifically, Lunar ships an optional, dependency-free ESM helper —
-`lunar-css/theme` — so you don't have to re-write the same three `localStorage`/attribute lines in
+`@velo0/lunar-css/theme` — so you don't have to re-write the same three `localStorage`/attribute lines in
 every project. It's the same helper [the docs page itself uses](./index.html).
 
 ### Plain HTML
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lunar-css/dist/lunar.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@velo0/lunar-css/dist/lunar.min.css" />
 <script type="module">
-  import { initTheme, toggleTheme } from "https://cdn.jsdelivr.net/npm/lunar-css/theme.mjs";
+  import { initTheme, toggleTheme } from "https://cdn.jsdelivr.net/npm/@velo0/lunar-css/theme.mjs";
   initTheme();
   document.getElementById("theme-toggle").addEventListener("click", toggleTheme);
 </script>
@@ -131,12 +131,12 @@ every project. It's the same helper [the docs page itself uses](./index.html).
 
 ```jsx
 // main.jsx / App entry point
-import "lunar-css/dist/lunar.css";
+import "@velo0/lunar-css/dist/lunar.css";
 ```
 
 ```jsx
 import { useEffect } from "react";
-import { initTheme, toggleTheme } from "lunar-css/theme";
+import { initTheme, toggleTheme } from "@velo0/lunar-css/theme";
 
 function ThemeToggle() {
   useEffect(() => { initTheme(); }, []);
@@ -159,7 +159,7 @@ global CSS to be imported from one of those top-level files, not from an arbitra
 
 ```tsx
 // app/layout.tsx (App Router)
-import "lunar-css/dist/lunar.css";
+import "@velo0/lunar-css/dist/lunar.css";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -180,7 +180,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 ```tsx
 // pages/_app.tsx (Pages Router)
-import "lunar-css/dist/lunar.css";
+import "@velo0/lunar-css/dist/lunar.css";
 export default function MyApp({ Component, pageProps }) {
   return <Component {...pageProps} />;
 }
@@ -193,13 +193,13 @@ Client Components (`"use client"`) — the inline script only handles the pre-hy
 
 ```js
 // main.js
-import "lunar-css/dist/lunar.css";
+import "@velo0/lunar-css/dist/lunar.css";
 ```
 
 ```vue
 <script setup>
 import { onMounted } from "vue";
-import { initTheme, toggleTheme } from "lunar-css/theme";
+import { initTheme, toggleTheme } from "@velo0/lunar-css/theme";
 onMounted(initTheme);
 </script>
 
@@ -212,12 +212,12 @@ onMounted(initTheme);
 
 ```json
 // angular.json
-"styles": ["node_modules/lunar-css/dist/lunar.css", "src/styles.css"]
+"styles": ["node_modules/@velo0/lunar-css/dist/lunar.css", "src/styles.css"]
 ```
 
 ```ts
 import { Component, OnInit } from "@angular/core";
-import { initTheme, toggleTheme } from "lunar-css/theme";
+import { initTheme, toggleTheme } from "@velo0/lunar-css/theme";
 
 @Component({ selector: "app-root", templateUrl: "./app.component.html" })
 export class AppComponent implements OnInit {
@@ -237,7 +237,7 @@ export class AppComponent implements OnInit {
 ### Anything else
 
 Svelte, SolidJS, Astro, Nuxt, Qwik, plain jQuery — same two ingredients: import
-`lunar-css/dist/lunar.css` (or the CDN link) once, and optionally `import` from `lunar-css/theme`.
+`@velo0/lunar-css/dist/lunar.css` (or the CDN link) once, and optionally `import` from `@velo0/lunar-css/theme`.
 Nothing in Lunar assumes a specific framework, bundler, or virtual DOM.
 
 ---
