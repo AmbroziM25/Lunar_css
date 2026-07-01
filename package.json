@@ -44,15 +44,15 @@
     "angular",
     "framework-agnostic"
   ],
-  "author": "",
+  "author": "AmbroziM25",
   "license": "MIT",
-  "homepage": "https://github.com/lunar-css/lunar-css#readme",
+  "homepage": "https://github.com/AmbroziM25/Lunar_css#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lunar-css/lunar-css.git"
+    "url": "git+https://github.com/AmbroziM25/Lunar_css.git"
   },
   "bugs": {
-    "url": "https://github.com/lunar-css/lunar-css/issues"
+    "url": "https://github.com/AmbroziM25/Lunar_css/issues"
   },
   "peerDependencies": {
     "tailwindcss": ">=3.4.0"
