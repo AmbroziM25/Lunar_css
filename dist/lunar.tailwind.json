@@ -1,0 +1,1090 @@
+{
+  "base": {
+    ":root": {
+      "color-scheme": "dark",
+      "--moon-50": "#f7f8fc",
+      "--moon-100": "#eceef7",
+      "--moon-200": "#d9dcee",
+      "--moon-300": "#b9bfdd",
+      "--moon-400": "#9298bd",
+      "--moon-500": "#6f76a0",
+      "--moon-600": "#545a80",
+      "--moon-700": "#3d4163",
+      "--moon-800": "#262844",
+      "--moon-900": "#14152a",
+      "--moon-950": "#090913",
+      "--indigo-400": "#818cf8",
+      "--indigo-500": "#6366f1",
+      "--indigo-600": "#4f46e5",
+      "--violet-400": "#a78bfa",
+      "--violet-500": "#8b5cf6",
+      "--violet-600": "#7c3aed",
+      "--silver-300": "#d7dbea",
+      "--silver-400": "#b7bcd6",
+      "--eclipse": "#0d0e1f",
+      "--glow": "#e4e8ff",
+      "--tide": "#6c6ff0",
+      "--lunar-bg": "var(--moon-950)",
+      "--lunar-bg-elevated": "var(--moon-900)",
+      "--lunar-surface": "var(--moon-800)",
+      "--lunar-surface-hover": "var(--moon-700)",
+      "--lunar-border": "var(--moon-700)",
+      "--lunar-text": "var(--moon-50)",
+      "--lunar-text-muted": "var(--moon-400)",
+      "--lunar-accent": "var(--tide)",
+      "--lunar-accent-2": "var(--violet-500)",
+      "--space-0": "0",
+      "--space-px": "1px",
+      "--space-1": "0.25rem",
+      "--space-2": "0.5rem",
+      "--space-3": "0.75rem",
+      "--space-4": "1rem",
+      "--space-5": "1.25rem",
+      "--space-6": "1.5rem",
+      "--space-7": "1.75rem",
+      "--space-8": "2rem",
+      "--space-9": "2.25rem",
+      "--space-10": "2.5rem",
+      "--space-12": "3rem",
+      "--space-14": "3.5rem",
+      "--space-16": "4rem",
+      "--space-20": "5rem",
+      "--space-24": "6rem",
+      "--space-32": "8rem",
+      "--font-sans": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
+      "--font-mono": "ui-monospace, SFMono-Regular, \"SF Mono\", Menlo, Consolas, \"Liberation Mono\", monospace",
+      "--text-xs": "0.75rem",
+      "--text-sm": "0.875rem",
+      "--text-base": "1rem",
+      "--text-lg": "1.125rem",
+      "--text-xl": "1.25rem",
+      "--text-2xl": "1.5rem",
+      "--text-3xl": "1.875rem",
+      "--text-4xl": "2.25rem",
+      "--text-5xl": "3rem",
+      "--text-6xl": "3.75rem",
+      "--leading-none": "1",
+      "--leading-tight": "1.25",
+      "--leading-snug": "1.375",
+      "--leading-normal": "1.5",
+      "--leading-relaxed": "1.625",
+      "--leading-loose": "2",
+      "--tracking-tight": "-0.02em",
+      "--tracking-normal": "0",
+      "--tracking-wide": "0.02em",
+      "--tracking-wider": "0.05em",
+      "--font-thin": "100",
+      "--font-light": "300",
+      "--font-normal": "400",
+      "--font-medium": "500",
+      "--font-semibold": "600",
+      "--font-bold": "700",
+      "--font-black": "900",
+      "--radius-none": "0",
+      "--radius-sm": "0.25rem",
+      "--radius-md": "0.5rem",
+      "--radius-lg": "0.75rem",
+      "--radius-xl": "1rem",
+      "--radius-2xl": "1.5rem",
+      "--radius-full": "9999px",
+      "--shadow-sm": "0 1px 2px 0 rgb(0 0 0 / 0.35)",
+      "--shadow-md": "0 4px 12px -2px rgb(0 0 0 / 0.45), 0 2px 4px -2px rgb(0 0 0 / 0.3)",
+      "--shadow-lg": "0 12px 24px -4px rgb(0 0 0 / 0.5), 0 4px 8px -4px rgb(0 0 0 / 0.35)",
+      "--shadow-xl": "0 24px 48px -8px rgb(0 0 0 / 0.55), 0 8px 16px -8px rgb(0 0 0 / 0.4)",
+      "--lunar-moonlight": "1",
+      "--glow-color-sm": "rgb(228 232 255 / calc(0.25 * var(--lunar-moonlight)))",
+      "--glow-color-md": "rgb(108 111 240 / calc(0.35 * var(--lunar-moonlight)))",
+      "--glow-color-lg": "rgb(108 111 240 / calc(0.45 * var(--lunar-moonlight)))",
+      "--glow-color-violet": "rgb(139 92 246 / calc(0.45 * var(--lunar-moonlight)))",
+      "--shadow-glow-sm": "0 0 12px 0 var(--glow-color-sm)",
+      "--shadow-glow-md": "0 0 24px 2px var(--glow-color-md)",
+      "--shadow-glow-lg": "0 0 48px 6px var(--glow-color-lg)",
+      "--shadow-glow-violet": "0 0 32px 4px var(--glow-color-violet)",
+      "--ease-out": "cubic-bezier(0.16, 1, 0.3, 1)",
+      "--ease-in-out": "cubic-bezier(0.65, 0, 0.35, 1)",
+      "--duration-fast": "150ms",
+      "--duration-base": "250ms",
+      "--duration-slow": "450ms",
+      "--z-dropdown": "100",
+      "--z-sticky": "200",
+      "--z-overlay": "300",
+      "--z-modal": "400",
+      "--z-toast": "500",
+      "--z-tooltip": "600"
+    },
+    ":root,\n[data-theme=\"dark\"]": {
+      "color-scheme": "dark",
+      "--lunar-bg": "var(--moon-950)",
+      "--lunar-bg-elevated": "var(--moon-900)",
+      "--lunar-surface": "var(--moon-800)",
+      "--lunar-surface-hover": "var(--moon-700)",
+      "--lunar-border": "var(--moon-700)",
+      "--lunar-text": "var(--moon-50)",
+      "--lunar-text-muted": "var(--moon-400)",
+      "--lunar-accent": "var(--tide)",
+      "--lunar-accent-2": "var(--violet-500)",
+      "--lunar-shadow-ambient": "var(--shadow-md)"
+    },
+    "[data-theme=\"light\"]": {
+      "color-scheme": "light",
+      "--lunar-bg": "var(--moon-50)",
+      "--lunar-bg-elevated": "#ffffff",
+      "--lunar-surface": "var(--moon-100)",
+      "--lunar-surface-hover": "var(--moon-200)",
+      "--lunar-border": "var(--moon-300)",
+      "--lunar-text": "var(--moon-950)",
+      "--lunar-text-muted": "var(--moon-600)",
+      "--lunar-accent": "var(--indigo-600)",
+      "--lunar-accent-2": "var(--violet-600)",
+      "--eclipse": "var(--moon-100)",
+      "--glow": "var(--indigo-500)",
+      "--glow-color-sm": "rgb(79 70 229 / calc(0.12 * var(--lunar-moonlight)))",
+      "--glow-color-md": "rgb(79 70 229 / calc(0.18 * var(--lunar-moonlight)))",
+      "--glow-color-lg": "rgb(79 70 229 / calc(0.22 * var(--lunar-moonlight)))",
+      "--glow-color-violet": "rgb(124 58 237 / calc(0.22 * var(--lunar-moonlight)))",
+      "--shadow-sm": "0 1px 2px 0 rgb(20 21 42 / 0.06)",
+      "--shadow-md": "0 4px 12px -2px rgb(20 21 42 / 0.1), 0 2px 4px -2px rgb(20 21 42 / 0.06)",
+      "--shadow-lg": "0 12px 24px -4px rgb(20 21 42 / 0.12), 0 4px 8px -4px rgb(20 21 42 / 0.08)",
+      "--shadow-xl": "0 24px 48px -8px rgb(20 21 42 / 0.16), 0 8px 16px -8px rgb(20 21 42 / 0.1)",
+      "--lunar-shadow-ambient": "var(--shadow-sm)"
+    },
+    "[data-theme=\"light\"] body": {
+      "background-image": "radial-gradient(ellipse 80% 50% at 50% -20%, rgb(99 102 241 / 0.08), transparent), radial-gradient(ellipse 60% 40% at 100% 0%, rgb(124 58 237 / 0.05), transparent)"
+    },
+    "[data-theme=\"light\"] .starfield::before,\n[data-theme=\"light\"] .starfield::after": {
+      "opacity": "0.35"
+    },
+    "[data-theme=\"light\"] .glass": {
+      "background": "rgb(255 255 255 / 0.6)",
+      "border-color": "rgb(20 21 42 / 0.08)"
+    },
+    "[data-theme=\"light\"] .glass-dark": {
+      "background": "rgb(20 21 42 / 0.06)",
+      "border-color": "rgb(20 21 42 / 0.08)"
+    },
+    "[data-moon-phase=\"new\"]": {
+      "--lunar-moonlight": "0.45"
+    },
+    "[data-moon-phase=\"waxing-crescent\"],\n[data-moon-phase=\"waning-crescent\"]": {
+      "--lunar-moonlight": "0.62"
+    },
+    "[data-moon-phase=\"first-quarter\"],\n[data-moon-phase=\"last-quarter\"]": {
+      "--lunar-moonlight": "0.8"
+    },
+    "[data-moon-phase=\"waxing-gibbous\"],\n[data-moon-phase=\"waning-gibbous\"]": {
+      "--lunar-moonlight": "1"
+    },
+    "[data-moon-phase=\"full\"]": {
+      "--lunar-moonlight": "1.25"
+    },
+    "@property --lunar-angle": {
+      "syntax": "'<angle>'",
+      "initial-value": "0deg",
+      "inherits": "false"
+    },
+    "@keyframes lunar-float": {
+      "0%, 100%": {
+        "transform": "translateY(0)"
+      },
+      "50%": {
+        "transform": "translateY(-10px)"
+      }
+    },
+    "@keyframes lunar-pulse-glow": {
+      "0%, 100%": {
+        "box-shadow": "var(--shadow-glow-sm)"
+      },
+      "50%": {
+        "box-shadow": "var(--shadow-glow-lg)"
+      }
+    },
+    "@keyframes lunar-shimmer": {
+      "to": {
+        "background-position": "-200% center"
+      }
+    },
+    "@keyframes lunar-twinkle": {
+      "0%, 100%": {
+        "opacity": "0.35"
+      },
+      "50%": {
+        "opacity": "1"
+      }
+    },
+    "@keyframes lunar-aurora": {
+      "0%": {
+        "background-position": "0% 50%"
+      },
+      "50%": {
+        "background-position": "100% 50%"
+      },
+      "100%": {
+        "background-position": "0% 50%"
+      }
+    },
+    "@keyframes lunar-eclipse-spin": {
+      "to": {
+        "--lunar-angle": "360deg"
+      }
+    },
+    "@keyframes lunar-fade-in": {
+      "from": {
+        "opacity": "0"
+      },
+      "to": {
+        "opacity": "1"
+      }
+    },
+    "@keyframes lunar-slide-up": {
+      "from": {
+        "opacity": "0",
+        "transform": "translateY(16px)"
+      },
+      "to": {
+        "opacity": "1",
+        "transform": "translateY(0)"
+      }
+    },
+    "@keyframes lunar-scale-in": {
+      "from": {
+        "opacity": "0",
+        "transform": "scale(0.94)"
+      },
+      "to": {
+        "opacity": "1",
+        "transform": "scale(1)"
+      }
+    },
+    "@keyframes lunar-scroll-reveal": {
+      "from": {
+        "opacity": "0"
+      },
+      "to": {
+        "opacity": "1"
+      }
+    },
+    "@keyframes lunar-scroll-reveal-up": {
+      "from": {
+        "opacity": "0",
+        "transform": "translateY(48px)"
+      },
+      "to": {
+        "opacity": "1",
+        "transform": "translateY(0)"
+      }
+    },
+    "@keyframes lunar-scroll-reveal-scale": {
+      "from": {
+        "opacity": "0",
+        "transform": "scale(0.88)"
+      },
+      "to": {
+        "opacity": "1",
+        "transform": "scale(1)"
+      }
+    },
+    "@keyframes lunar-scroll-reveal-blur": {
+      "from": {
+        "opacity": "0",
+        "filter": "blur(12px)"
+      },
+      "to": {
+        "opacity": "1",
+        "filter": "blur(0)"
+      }
+    },
+    "@keyframes lunar-scroll-parallax": {
+      "from": {
+        "transform": "translateY(48px)"
+      },
+      "to": {
+        "transform": "translateY(-48px)"
+      }
+    },
+    "@keyframes lunar-scroll-grow-x": {
+      "from": {
+        "transform": "scaleX(0)"
+      },
+      "to": {
+        "transform": "scaleX(1)"
+      }
+    },
+    "@starting-style": {
+      ".modal[popover]:popover-open": {
+        "opacity": "0",
+        "transform": "scale(0.95) translateY(8px)"
+      },
+      ".modal[popover]:popover-open::backdrop": {
+        "background-color": "rgb(9 9 19 / 0)",
+        "-webkit-backdrop-filter": "blur(0)",
+        "backdrop-filter": "blur(0)"
+      }
+    },
+    "[data-tooltip]": {
+      "position": "relative"
+    },
+    "[data-tooltip]::after,\n[data-tooltip]::before": {
+      "opacity": "0",
+      "visibility": "hidden",
+      "pointer-events": "none",
+      "position": "absolute",
+      "left": "50%",
+      "bottom": "calc(100% + 8px)",
+      "transform": "translateX(-50%) translateY(4px)",
+      "transition": "opacity var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out)",
+      "z-index": "var(--z-tooltip)"
+    },
+    "[data-tooltip]::after": {
+      "content": "attr(data-tooltip)",
+      "white-space": "nowrap",
+      "padding": "0.375rem 0.625rem",
+      "font-size": "var(--text-xs)",
+      "font-weight": "var(--font-medium)",
+      "color": "var(--moon-50)",
+      "background-color": "var(--moon-900)",
+      "border-radius": "var(--radius-sm)",
+      "box-shadow": "var(--shadow-md)"
+    },
+    "[data-tooltip]::before": {
+      "content": "\"\"",
+      "bottom": "100%",
+      "border": "5px solid transparent",
+      "border-top-color": "var(--moon-900)"
+    },
+    "[data-tooltip]:hover::after, [data-tooltip]:hover::before,\n[data-tooltip]:focus-visible::after, [data-tooltip]:focus-visible::before": {
+      "opacity": "1",
+      "visibility": "visible",
+      "transform": "translateX(-50%) translateY(0)"
+    }
+  },
+  "components": {
+    ".btn": {
+      "display": "inline-flex",
+      "align-items": "center",
+      "justify-content": "center",
+      "gap": "var(--space-2)",
+      "padding": "0.625rem 1.25rem",
+      "font-family": "inherit",
+      "font-size": "var(--text-sm)",
+      "font-weight": "var(--font-medium)",
+      "line-height": "1",
+      "white-space": "nowrap",
+      "user-select": "none",
+      "border": "1px solid transparent",
+      "border-radius": "var(--radius-md)",
+      "color": "var(--lunar-text)",
+      "background-color": "var(--lunar-surface)",
+      "transition": "background-color var(--duration-base) var(--ease-out), border-color var(--duration-base) var(--ease-out), box-shadow var(--duration-base) var(--ease-out), transform var(--duration-fast) var(--ease-out)",
+      "&:disabled": {
+        "opacity": "0.5",
+        "cursor": "not-allowed",
+        "box-shadow": "none",
+        "transform": "none"
+      }
+    },
+    ".btn-primary": {
+      "background-color": "var(--tide)",
+      "color": "var(--moon-50)",
+      "box-shadow": "var(--shadow-glow-sm)",
+      "&:hover:not(:disabled), &:focus-visible:not(:disabled)": {
+        "background-color": "var(--indigo-600)",
+        "box-shadow": "var(--shadow-glow-md)",
+        "transform": "translateY(-1px)"
+      }
+    },
+    ".btn-secondary": {
+      "background-color": "var(--lunar-surface)",
+      "border-color": "var(--lunar-border)",
+      "color": "var(--lunar-text)",
+      "&:hover:not(:disabled)": {
+        "background-color": "var(--lunar-surface-hover)"
+      }
+    },
+    ".btn-ghost": {
+      "background-color": "transparent",
+      "color": "var(--lunar-text)",
+      "&:hover:not(:disabled)": {
+        "background-color": "var(--lunar-surface)"
+      }
+    },
+    ".btn-outline": {
+      "background-color": "transparent",
+      "border-color": "var(--tide)",
+      "color": "var(--tide)",
+      "&:hover:not(:disabled)": {
+        "background-color": "rgb(108 111 240 / 0.1)"
+      }
+    },
+    ".btn-glow": {
+      "background-image": "linear-gradient(135deg, var(--tide), var(--violet-500))",
+      "color": "var(--moon-50)",
+      "box-shadow": "var(--shadow-glow-violet)",
+      "&:hover:not(:disabled)": {
+        "box-shadow": "var(--shadow-glow-lg)",
+        "transform": "translateY(-1px)"
+      }
+    },
+    ".btn-sm": {
+      "padding": "0.375rem 0.875rem",
+      "font-size": "var(--text-xs)"
+    },
+    ".btn-lg": {
+      "padding": "0.875rem 1.75rem",
+      "font-size": "var(--text-base)"
+    },
+    ".card": {
+      "background-color": "var(--lunar-bg-elevated)",
+      "border": "1px solid var(--lunar-border)",
+      "border-radius": "var(--radius-lg)",
+      "box-shadow": "var(--shadow-md)",
+      "overflow": "hidden",
+      "transition": "transform var(--duration-base) var(--ease-out), box-shadow var(--duration-base) var(--ease-out), border-color var(--duration-base) var(--ease-out)",
+      "&:hover": {
+        "border-color": "var(--moon-600)"
+      }
+    },
+    ".card-header": {
+      "padding": "var(--space-5) var(--space-6)",
+      "border-bottom": "1px solid var(--lunar-border)",
+      "font-weight": "var(--font-semibold)"
+    },
+    ".card-body": {
+      "padding": "var(--space-6)"
+    },
+    ".card-footer": {
+      "padding": "var(--space-5) var(--space-6)",
+      "border-top": "1px solid var(--lunar-border)",
+      "display": "flex",
+      "align-items": "center",
+      "gap": "var(--space-3)"
+    },
+    ".label": {
+      "display": "block",
+      "margin-bottom": "var(--space-2)",
+      "font-size": "var(--text-sm)",
+      "font-weight": "var(--font-medium)",
+      "color": "var(--lunar-text-muted)"
+    },
+    ".input": {
+      "display": "block",
+      "width": "100%",
+      "padding": "0.625rem 0.875rem",
+      "font-family": "inherit",
+      "font-size": "var(--text-sm)",
+      "color": "var(--lunar-text)",
+      "background-color": "var(--lunar-surface)",
+      "border": "1px solid var(--lunar-border)",
+      "border-radius": "var(--radius-md)",
+      "transition": "border-color var(--duration-base) var(--ease-out), box-shadow var(--duration-base) var(--ease-out)",
+      "&::placeholder": {
+        "color": "var(--lunar-text-muted)"
+      },
+      "&:focus": {
+        "outline": "none",
+        "border-color": "var(--tide)",
+        "box-shadow": "0 0 0 3px rgb(108 111 240 / 0.25), var(--shadow-glow-sm)"
+      },
+      "&:disabled": {
+        "opacity": "0.5",
+        "cursor": "not-allowed"
+      }
+    },
+    ".textarea": {
+      "display": "block",
+      "width": "100%",
+      "padding": "0.625rem 0.875rem",
+      "font-family": "inherit",
+      "font-size": "var(--text-sm)",
+      "color": "var(--lunar-text)",
+      "background-color": "var(--lunar-surface)",
+      "border": "1px solid var(--lunar-border)",
+      "border-radius": "var(--radius-md)",
+      "transition": "border-color var(--duration-base) var(--ease-out), box-shadow var(--duration-base) var(--ease-out)",
+      "&::placeholder": {
+        "color": "var(--lunar-text-muted)"
+      },
+      "&:focus": {
+        "outline": "none",
+        "border-color": "var(--tide)",
+        "box-shadow": "0 0 0 3px rgb(108 111 240 / 0.25), var(--shadow-glow-sm)"
+      },
+      "&:disabled": {
+        "opacity": "0.5",
+        "cursor": "not-allowed"
+      },
+      "min-height": "6rem",
+      "resize": "vertical"
+    },
+    ".select": {
+      "display": "block",
+      "width": "100%",
+      "padding": "0.625rem 0.875rem",
+      "font-family": "inherit",
+      "font-size": "var(--text-sm)",
+      "color": "var(--lunar-text)",
+      "background-color": "var(--lunar-surface)",
+      "border": "1px solid var(--lunar-border)",
+      "border-radius": "var(--radius-md)",
+      "transition": "border-color var(--duration-base) var(--ease-out), box-shadow var(--duration-base) var(--ease-out)",
+      "&:focus": {
+        "outline": "none",
+        "border-color": "var(--tide)",
+        "box-shadow": "0 0 0 3px rgb(108 111 240 / 0.25), var(--shadow-glow-sm)"
+      },
+      "&:disabled": {
+        "opacity": "0.5",
+        "cursor": "not-allowed"
+      }
+    },
+    ".form-group": {
+      "margin-bottom": "var(--space-5)"
+    },
+    ".form-hint": {
+      "margin-top": "var(--space-2)",
+      "font-size": "var(--text-xs)",
+      "color": "var(--lunar-text-muted)"
+    },
+    ".badge": {
+      "display": "inline-flex",
+      "align-items": "center",
+      "gap": "var(--space-1)",
+      "padding": "0.2rem 0.625rem",
+      "font-size": "var(--text-xs)",
+      "font-weight": "var(--font-medium)",
+      "border-radius": "var(--radius-full)",
+      "background-color": "var(--lunar-surface)",
+      "color": "var(--lunar-text)",
+      "border": "1px solid var(--lunar-border)"
+    },
+    ".badge-primary": {
+      "background-color": "rgb(108 111 240 / 0.15)",
+      "color": "var(--indigo-400)",
+      "border-color": "rgb(108 111 240 / 0.3)"
+    },
+    ".badge-violet": {
+      "background-color": "rgb(139 92 246 / 0.15)",
+      "color": "var(--violet-400)",
+      "border-color": "rgb(139 92 246 / 0.3)"
+    },
+    ".badge-outline": {
+      "background-color": "transparent"
+    },
+    ".badge-glow": {
+      "background-color": "var(--tide)",
+      "color": "var(--moon-50)",
+      "border-color": "transparent",
+      "box-shadow": "var(--shadow-glow-sm)"
+    },
+    ".navbar": {
+      "display": "flex",
+      "align-items": "center",
+      "justify-content": "space-between",
+      "gap": "var(--space-6)",
+      "padding": "var(--space-4) var(--space-6)",
+      "background-color": "rgb(9 9 19 / 0.7)",
+      "backdrop-filter": "blur(12px) saturate(140%)",
+      "-webkit-backdrop-filter": "blur(12px) saturate(140%)",
+      "border-bottom": "1px solid var(--lunar-border)",
+      "position": "sticky",
+      "top": "0",
+      "z-index": "var(--z-sticky)"
+    },
+    ".navbar-brand": {
+      "display": "flex",
+      "align-items": "center",
+      "gap": "var(--space-2)",
+      "font-weight": "var(--font-semibold)",
+      "font-size": "var(--text-lg)",
+      "color": "var(--lunar-text)"
+    },
+    ".navbar-nav": {
+      "display": "flex",
+      "align-items": "center",
+      "gap": "var(--space-6)",
+      "list-style": "none",
+      "padding": "0",
+      "margin": "0"
+    },
+    ".navbar-link": {
+      "color": "var(--lunar-text-muted)",
+      "font-size": "var(--text-sm)",
+      "font-weight": "var(--font-medium)",
+      "transition": "color var(--duration-base) var(--ease-out)",
+      "&:hover, &.is-active": {
+        "color": "var(--lunar-text)",
+        "text-decoration": "none"
+      },
+      "&.is-active": {
+        "color": "var(--tide)"
+      }
+    },
+    ".modal-overlay": {
+      "position": "fixed",
+      "inset": "0",
+      "display": "flex",
+      "align-items": "center",
+      "justify-content": "center",
+      "padding": "var(--space-6)",
+      "background-color": "rgb(9 9 19 / 0.7)",
+      "backdrop-filter": "blur(4px)",
+      "z-index": "var(--z-modal)",
+      "opacity": "0",
+      "visibility": "hidden",
+      "transition": "opacity var(--duration-base) var(--ease-out), visibility var(--duration-base)",
+      "&.is-open": {
+        "opacity": "1",
+        "visibility": "visible"
+      },
+      "&.is-open .modal": {
+        "transform": "scale(1) translateY(0)"
+      }
+    },
+    ".modal": {
+      "width": "100%",
+      "max-width": "28rem",
+      "background-color": "var(--lunar-bg-elevated)",
+      "border": "1px solid var(--lunar-border)",
+      "border-radius": "var(--radius-lg)",
+      "box-shadow": "var(--shadow-xl), var(--shadow-glow-sm)",
+      "transform": "scale(0.95) translateY(8px)",
+      "transition": "transform var(--duration-base) var(--ease-out)",
+      "&[popover]": {
+        "margin": "auto",
+        "padding": "0",
+        "width": "min(28rem, 100vw - 3rem)",
+        "border": "1px solid var(--lunar-border)",
+        "opacity": "0",
+        "transform": "scale(0.95) translateY(8px)",
+        "transition": "opacity var(--duration-base) var(--ease-out), transform var(--duration-base) var(--ease-out), overlay var(--duration-base) allow-discrete, display var(--duration-base) allow-discrete"
+      },
+      "&[popover]:popover-open": {
+        "opacity": "1",
+        "transform": "none"
+      },
+      "&[popover]::backdrop": {
+        "background-color": "rgb(9 9 19 / 0.7)",
+        "-webkit-backdrop-filter": "blur(4px)",
+        "backdrop-filter": "blur(4px)",
+        "transition": "background-color 250ms ease-out, -webkit-backdrop-filter 250ms ease-out, backdrop-filter 250ms ease-out, overlay 250ms allow-discrete, display 250ms allow-discrete"
+      }
+    },
+    ".modal-header": {
+      "display": "flex",
+      "align-items": "center",
+      "justify-content": "space-between",
+      "padding": "var(--space-5) var(--space-6)",
+      "border-bottom": "1px solid var(--lunar-border)",
+      "font-weight": "var(--font-semibold)"
+    },
+    ".modal-body": {
+      "padding": "var(--space-6)",
+      "color": "var(--lunar-text-muted)"
+    },
+    ".modal-footer": {
+      "display": "flex",
+      "justify-content": "flex-end",
+      "gap": "var(--space-3)",
+      "padding": "var(--space-5) var(--space-6)",
+      "border-top": "1px solid var(--lunar-border)"
+    },
+    ".modal-close": {
+      "font-size": "var(--text-xl)",
+      "line-height": "1",
+      "color": "var(--lunar-text-muted)",
+      "&:hover": {
+        "color": "var(--lunar-text)"
+      }
+    },
+    ".toast": {
+      "display": "flex",
+      "align-items": "flex-start",
+      "gap": "var(--space-3)",
+      "max-width": "24rem",
+      "padding": "var(--space-4) var(--space-5)",
+      "background-color": "var(--lunar-bg-elevated)",
+      "border": "1px solid var(--lunar-border)",
+      "border-left": "3px solid var(--tide)",
+      "border-radius": "var(--radius-md)",
+      "box-shadow": "var(--shadow-lg)",
+      "animation": "lunar-slide-up var(--duration-slow) var(--ease-out) both"
+    },
+    ".toast-title": {
+      "font-weight": "var(--font-semibold)",
+      "font-size": "var(--text-sm)"
+    },
+    ".toast-message": {
+      "font-size": "var(--text-sm)",
+      "color": "var(--lunar-text-muted)"
+    },
+    ".toast-success": {
+      "border-left-color": "#34d399"
+    },
+    ".toast-error": {
+      "border-left-color": "#f87171"
+    },
+    ".toast-warning": {
+      "border-left-color": "#fbbf24"
+    },
+    ".toast-info": {
+      "border-left-color": "var(--indigo-400)"
+    },
+    ".moon": {
+      "--moon-size": "3rem",
+      "position": "relative",
+      "display": "inline-block",
+      "flex-shrink": "0",
+      "width": "var(--moon-size)",
+      "height": "var(--moon-size)",
+      "border-radius": "var(--radius-full)",
+      "background-color": "var(--glow)",
+      "overflow": "hidden",
+      "box-shadow": "inset 0 0 calc(var(--moon-size) / 10) rgb(9 9 19 / 0.25), var(--shadow-glow-sm)",
+      "&::before": {
+        "content": "\"\"",
+        "position": "absolute",
+        "top": "0",
+        "bottom": "0",
+        "width": "50%",
+        "background-color": "var(--moon-800)",
+        "display": "none"
+      },
+      "&::after": {
+        "content": "\"\"",
+        "position": "absolute",
+        "inset": "0",
+        "border-radius": "var(--radius-full)",
+        "background-color": "var(--moon-800)",
+        "transform": "scaleX(0)"
+      }
+    },
+    ".moon-new": {
+      "&::before": {
+        "display": "block",
+        "left": "0",
+        "right": "0",
+        "width": "auto"
+      }
+    },
+    ".moon-live": {
+      "[data-moon-phase=\"new\"] &::before": {
+        "display": "block",
+        "left": "0",
+        "right": "0",
+        "width": "auto"
+      },
+      "[data-moon-phase=\"waxing-crescent\"] &::before, [data-moon-phase=\"first-quarter\"] &::before, [data-moon-phase=\"waxing-gibbous\"] &::before": {
+        "display": "block",
+        "left": "0"
+      },
+      "[data-moon-phase=\"waning-gibbous\"] &::before, [data-moon-phase=\"last-quarter\"] &::before, [data-moon-phase=\"waning-crescent\"] &::before": {
+        "display": "block",
+        "right": "0"
+      },
+      "[data-moon-phase=\"waxing-crescent\"] &::after, [data-moon-phase=\"waning-crescent\"] &::after": {
+        "transform": "scaleX(0.65)"
+      },
+      "[data-moon-phase=\"waxing-gibbous\"] &::after, [data-moon-phase=\"waning-gibbous\"] &::after": {
+        "transform": "scaleX(0.65)",
+        "background-color": "var(--glow)"
+      }
+    },
+    ".moon-waxing-crescent": {
+      "&::before": {
+        "display": "block",
+        "left": "0"
+      },
+      "&::after": {
+        "transform": "scaleX(0.65)"
+      }
+    },
+    ".moon-first-quarter": {
+      "&::before": {
+        "display": "block",
+        "left": "0"
+      }
+    },
+    ".moon-waxing-gibbous": {
+      "&::before": {
+        "display": "block",
+        "left": "0"
+      },
+      "&::after": {
+        "transform": "scaleX(0.65)",
+        "background-color": "var(--glow)"
+      }
+    },
+    ".moon-waning-gibbous": {
+      "&::before": {
+        "display": "block",
+        "right": "0"
+      },
+      "&::after": {
+        "transform": "scaleX(0.65)",
+        "background-color": "var(--glow)"
+      }
+    },
+    ".moon-last-quarter": {
+      "&::before": {
+        "display": "block",
+        "right": "0"
+      }
+    },
+    ".moon-waning-crescent": {
+      "&::before": {
+        "display": "block",
+        "right": "0"
+      },
+      "&::after": {
+        "transform": "scaleX(0.65)"
+      }
+    }
+  },
+  "utilities": {
+    ".glow-sm": {
+      "box-shadow": "var(--shadow-glow-sm)"
+    },
+    ".glow-md": {
+      "box-shadow": "var(--shadow-glow-md)"
+    },
+    ".glow-lg": {
+      "box-shadow": "var(--shadow-glow-lg)"
+    },
+    ".glow-violet": {
+      "box-shadow": "var(--shadow-glow-violet)"
+    },
+    ".hover-lift": {
+      "transition": "transform var(--duration-base) var(--ease-out), box-shadow var(--duration-base) var(--ease-out)",
+      "&:hover, &:focus-visible": {
+        "transform": "translateY(-4px)",
+        "box-shadow": "var(--shadow-lg)"
+      },
+      "@media (prefers-reduced-motion: reduce)": {
+        "transition": "none"
+      }
+    },
+    ".hover-glow": {
+      "box-shadow": "var(--shadow-glow-sm)",
+      "transition": "box-shadow var(--duration-base) var(--ease-out)",
+      "&:hover, &:focus-visible": {
+        "box-shadow": "var(--shadow-glow-lg)"
+      },
+      "@media (prefers-reduced-motion: reduce)": {
+        "transition": "none"
+      }
+    },
+    ".text-shimmer": {
+      "background-image": "linear-gradient( 90deg, var(--lunar-text-muted) 0%, var(--glow) 25%, var(--tide) 50%, var(--glow) 75%, var(--lunar-text-muted) 100% )",
+      "background-size": "200% auto",
+      "color": "transparent",
+      "-webkit-background-clip": "text",
+      "background-clip": "text",
+      "animation": "lunar-shimmer 4s linear infinite",
+      "@media (prefers-reduced-motion: reduce)": {
+        "animation": "none"
+      }
+    },
+    ".float": {
+      "animation": "lunar-float 6s var(--ease-in-out) infinite",
+      "@media (prefers-reduced-motion: reduce)": {
+        "animation": "none"
+      }
+    },
+    ".pulse-glow": {
+      "animation": "lunar-pulse-glow 2.4s var(--ease-in-out) infinite",
+      "@media (prefers-reduced-motion: reduce)": {
+        "animation": "none"
+      }
+    },
+    ".glass": {
+      "background": "rgb(255 255 255 / 0.06)",
+      "backdrop-filter": "blur(16px) saturate(140%)",
+      "-webkit-backdrop-filter": "blur(16px) saturate(140%)",
+      "border": "1px solid rgb(255 255 255 / 0.12)"
+    },
+    ".glass-dark": {
+      "background": "rgb(9 9 19 / 0.55)",
+      "backdrop-filter": "blur(16px) saturate(120%)",
+      "-webkit-backdrop-filter": "blur(16px) saturate(120%)",
+      "border": "1px solid rgb(255 255 255 / 0.08)"
+    },
+    ".starfield": {
+      "position": "relative",
+      "isolation": "isolate",
+      "overflow": "hidden",
+      "background-color": "var(--eclipse)",
+      "&::before, &::after": {
+        "content": "\"\"",
+        "position": "absolute",
+        "inset": "-10%",
+        "z-index": "-1",
+        "pointer-events": "none",
+        "background-repeat": "repeat",
+        "background-image": "radial-gradient(1px 1px at 10% 20%, #fff, transparent 100%), radial-gradient(1px 1px at 80% 10%, #fff, transparent 100%), radial-gradient(1.5px 1.5px at 40% 70%, #fff, transparent 100%), radial-gradient(1px 1px at 90% 60%, #fff, transparent 100%), radial-gradient(1px 1px at 60% 90%, #fff, transparent 100%), radial-gradient(1.5px 1.5px at 15% 85%, #fff, transparent 100%), radial-gradient(1px 1px at 25% 45%, #fff, transparent 100%), radial-gradient(1px 1px at 70% 35%, #fff, transparent 100%)",
+        "background-size": "220px 220px",
+        "animation": "lunar-twinkle 5s ease-in-out infinite"
+      },
+      "&::after": {
+        "background-size": "320px 320px",
+        "background-position": "50px 80px",
+        "animation-duration": "7s",
+        "animation-delay": "-3.5s"
+      },
+      "@media (prefers-reduced-motion: reduce)": {
+        "&::before, &::after": {
+          "animation": "none"
+        }
+      }
+    },
+    ".gradient-aurora": {
+      "background-image": "linear-gradient( 120deg, var(--indigo-600), var(--violet-600), var(--tide), var(--indigo-500) )",
+      "background-size": "300% 300%",
+      "animation": "lunar-aurora 12s ease-in-out infinite",
+      "@media (prefers-reduced-motion: reduce)": {
+        "animation": "none"
+      }
+    },
+    ".eclipse-border": {
+      "position": "relative",
+      "background-color": "var(--lunar-surface)",
+      "&::before": {
+        "content": "\"\"",
+        "position": "absolute",
+        "inset": "0",
+        "z-index": "1",
+        "padding": "2px",
+        "border-radius": "inherit",
+        "background-image": "conic-gradient( from var(--lunar-angle), var(--tide), var(--violet-500), var(--silver-300), var(--tide) )",
+        "-webkit-mask": "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+        "-webkit-mask-composite": "xor",
+        "mask-composite": "exclude",
+        "pointer-events": "none",
+        "animation": "lunar-eclipse-spin 6s linear infinite"
+      },
+      "@media (prefers-reduced-motion: reduce)": {
+        "&::before": {
+          "animation": "none"
+        }
+      }
+    },
+    ".moonbeam": {
+      "position": "relative",
+      "&::after": {
+        "content": "\"\"",
+        "position": "absolute",
+        "inset": "0",
+        "border-radius": "inherit",
+        "pointer-events": "none",
+        "opacity": "0",
+        "transition": "opacity var(--duration-slow) var(--ease-out)",
+        "background": "radial-gradient( 260px circle at var(--beam-x, 50%) var(--beam-y, 50%), rgb(228 232 255 / 0.12), transparent 65% )"
+      },
+      "&:hover::after, &:focus-within::after": {
+        "opacity": "1"
+      }
+    },
+    ".fade-in": {
+      "animation": "lunar-fade-in var(--duration-slow) var(--ease-out) both",
+      "@media (prefers-reduced-motion: reduce)": {
+        "animation": "none"
+      }
+    },
+    ".slide-up": {
+      "animation": "lunar-slide-up var(--duration-slow) var(--ease-out) both",
+      "@media (prefers-reduced-motion: reduce)": {
+        "animation": "none"
+      }
+    },
+    ".scale-in": {
+      "animation": "lunar-scale-in var(--duration-slow) var(--ease-out) both",
+      "@media (prefers-reduced-motion: reduce)": {
+        "animation": "none"
+      }
+    },
+    ".delay-1": {
+      "animation-delay": "100ms"
+    },
+    ".delay-2": {
+      "animation-delay": "200ms"
+    },
+    ".delay-3": {
+      "animation-delay": "300ms"
+    },
+    ".delay-4": {
+      "animation-delay": "400ms"
+    },
+    ".scroll-reveal": {
+      "@supports (animation-timeline: view())": {
+        "animation-timing-function": "linear",
+        "animation-fill-mode": "both",
+        "animation-timeline": "view()",
+        "animation-range": "entry 10% entry 70%",
+        "animation-name": "lunar-scroll-reveal",
+        "@media (prefers-reduced-motion: reduce)": {
+          "animation": "none"
+        }
+      }
+    },
+    ".scroll-reveal-up": {
+      "@supports (animation-timeline: view())": {
+        "animation-timing-function": "linear",
+        "animation-fill-mode": "both",
+        "animation-timeline": "view()",
+        "animation-range": "entry 10% entry 70%",
+        "animation-name": "lunar-scroll-reveal-up",
+        "@media (prefers-reduced-motion: reduce)": {
+          "animation": "none"
+        }
+      }
+    },
+    ".scroll-reveal-scale": {
+      "@supports (animation-timeline: view())": {
+        "animation-timing-function": "linear",
+        "animation-fill-mode": "both",
+        "animation-timeline": "view()",
+        "animation-range": "entry 10% entry 70%",
+        "animation-name": "lunar-scroll-reveal-scale",
+        "@media (prefers-reduced-motion: reduce)": {
+          "animation": "none"
+        }
+      }
+    },
+    ".scroll-reveal-blur": {
+      "@supports (animation-timeline: view())": {
+        "animation-timing-function": "linear",
+        "animation-fill-mode": "both",
+        "animation-timeline": "view()",
+        "animation-range": "entry 10% entry 70%",
+        "animation-name": "lunar-scroll-reveal-blur",
+        "@media (prefers-reduced-motion: reduce)": {
+          "animation": "none"
+        }
+      }
+    },
+    ".scroll-parallax": {
+      "@supports (animation-timeline: view())": {
+        "animation": "lunar-scroll-parallax linear both",
+        "animation-timeline": "view()",
+        "animation-range": "cover 0% cover 100%",
+        "@media (prefers-reduced-motion: reduce)": {
+          "animation": "none"
+        }
+      }
+    },
+    ".scroll-progress": {
+      "@supports (animation-timeline: view())": {
+        "position": "fixed",
+        "top": "0",
+        "left": "0",
+        "right": "0",
+        "height": "3px",
+        "z-index": "var(--z-toast)",
+        "pointer-events": "none",
+        "transform-origin": "0 50%",
+        "background-image": "linear-gradient(90deg, var(--tide), var(--violet-500), var(--glow))",
+        "box-shadow": "0 0 8px var(--glow-color-md)",
+        "animation": "lunar-scroll-grow-x linear both",
+        "animation-timeline": "scroll(root)"
+      }
+    }
+  }
+}

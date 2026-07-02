@@ -1,0 +1,403 @@
+/*!
+ * Lunara CSS — bootstrap.css (the "lunara-bootstrap" bridge)
+ *
+ * Re-themes Bootstrap 5.3+ with Lunara's night-sky design system, purely by
+ * overriding Bootstrap's own --bs-* CSS variable API — no Sass, no build step.
+ * Load AFTER bootstrap.css:
+ *
+ *   <link rel="stylesheet" href=".../bootstrap.min.css" />
+ *   <link rel="stylesheet" href=".../lunar-bootstrap.min.css" />
+ *
+ * This file is intentionally NOT wrapped in a cascade @layer: Bootstrap's own
+ * styles are unlayered, and unlayered CSS always beats layered CSS, so the
+ * bridge must stay unlayered to win ties by source order.
+ *
+ * Theme switching: works with Bootstrap's data-bs-theme attribute AND Lunara's
+ * data-theme attribute (theme.mjs sets both). Dark is the default.
+ */
+
+/* ---------------------------------------------------------------
+ * Root variable mapping — Bootstrap globals → Lunara tokens.
+ * Component vars point at Lunara's semantic aliases, so the
+ * data-theme / data-bs-theme switch re-themes everything at once.
+ * --------------------------------------------------------------- */
+:root,
+[data-bs-theme="dark"],
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bs-body-bg: var(--lunar-bg);
+  --bs-body-bg-rgb: 9, 9, 19;
+  --bs-body-color: var(--lunar-text);
+  --bs-body-color-rgb: 247, 248, 252;
+  --bs-emphasis-color: #ffffff;
+  --bs-emphasis-color-rgb: 255, 255, 255;
+
+  --bs-secondary-color: var(--lunar-text-muted);
+  --bs-secondary-color-rgb: 146, 152, 189;
+  --bs-secondary-bg: var(--lunar-surface);
+  --bs-secondary-bg-rgb: 38, 40, 68;
+  --bs-tertiary-color: var(--moon-500);
+  --bs-tertiary-color-rgb: 111, 118, 160;
+  --bs-tertiary-bg: var(--lunar-bg-elevated);
+  --bs-tertiary-bg-rgb: 20, 21, 42;
+
+  --bs-border-color: var(--lunar-border);
+  --bs-border-color-translucent: rgb(217 220 238 / 0.12);
+
+  --bs-primary: var(--tide);
+  --bs-primary-rgb: 108, 111, 240;
+  --bs-primary-text-emphasis: var(--indigo-400);
+  --bs-primary-bg-subtle: rgb(108 111 240 / 0.12);
+  --bs-primary-border-subtle: rgb(108 111 240 / 0.4);
+
+  --bs-link-color: var(--lunar-accent);
+  --bs-link-color-rgb: 108, 111, 240;
+  --bs-link-hover-color: var(--indigo-400);
+  --bs-link-hover-color-rgb: 129, 140, 248;
+
+  --bs-code-color: var(--violet-400);
+  --bs-highlight-bg: rgb(108 111 240 / 0.25);
+  --bs-heading-color: var(--lunar-text);
+
+  --bs-focus-ring-color: rgb(108 111 240 / 0.35);
+
+  --bs-body-font-family: var(--font-sans);
+
+  --bs-border-radius: var(--radius-md);
+  --bs-border-radius-sm: var(--radius-sm);
+  --bs-border-radius-lg: var(--radius-lg);
+  --bs-border-radius-xl: var(--radius-xl);
+  --bs-border-radius-xxl: var(--radius-2xl);
+
+  --bs-box-shadow: var(--shadow-md);
+  --bs-box-shadow-sm: var(--shadow-sm);
+  --bs-box-shadow-lg: var(--shadow-lg);
+}
+
+[data-bs-theme="light"],
+[data-theme="light"] {
+  color-scheme: light;
+
+  --bs-body-bg-rgb: 247, 248, 252;
+  --bs-body-color-rgb: 9, 9, 19;
+  --bs-emphasis-color: #000000;
+  --bs-emphasis-color-rgb: 0, 0, 0;
+
+  --bs-secondary-color-rgb: 84, 90, 128;
+  --bs-secondary-bg-rgb: 236, 238, 247;
+  --bs-tertiary-color: var(--moon-500);
+  --bs-tertiary-color-rgb: 111, 118, 160;
+  --bs-tertiary-bg-rgb: 255, 255, 255;
+
+  --bs-border-color-translucent: rgb(20 21 42 / 0.12);
+
+  --bs-primary: var(--indigo-600);
+  --bs-primary-rgb: 79, 70, 229;
+  --bs-primary-text-emphasis: var(--indigo-600);
+  --bs-primary-bg-subtle: rgb(79 70 229 / 0.1);
+  --bs-primary-border-subtle: rgb(79 70 229 / 0.35);
+
+  --bs-link-color-rgb: 79, 70, 229;
+  --bs-link-hover-color: var(--indigo-500);
+  --bs-link-hover-color-rgb: 99, 102, 241;
+
+  --bs-code-color: var(--violet-600);
+  --bs-highlight-bg: rgb(99 102 241 / 0.2);
+
+  --bs-focus-ring-color: rgb(79 70 229 / 0.25);
+}
+
+/* Night-sky nebula backdrop (the daylight variant is provided by the
+   mirrored [data-theme="light"] body rule from themes.css above). */
+body {
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgb(108 111 240 / 0.12), transparent),
+    radial-gradient(ellipse 60% 40% at 100% 0%, rgb(139 92 246 / 0.08), transparent);
+  background-attachment: fixed;
+}
+
+::selection {
+  background: var(--tide);
+  color: var(--moon-50);
+}
+
+/* ---------------------------------------------------------------
+ * Buttons
+ * --------------------------------------------------------------- */
+.btn {
+  --bs-btn-font-weight: 500;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.25s ease-in-out;
+}
+
+.btn-primary {
+  --bs-btn-color: #ffffff;
+  --bs-btn-bg: var(--tide);
+  --bs-btn-border-color: var(--tide);
+  --bs-btn-hover-color: #ffffff;
+  --bs-btn-hover-bg: var(--indigo-500);
+  --bs-btn-hover-border-color: var(--indigo-500);
+  --bs-btn-active-color: #ffffff;
+  --bs-btn-active-bg: var(--indigo-600);
+  --bs-btn-active-border-color: var(--indigo-600);
+  --bs-btn-disabled-color: var(--moon-400);
+  --bs-btn-disabled-bg: var(--moon-700);
+  --bs-btn-disabled-border-color: var(--moon-700);
+  --bs-btn-focus-shadow-rgb: 108, 111, 240;
+}
+
+.btn-primary:hover,
+.btn-primary:focus-visible {
+  box-shadow: var(--shadow-glow-md);
+}
+
+.btn-outline-primary {
+  --bs-btn-color: var(--lunar-accent);
+  --bs-btn-border-color: var(--lunar-accent);
+  --bs-btn-hover-color: #ffffff;
+  --bs-btn-hover-bg: var(--tide);
+  --bs-btn-hover-border-color: var(--tide);
+  --bs-btn-active-color: #ffffff;
+  --bs-btn-active-bg: var(--indigo-600);
+  --bs-btn-active-border-color: var(--indigo-600);
+  --bs-btn-focus-shadow-rgb: 108, 111, 240;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus-visible {
+  box-shadow: var(--shadow-glow-sm);
+}
+
+.btn-secondary {
+  --bs-btn-color: var(--lunar-text);
+  --bs-btn-bg: var(--lunar-surface);
+  --bs-btn-border-color: var(--lunar-border);
+  --bs-btn-hover-color: var(--lunar-text);
+  --bs-btn-hover-bg: var(--lunar-surface-hover);
+  --bs-btn-hover-border-color: var(--lunar-border);
+  --bs-btn-active-color: var(--lunar-text);
+  --bs-btn-active-bg: var(--lunar-surface-hover);
+  --bs-btn-active-border-color: var(--lunar-border);
+}
+
+.btn-link {
+  --bs-btn-color: var(--lunar-accent);
+  --bs-btn-hover-color: var(--indigo-400);
+}
+
+/* ---------------------------------------------------------------
+ * Surfaces — cards, modals, dropdowns, toasts, offcanvas, popovers
+ * --------------------------------------------------------------- */
+.card {
+  --bs-card-bg: var(--lunar-bg-elevated);
+  --bs-card-border-color: var(--lunar-border);
+  --bs-card-cap-bg: rgb(217 220 238 / 0.03);
+}
+
+.modal {
+  --bs-modal-bg: var(--lunar-bg-elevated);
+  --bs-modal-border-color: var(--lunar-border);
+  --bs-modal-header-border-color: var(--lunar-border);
+  --bs-modal-footer-border-color: var(--lunar-border);
+}
+
+.modal-content {
+  box-shadow: var(--shadow-xl), var(--shadow-glow-sm);
+}
+
+.modal-backdrop {
+  --bs-backdrop-bg: var(--moon-950);
+  --bs-backdrop-opacity: 0.7;
+}
+
+.dropdown-menu {
+  --bs-dropdown-bg: var(--lunar-bg-elevated);
+  --bs-dropdown-border-color: var(--lunar-border);
+  --bs-dropdown-color: var(--lunar-text);
+  --bs-dropdown-link-color: var(--lunar-text);
+  --bs-dropdown-link-hover-color: var(--lunar-text);
+  --bs-dropdown-link-hover-bg: var(--lunar-surface);
+  --bs-dropdown-link-active-color: #ffffff;
+  --bs-dropdown-link-active-bg: var(--tide);
+  --bs-dropdown-divider-bg: var(--lunar-border);
+  --bs-dropdown-header-color: var(--lunar-text-muted);
+  box-shadow: var(--shadow-lg);
+}
+
+.toast {
+  --bs-toast-bg: var(--lunar-bg-elevated);
+  --bs-toast-color: var(--lunar-text);
+  --bs-toast-border-color: var(--lunar-border);
+  --bs-toast-header-bg: transparent;
+  --bs-toast-header-color: var(--lunar-text-muted);
+  --bs-toast-header-border-color: var(--lunar-border);
+  box-shadow: var(--shadow-lg);
+}
+
+.offcanvas,
+.offcanvas-sm,
+.offcanvas-md,
+.offcanvas-lg,
+.offcanvas-xl,
+.offcanvas-xxl {
+  --bs-offcanvas-bg: var(--lunar-bg-elevated);
+  --bs-offcanvas-color: var(--lunar-text);
+  --bs-offcanvas-border-color: var(--lunar-border);
+}
+
+.popover {
+  --bs-popover-bg: var(--lunar-bg-elevated);
+  --bs-popover-border-color: var(--lunar-border);
+  --bs-popover-header-bg: var(--lunar-surface);
+  --bs-popover-header-color: var(--lunar-text);
+  --bs-popover-body-color: var(--lunar-text);
+}
+
+.tooltip {
+  --bs-tooltip-bg: var(--moon-800);
+  --bs-tooltip-color: var(--moon-50);
+}
+
+/* ---------------------------------------------------------------
+ * Forms
+ * --------------------------------------------------------------- */
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--lunar-accent);
+  box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
+}
+
+.form-control::placeholder {
+  color: var(--lunar-text-muted);
+}
+
+.form-check-input:checked {
+  background-color: var(--tide);
+  border-color: var(--tide);
+}
+
+.form-check-input:focus {
+  border-color: var(--lunar-accent);
+  box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
+}
+
+.form-range::-webkit-slider-thumb {
+  background-color: var(--tide);
+}
+
+.form-range::-moz-range-thumb {
+  background-color: var(--tide);
+}
+
+.input-group-text {
+  background-color: var(--lunar-surface);
+  border-color: var(--lunar-border);
+  color: var(--lunar-text-muted);
+}
+
+/* ---------------------------------------------------------------
+ * Navs & navbar
+ * --------------------------------------------------------------- */
+.nav {
+  --bs-nav-link-color: var(--lunar-text-muted);
+  --bs-nav-link-hover-color: var(--lunar-text);
+}
+
+.nav-pills {
+  --bs-nav-pills-link-active-color: #ffffff;
+  --bs-nav-pills-link-active-bg: var(--tide);
+}
+
+.nav-tabs {
+  --bs-nav-tabs-border-color: var(--lunar-border);
+  --bs-nav-tabs-link-hover-border-color: var(--lunar-border) var(--lunar-border) transparent;
+  --bs-nav-tabs-link-active-color: var(--lunar-text);
+  --bs-nav-tabs-link-active-bg: var(--lunar-bg-elevated);
+  --bs-nav-tabs-link-active-border-color: var(--lunar-border) var(--lunar-border) var(--lunar-bg-elevated);
+}
+
+.navbar {
+  --bs-navbar-color: var(--lunar-text-muted);
+  --bs-navbar-hover-color: var(--lunar-text);
+  --bs-navbar-active-color: var(--lunar-text);
+  --bs-navbar-brand-color: var(--lunar-text);
+  --bs-navbar-brand-hover-color: var(--lunar-accent);
+  --bs-navbar-toggler-border-color: var(--lunar-border);
+}
+
+/* ---------------------------------------------------------------
+ * List group, table, pagination, progress, accordion, breadcrumb
+ * --------------------------------------------------------------- */
+.list-group {
+  --bs-list-group-bg: var(--lunar-bg-elevated);
+  --bs-list-group-color: var(--lunar-text);
+  --bs-list-group-border-color: var(--lunar-border);
+  --bs-list-group-action-color: var(--lunar-text);
+  --bs-list-group-action-hover-color: var(--lunar-text);
+  --bs-list-group-action-hover-bg: var(--lunar-surface);
+  --bs-list-group-action-active-color: var(--lunar-text);
+  --bs-list-group-action-active-bg: var(--lunar-surface-hover);
+  --bs-list-group-active-color: #ffffff;
+  --bs-list-group-active-bg: var(--tide);
+  --bs-list-group-active-border-color: var(--tide);
+  --bs-list-group-disabled-color: var(--lunar-text-muted);
+  --bs-list-group-disabled-bg: var(--lunar-bg-elevated);
+}
+
+.table {
+  --bs-table-color: var(--lunar-text);
+  --bs-table-bg: transparent;
+  --bs-table-border-color: var(--lunar-border);
+  --bs-table-striped-color: var(--lunar-text);
+  --bs-table-striped-bg: rgb(217 220 238 / 0.03);
+  --bs-table-hover-color: var(--lunar-text);
+  --bs-table-hover-bg: rgb(108 111 240 / 0.08);
+  --bs-table-active-color: var(--lunar-text);
+  --bs-table-active-bg: rgb(108 111 240 / 0.12);
+}
+
+.pagination {
+  --bs-pagination-color: var(--lunar-text-muted);
+  --bs-pagination-bg: var(--lunar-bg-elevated);
+  --bs-pagination-border-color: var(--lunar-border);
+  --bs-pagination-hover-color: var(--lunar-text);
+  --bs-pagination-hover-bg: var(--lunar-surface);
+  --bs-pagination-hover-border-color: var(--lunar-border);
+  --bs-pagination-focus-color: var(--lunar-text);
+  --bs-pagination-focus-bg: var(--lunar-surface);
+  --bs-pagination-focus-box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
+  --bs-pagination-active-color: #ffffff;
+  --bs-pagination-active-bg: var(--tide);
+  --bs-pagination-active-border-color: var(--tide);
+  --bs-pagination-disabled-color: var(--moon-600);
+  --bs-pagination-disabled-bg: var(--lunar-bg-elevated);
+  --bs-pagination-disabled-border-color: var(--lunar-border);
+}
+
+.progress,
+.progress-stacked {
+  --bs-progress-bg: var(--lunar-surface);
+  --bs-progress-bar-bg: var(--tide);
+}
+
+.accordion {
+  --bs-accordion-bg: var(--lunar-bg-elevated);
+  --bs-accordion-color: var(--lunar-text);
+  --bs-accordion-border-color: var(--lunar-border);
+  --bs-accordion-btn-color: var(--lunar-text);
+  --bs-accordion-active-color: var(--lunar-accent);
+  --bs-accordion-active-bg: rgb(108 111 240 / 0.1);
+  --bs-accordion-btn-focus-box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
+}
+
+.breadcrumb {
+  --bs-breadcrumb-divider-color: var(--lunar-text-muted);
+  --bs-breadcrumb-item-active-color: var(--lunar-text-muted);
+}
+
+/* Bootstrap only inverts .btn-close under its own attribute; mirror
+   that for pages driven purely by Lunara's data-theme. */
+[data-theme="dark"] .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}

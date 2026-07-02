@@ -41,10 +41,24 @@ function build() {
   const min = minify(full);
   fs.writeFileSync(path.join(DIST_DIR, 'lunar.min.css'), min, 'utf8');
 
+  const twJson = JSON.stringify(buildTailwindMap(full), null, 2) + '\n';
+  fs.writeFileSync(path.join(DIST_DIR, 'lunar.tailwind.json'), twJson, 'utf8');
+
+  const bootstrap = buildBootstrap(full);
+  fs.writeFileSync(path.join(DIST_DIR, 'lunar-bootstrap.css'), bootstrap, 'utf8');
+  const bootstrapMin = minify(bootstrap);
+  fs.writeFileSync(path.join(DIST_DIR, 'lunar-bootstrap.min.css'), bootstrapMin, 'utf8');
+
   const fullKB = (Buffer.byteLength(full) / 1024).toFixed(1);
   const minKB = (Buffer.byteLength(min) / 1024).toFixed(1);
+  const twKB = (Buffer.byteLength(twJson) / 1024).toFixed(1);
+  const bsKB = (Buffer.byteLength(bootstrap) / 1024).toFixed(1);
+  const bsMinKB = (Buffer.byteLength(bootstrapMin) / 1024).toFixed(1);
   console.log(`built dist/lunar.css (${fullKB} KB)`);
   console.log(`built dist/lunar.min.css (${minKB} KB)`);
+  console.log(`built dist/lunar.tailwind.json (${twKB} KB)`);
+  console.log(`built dist/lunar-bootstrap.css (${bsKB} KB)`);
+  console.log(`built dist/lunar-bootstrap.min.css (${bsMinKB} KB)`);
 }
 
 function minify(css) {
@@ -60,6 +74,247 @@ function minify(css) {
     .trim();
 
   return head ? `${head}\n${body}\n` : `${body}\n`;
+}
+
+/* ------------------------------------------------------------------
+ * Tailwind class map — dist/lunar.tailwind.json
+ *
+ * Pre-parses the built CSS into the { base, components, utilities }
+ * CSS-in-JS buckets that tailwind-plugin.js feeds to addBase /
+ * addComponents / addUtilities. Doing this at package build time keeps
+ * the plugin dependency-free at runtime (no postcss), which is what
+ * lets it run under Tailwind v4's plugin loader as well as v3.
+ * ------------------------------------------------------------------ */
+
+/**
+ * Minimal CSS parser for Lunara's own (flat, well-formed) output.
+ * Handles rules, at-rules, declarations, and quoted strings — that is
+ * everything the framework's stylesheets contain.
+ */
+function parseCss(css) {
+  const src = css.replace(/\/\*[\s\S]*?\*\//g, ''); // strip comments
+  let i = 0;
+
+  function readUntil(stops) {
+    let buf = '';
+    while (i < src.length && !stops.includes(src[i])) {
+      const ch = src[i];
+      if (ch === '"' || ch === "'") {
+        const quote = ch;
+        buf += ch;
+        i++;
+        while (i < src.length && src[i] !== quote) {
+          buf += src[i];
+          i++;
+        }
+        buf += src[i] || '';
+        i++;
+      } else {
+        buf += ch;
+        i++;
+      }
+    }
+    return buf;
+  }
+
+  function parseNodes() {
+    const nodes = [];
+    for (;;) {
+      while (i < src.length && /\s/.test(src[i])) i++;
+      if (i >= src.length) return nodes;
+      if (src[i] === '}') {
+        i++;
+        return nodes;
+      }
+      const text = readUntil(['{', ';', '}']).trim();
+      if (src[i] === '{') {
+        i++;
+        const children = parseNodes();
+        if (text.startsWith('@')) {
+          const m = text.match(/^@([\w-]+)\s*([\s\S]*)$/);
+          nodes.push({ type: 'atrule', name: m[1], params: m[2].trim(), nodes: children });
+        } else {
+          nodes.push({ type: 'rule', selector: text, nodes: children });
+        }
+      } else {
+        if (src[i] === ';') i++;
+        if (!text) continue;
+        if (text.startsWith('@')) {
+          const m = text.match(/^@([\w-]+)\s*([\s\S]*)$/);
+          nodes.push({ type: 'atrule', name: m[1], params: m[2].trim(), nodes: null });
+        } else {
+          const colon = text.indexOf(':');
+          if (colon !== -1) {
+            nodes.push({
+              type: 'decl',
+              prop: text.slice(0, colon).trim(),
+              value: text.slice(colon + 1).trim().replace(/\s+/g, ' '),
+            });
+          }
+        }
+      }
+    }
+  }
+
+  return parseNodes();
+}
+
+/** Convert parsed nodes into a Tailwind CSS-in-JS object. */
+function toObject(nodes) {
+  const obj = {};
+  for (const node of nodes) {
+    if (node.type === 'decl') {
+      obj[node.prop] = node.value;
+    } else if (node.type === 'rule') {
+      mergeKey(obj, node.selector, toObject(node.nodes));
+    } else if (node.type === 'atrule' && node.nodes) {
+      mergeKey(obj, '@' + node.name + (node.params ? ' ' + node.params : ''), toObject(node.nodes));
+    }
+  }
+  return obj;
+}
+
+/** Merge duplicate keys (e.g. repeated @starting-style blocks) instead of clobbering. */
+function mergeKey(obj, key, value) {
+  if (obj[key]) {
+    Object.assign(obj[key], value);
+  } else {
+    obj[key] = value;
+  }
+}
+
+/** Collect the child nodes of every `@layer <name>` block. */
+function collectLayer(nodes, layerName) {
+  const found = [];
+  for (const node of nodes) {
+    if (node.type === 'atrule' && node.name === 'layer' && node.params === layerName && node.nodes) {
+      found.push(...node.nodes);
+    }
+  }
+  return found;
+}
+
+/**
+ * Split a layer's nodes into "always-on base" (keyframes, @property,
+ * @starting-style, attribute-only selectors like [data-tooltip]) and
+ * class-keyed rules that Tailwind can tree-shake.
+ */
+function splitNodes(nodes, baseBucket, classBucket) {
+  for (const node of nodes) {
+    if (
+      node.type === 'atrule' &&
+      (node.name === 'keyframes' || node.name === 'property' || node.name === 'starting-style')
+    ) {
+      baseBucket.push(node);
+    } else if (node.type === 'rule' && !node.selector.includes('.')) {
+      baseBucket.push(node);
+    } else {
+      classBucket.push(node);
+    }
+  }
+}
+
+/** Split a selector list on top-level commas (never inside () or []). */
+function splitSelectorList(selector) {
+  const groups = [];
+  let depth = 0;
+  let buf = '';
+  for (const ch of selector) {
+    if (ch === '(' || ch === '[') depth++;
+    else if (ch === ')' || ch === ']') depth--;
+    if (ch === ',' && depth === 0) {
+      groups.push(buf.trim());
+      buf = '';
+    } else {
+      buf += ch;
+    }
+  }
+  if (buf.trim()) groups.push(buf.trim());
+  return groups;
+}
+
+/**
+ * Re-key class rules under their primary class with `&` nesting:
+ *
+ *   .hover-lift:hover, .hover-lift:focus-visible  →  ".hover-lift": { "&:hover, &:focus-visible": … }
+ *   @supports (…) { .scroll-reveal { … } }        →  ".scroll-reveal": { "@supports (…)": … }
+ *   [data-moon-phase="new"] .moon-live            →  ".moon-live": { "[data-moon-phase=\"new\"] &": … }
+ *
+ * Tailwind v3 accepts both flat and nested forms, but v4's plugin API
+ * requires every addUtilities/addComponents key to be a single class —
+ * this shape is the common denominator that works in both.
+ */
+function restructureBucket(nodes) {
+  const out = {};
+
+  function walk(nodes, wrappers) {
+    for (const node of nodes) {
+      if (node.type === 'rule') {
+        distribute(node.selector, toObject(node.nodes), wrappers);
+      } else if (node.type === 'atrule' && node.nodes) {
+        walk(node.nodes, wrappers.concat('@' + node.name + (node.params ? ' ' + node.params : '')));
+      }
+    }
+  }
+
+  function distribute(selector, obj, wrappers) {
+    const byPrimary = new Map();
+    for (const group of splitSelectorList(selector)) {
+      const m = group.match(/\.[A-Za-z0-9_-]+/);
+      if (!m) continue;
+      const primary = m[0];
+      const nested = group.replace(primary, '&').replace(/\s+/g, ' ').trim();
+      if (!byPrimary.has(primary)) byPrimary.set(primary, []);
+      byPrimary.get(primary).push(nested);
+    }
+    for (const [primary, nestedSels] of byPrimary) {
+      let target = (out[primary] = out[primary] || {});
+      for (const w of wrappers) target = target[w] = target[w] || {};
+      // Deep-copy so later merges into one class never mutate a sibling
+      // class that shared the same source rule (grouped selectors).
+      const copy = JSON.parse(JSON.stringify(obj));
+      const key = nestedSels.join(', ');
+      if (key === '&') Object.assign(target, copy);
+      else mergeKey(target, key, copy);
+    }
+  }
+
+  walk(nodes, []);
+  return out;
+}
+
+function buildTailwindMap(css) {
+  const root = parseCss(css);
+
+  const base = [];
+  const components = [];
+  const utilities = [];
+
+  // Design tokens only — Lunara's element reset stays out of the way of
+  // Tailwind's own preflight.
+  for (const node of collectLayer(root, 'lunar-base')) {
+    if (node.type === 'rule' && node.selector.trim() === ':root') base.push(node);
+  }
+
+  // Theme blocks: [data-theme=…] overrides and [data-moon-phase=…] moonlight dial.
+  splitNodes(collectLayer(root, 'lunar-themes'), base, base);
+
+  // @property registrations live at the top level, outside any layer.
+  for (const node of root) {
+    if (node.type === 'atrule' && node.name === 'property') base.push(node);
+  }
+
+  // Effects + scroll motion register as utilities (variant-friendly);
+  // components register as components.
+  splitNodes(collectLayer(root, 'lunar-effects'), base, utilities);
+  splitNodes(collectLayer(root, 'lunar-motion'), base, utilities);
+  splitNodes(collectLayer(root, 'lunar-components'), base, components);
+
+  return {
+    base: toObject(base),
+    components: restructureBucket(components),
+    utilities: restructureBucket(utilities),
+  };
 }
 
 build();

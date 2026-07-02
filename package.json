@@ -1,6 +1,6 @@
 {
   "name": "lunara-css",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "publishConfig": {
     "access": "public"
   },
@@ -17,6 +17,8 @@
     "./lunar.min.css": "./dist/lunar.min.css",
     "./dist/lunar.css": "./dist/lunar.css",
     "./dist/lunar.min.css": "./dist/lunar.min.css",
+    "./tailwind": "./tailwind.css",
+    "./tailwind.css": "./tailwind.css",
     "./tailwind-preset": "./tailwind-preset.js",
     "./tailwind-plugin": "./tailwind-plugin.js",
     "./theme": "./theme.mjs",
@@ -26,6 +28,7 @@
   "files": [
     "dist",
     "src",
+    "tailwind.css",
     "tailwind-preset.js",
     "tailwind-plugin.js",
     "theme.mjs",

@@ -7,13 +7,42 @@ export default function Tailwind() {
     <>
       <h1 className="text-4xl font-bold">Tailwind integration</h1>
       <p className="text-muted text-lg">
-        Lunara ships a preset that gives Tailwind projects the <strong>whole
-        framework</strong> — not just the color palette, but every prebuilt component and
-        effect utility, registered as native Tailwind classes.
+        Lunara gives Tailwind projects the <strong>whole framework</strong> — not just the
+        color palette, but every prebuilt component and effect utility, registered as
+        native Tailwind classes. Both major Tailwind versions are first-class.
       </p>
 
-      <h2 className="text-2xl font-bold">Setup</h2>
       <CodeBlock lang="bash" code={`npm install lunara-css tailwindcss`} />
+
+      <h2 className="text-2xl font-bold">Tailwind v4 (CSS-first)</h2>
+      <p>One import next to Tailwind&rsquo;s own:</p>
+      <CodeBlock
+        lang="css"
+        code={`/* app.css */
+@import "tailwindcss";
+@import "lunara-css/tailwind";`}
+      />
+      <p>That single line does three things:</p>
+      <ul>
+        <li>
+          Registers the design tokens via <code>@theme</code>, so native v4 utilities pick
+          them up — <code>bg-moon-900</code>, <code>text-tide</code>,{" "}
+          <code>shadow-glow-lg</code>, <code>rounded-2xl</code>,{" "}
+          <code>animate-float</code>, …
+        </li>
+        <li>
+          Loads every component and effect through the components plugin
+          (<code>@plugin</code> under the hood) — <code>btn btn-primary</code>,{" "}
+          <code>card</code>, <code>modal</code>, <code>glow-md</code>,{" "}
+          <code>starfield</code>, <code>scroll-reveal-up</code>, …
+        </li>
+        <li>
+          Re-points Tailwind&rsquo;s <code>dark:</code> variant at Lunara&rsquo;s{" "}
+          <code>data-theme</code> attribute via <code>@custom-variant</code>.
+        </li>
+      </ul>
+
+      <h2 className="text-2xl font-bold">Tailwind v3 (JS config)</h2>
       <CodeBlock
         lang="js"
         code={`// tailwind.config.js
@@ -23,7 +52,7 @@ module.exports = {
 };`}
       />
 
-      <h2 className="text-2xl font-bold">What one preset line gets you</h2>
+      <h2 className="text-2xl font-bold">What you get (both versions)</h2>
       <ul>
         <li>
           <strong>Design tokens</strong> as theme values — <code>bg-moon-900</code>,{" "}
@@ -58,48 +87,42 @@ module.exports = {
         emits everything.
       </p>
       <p>
-        Under the hood the plugin parses Lunara&rsquo;s own built CSS at build time, so the
-        Tailwind classes can never drift from the plain-CSS distribution.
+        Under the hood, Lunara&rsquo;s build pre-parses its own built CSS into a class map
+        (<code>dist/lunar.tailwind.json</code>) that the plugin feeds straight to Tailwind
+        — so the Tailwind classes can never drift from the plain-CSS distribution, and the
+        plugin has zero runtime dependencies (no PostCSS required, which is what lets it
+        run under v4&rsquo;s plugin loader too).
       </p>
 
       <h2 className="text-2xl font-bold">Components only, no theme</h2>
       <p>
-        Want Lunara&rsquo;s components on top of your own Tailwind theme? Skip the preset
-        and register just the plugin:
+        Want Lunara&rsquo;s components on top of your own Tailwind theme? Register just
+        the plugin:
       </p>
       <CodeBlock
         lang="js"
-        code={`// tailwind.config.js
+        code={`// tailwind.config.js (v3)
 module.exports = {
   plugins: [require("lunara-css/tailwind-plugin")],
 };`}
       />
-
-      <h2 className="text-2xl font-bold">Tailwind v4</h2>
-      <p>
-        The preset/plugin target Tailwind v3&rsquo;s JS config. On v4&rsquo;s CSS-first
-        setup, either load the config through <code>@config</code>, or simply import the
-        built CSS next to your Tailwind import — the class names are Tailwind-shaped either
-        way:
-      </p>
       <CodeBlock
         lang="css"
-        code={`/* option A: keep the JS config */
-@config "./tailwind.config.js";
-
-/* option B: plain CSS build alongside Tailwind */
+        code={`/* app.css (v4) */
 @import "tailwindcss";
-@import "lunara-css/dist/lunar.css";`}
+@plugin "lunara-css/tailwind-plugin";`}
       />
 
       <h2 className="text-2xl font-bold">Dark mode</h2>
       <p>
-        The preset sets <code>darkMode: [&apos;selector&apos;,
-        &apos;[data-theme=&quot;dark&quot;]&apos;]</code>, pointing Tailwind&rsquo;s own{" "}
-        <code>dark:</code> variant at the same <code>data-theme</code> attribute Lunara
-        uses. Set <code>data-theme=&quot;dark&quot;</code> on <code>&lt;html&gt;</code> and
-        both Lunara&rsquo;s dark tokens and your <code>dark:</code> utilities activate
-        together; <code>data-theme=&quot;light&quot;</code> gives daylight mode.
+        Both versions point Tailwind&rsquo;s own <code>dark:</code> variant convention at
+        the same <code>data-theme</code> attribute Lunara uses to toggle themes — the v3
+        preset via <code>darkMode: [&apos;selector&apos;,
+        &apos;[data-theme=&quot;dark&quot;]&apos;]</code>, the v4 entry via{" "}
+        <code>@custom-variant dark</code>. Set <code>data-theme=&quot;dark&quot;</code> on{" "}
+        <code>&lt;html&gt;</code> and both Lunara&rsquo;s dark tokens and your{" "}
+        <code>dark:</code> utilities activate together;{" "}
+        <code>data-theme=&quot;light&quot;</code> gives daylight mode.
       </p>
       <p>
         If you only need the plain CSS utilities/components (no Tailwind build), skip this

@@ -7,9 +7,10 @@ violet.
 - **Pure CSS, zero build step.** Drop in a `<link>` tag and go.
 - **Utility-first**, Tailwind-like class names (`bg-moon-900`, `text-glow`, `p-4`, `rounded-lg`) —
   muscle memory carries over either direction.
-- **Tailwind-native.** One preset line (`require('lunara-css/tailwind-preset')`) registers the
-  full palette **and every component/effect** as real Tailwind classes — tree-shaken, variant-aware
-  (`hover:glow-lg`), emitted by your own Tailwind build.
+- **Tailwind-native, v3 and v4.** One line — `@import "lunara-css/tailwind"` on Tailwind v4, or
+  `presets: [require('lunara-css/tailwind-preset')]` on v3 — registers the full palette **and every
+  component/effect** as real Tailwind classes — tree-shaken, variant-aware (`hover:glow-lg`),
+  emitted by your own Tailwind build.
 - **One-line effect utilities.** Glow, glass, aurora, shimmer, starfields, entrance animations —
   no hand-written keyframes or box-shadow stacks.
 - **Prebuilt components.** Buttons, cards, inputs, badges, navbar, modal, toast, tooltip — all
@@ -185,12 +186,30 @@ Without the JS it gracefully degrades to a centered glow on hover.
 
 ## Tailwind integration
 
-Lunara ships a preset that gives Tailwind projects the **whole framework** — not just the color
-palette, but every prebuilt component and effect utility, registered as native Tailwind classes:
+Lunara gives Tailwind projects the **whole framework** — not just the color palette, but every
+prebuilt component and effect utility, registered as native Tailwind classes. Both major
+Tailwind versions are first-class:
 
 ```bash
 npm install lunara-css tailwindcss
 ```
+
+### Tailwind v4 (CSS-first)
+
+One import next to Tailwind's own:
+
+```css
+/* app.css */
+@import "tailwindcss";
+@import "lunara-css/tailwind";
+```
+
+That registers the design tokens via `@theme` (so `bg-moon-900`, `shadow-glow-lg`,
+`animate-float` are generated natively by v4), loads every component and effect through the
+components plugin, and re-points Tailwind's `dark:` variant at Lunara's `data-theme` attribute
+via `@custom-variant`.
+
+### Tailwind v3 (JS config)
 
 ```js
 // tailwind.config.js
@@ -200,7 +219,9 @@ module.exports = {
 };
 ```
 
-One preset line gets you all of this, through Tailwind's own build:
+### What you get (both versions)
+
+One line gets you all of this, through Tailwind's own build:
 
 - **Design tokens** as theme values — `bg-moon-900`, `text-tide`, `shadow-glow-lg`,
   `rounded-2xl`, `animate-float`, …
@@ -220,27 +241,31 @@ Tailwind: unused components are **tree-shaken** by content scanning, and **varia
 (Accessibility guards like `prefers-reduced-motion` blocks always ship alongside the animations
 they protect.)
 
-Under the hood the plugin parses Lunara's own built CSS at build time, so the Tailwind classes
-can never drift from the plain-CSS distribution.
+Under the hood, Lunara's build pre-parses its own built CSS into a class map
+(`dist/lunar.tailwind.json`) that the plugin feeds straight to Tailwind — so the Tailwind
+classes can never drift from the plain-CSS distribution, and the plugin has **zero runtime
+dependencies** (no PostCSS required, which is what makes it work under v4's plugin loader too).
 
 **Components only, no theme?** If you want Lunara's components on top of your own Tailwind theme,
-skip the preset and register just the plugin:
+register just the plugin:
 
 ```js
-// tailwind.config.js
+// tailwind.config.js (v3)
 module.exports = {
   plugins: [require("lunara-css/tailwind-plugin")],
 };
 ```
 
-**Tailwind v4?** The preset/plugin target Tailwind v3's JS config. On v4's CSS-first setup,
-either load the config through `@config "./tailwind.config.js"`, or simply
-`@import "lunara-css/dist/lunar.css";` next to your Tailwind import — the class names are
-Tailwind-shaped either way.
+```css
+/* app.css (v4) */
+@import "tailwindcss";
+@plugin "lunara-css/tailwind-plugin";
+```
 
-**Dark mode:** the preset sets `darkMode: ['selector', '[data-theme="dark"]']`, which points
-Tailwind's own `dark:` variant convention at the same `data-theme` attribute Lunara uses to toggle
-themes. Set `data-theme="dark"` on `<html>` and both Lunara's dark tokens and your `dark:` utilities
+**Dark mode:** both versions point Tailwind's own `dark:` variant convention at the same
+`data-theme` attribute Lunara uses to toggle themes — the v3 preset via
+`darkMode: ['selector', '[data-theme="dark"]']`, the v4 entry via `@custom-variant dark`.
+Set `data-theme="dark"` on `<html>` and both Lunara's dark tokens and your `dark:` utilities
 activate together; set `data-theme="light"` for daylight mode.
 
 If you only need the plain CSS utilities/components (no Tailwind build), skip this section
@@ -473,9 +498,11 @@ lunar-css/
 │   └── utilities.css     # atomic utility classes (spacing, flex/grid, typography, borders…)
 ├── dist/                 # built output (generated, do not hand-edit)
 │   ├── lunar.css
-│   └── lunar.min.css
-├── tailwind-preset.js    # Tailwind theme extension (includes the components plugin)
-├── tailwind-plugin.js    # registers components/effects as native Tailwind classes
+│   ├── lunar.min.css
+│   └── lunar.tailwind.json  # pre-parsed class map consumed by the Tailwind plugin
+├── tailwind.css          # Tailwind v4 CSS-first entry (@theme + @plugin + dark variant)
+├── tailwind-preset.js    # Tailwind v3 theme extension (includes the components plugin)
+├── tailwind-plugin.js    # registers components/effects as native Tailwind classes (v3 + v4)
 ├── theme.mjs             # optional framework-agnostic theme + moon-phase helpers (ESM)
 ├── index.html            # palette / typography / component / effects gallery
 ├── build.js              # concatenates + minifies src/ → dist/
