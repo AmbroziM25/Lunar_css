@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en" data-theme="dark" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lunara Bootstrap — night-sky theme for Bootstrap 5.3</title>
+  <!-- 1. Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <!-- 2. Lunara Bootstrap bridge — must come AFTER bootstrap.css -->
+  <link rel="stylesheet" href="./dist/lunar-bootstrap.css" />
+</head>
+<body>
+
+  <div class="scroll-progress"></div>
+
+  <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+        <span class="moon moon-live" style="--moon-size: 1.5rem"></span>
+        <strong class="text-shimmer">Lunara Bootstrap</strong>
+      </a>
+      <div class="d-flex align-items-center gap-3">
+        <span class="badge text-bg-primary">v0.4.0</span>
+        <button id="theme-toggle" class="btn btn-secondary btn-sm">☾ / ☀</button>
+      </div>
+    </div>
+  </nav>
+
+  <header class="starfield text-center py-5">
+    <div class="container py-5">
+      <h1 class="display-4 fw-bold">Bootstrap, under a <span class="text-shimmer">night sky</span></h1>
+      <p class="lead text-body-secondary mx-auto" style="max-width: 40rem">
+        Plain Bootstrap 5.3 components, re-themed by one extra stylesheet through
+        Bootstrap's own <code>--bs-*</code> variables. No Sass, no build step.
+      </p>
+      <div class="d-flex justify-content-center gap-3 mt-4">
+        <button class="btn btn-primary btn-lg">Primary glow</button>
+        <button class="btn btn-outline-primary btn-lg">Outline</button>
+        <button class="btn btn-secondary btn-lg">Secondary</button>
+      </div>
+      <div class="d-flex justify-content-center gap-3 mt-5">
+        <span class="moon moon-new" style="--moon-size: 2rem"></span>
+        <span class="moon moon-waxing-crescent" style="--moon-size: 2rem"></span>
+        <span class="moon moon-first-quarter" style="--moon-size: 2rem"></span>
+        <span class="moon moon-waxing-gibbous" style="--moon-size: 2rem"></span>
+        <span class="moon moon-full" style="--moon-size: 2rem"></span>
+        <span class="moon moon-waning-gibbous" style="--moon-size: 2rem"></span>
+        <span class="moon moon-last-quarter" style="--moon-size: 2rem"></span>
+        <span class="moon moon-waning-crescent" style="--moon-size: 2rem"></span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container py-5">
+
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card hover-glow h-100">
+          <div class="card-header">Bootstrap card</div>
+          <div class="card-body">
+            <h5 class="card-title">Night-sky surface</h5>
+            <p class="card-text text-body-secondary">Standard <code>.card</code>, themed via <code>--bs-card-bg</code>.</p>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#demoModal">Open modal</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card moonbeam h-100">
+          <div class="card-body">
+            <h5 class="card-title">Lunara effects still work</h5>
+            <p class="card-text text-body-secondary">
+              This card is <code>.card.moonbeam</code> — Bootstrap component, Lunara cursor glow.
+              Effects like <code>.glass</code>, <code>.starfield</code>, <code>.glow-md</code>
+              ship in the bridge because they don't collide with Bootstrap class names.
+            </p>
+            <span class="badge text-bg-primary">badge</span>
+            <span class="badge border text-body-secondary">outline</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card glow-sm h-100">
+          <div class="card-body">
+            <h5 class="card-title">Form controls</h5>
+            <div class="mb-3">
+              <label class="form-label" for="em">Email</label>
+              <input type="email" class="form-control" id="em" placeholder="you@nightsky.dev" />
+            </div>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="sw" checked />
+              <label class="form-check-label" for="sw">Moonlight on</label>
+            </div>
+            <div class="progress mt-3" role="progressbar" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100">
+              <div class="progress-bar" style="width: 66%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4 mt-1 scroll-reveal-up">
+      <div class="col-md-6">
+        <table class="table table-striped table-hover align-middle">
+          <thead><tr><th>Phase</th><th>Illumination</th><th></th></tr></thead>
+          <tbody>
+            <tr><td>New</td><td>0%</td><td><span class="moon moon-new" style="--moon-size: 1.25rem"></span></td></tr>
+            <tr><td>First quarter</td><td>50%</td><td><span class="moon moon-first-quarter" style="--moon-size: 1.25rem"></span></td></tr>
+            <tr><td>Full</td><td>100%</td><td><span class="moon moon-full" style="--moon-size: 1.25rem"></span></td></tr>
+          </tbody>
+        </table>
+        <nav><ul class="pagination">
+          <li class="page-item disabled"><a class="page-link">«</a></li>
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">»</a></li>
+        </ul></nav>
+      </div>
+      <div class="col-md-6">
+        <div class="alert alert-primary">An <code>.alert-primary</code>, tinted tide-indigo via the subtle vars.</div>
+        <div class="toast show" role="status">
+          <div class="toast-header">
+            <span class="moon moon-full me-2" style="--moon-size: 1rem"></span>
+            <strong class="me-auto">Lunara</strong><small>now</small>
+            <button type="button" class="btn-close ms-2" data-bs-dismiss="toast"></button>
+          </div>
+          <div class="toast-body">Full moon tonight — glows at maximum.</div>
+        </div>
+        <div class="dropdown mt-3">
+          <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">Dropdown</button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item active" href="#">Waxing</a></li>
+            <li><a class="dropdown-item" href="#">Waning</a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><a class="dropdown-item" href="#">Eclipse</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <div class="modal fade" id="demoModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Bootstrap modal 🌙</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          Standard Bootstrap JS modal — backdrop, focus trap and all — wearing
+          Lunara's elevated surface, border, and a soft glow.
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="border-top py-4 text-center text-body-secondary">
+    <div class="container">Bootstrap 5.3 + <code>lunar-bootstrap.css</code> · MIT</div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module">
+    import { initTheme, toggleTheme, initMoonPhase, initMoonbeam } from './theme.mjs';
+    initTheme();
+    initMoonPhase();
+    initMoonbeam();
+    document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+  </script>
+</body>
+</html>

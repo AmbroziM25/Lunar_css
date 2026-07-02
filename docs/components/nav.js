@@ -20,6 +20,7 @@ export const docsNav = [
     title: "Integrations",
     items: [
       { href: "/docs/tailwind", label: "Tailwind" },
+      { href: "/docs/bootstrap", label: "Bootstrap" },
       { href: "/docs/frameworks", label: "React, Vue, Angular…" },
       { href: "/docs/javascript", label: "JavaScript API" },
     ],

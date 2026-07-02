@@ -18,6 +18,9 @@ violet.
 - **Dark-mode-first**, with a light "daylight" variant toggled via `data-theme`.
 - **Works with any framework.** Plain HTML, React, Next.js, Vue, Angular, or anything else — it's
   just CSS classes and an optional framework-agnostic JS helper for theme toggling.
+- **Bootstrap-native too.** Not on Tailwind? `lunara-bootstrap` re-themes Bootstrap 5.3+ with the
+  full night-sky design through Bootstrap's own `--bs-*` variables — one extra `<link>` tag, no
+  Sass, no build step.
 - **Lunara-reactive theming** 🌖 — opt in and the framework's glow intensity follows the *real*
   moon phase. Nobody else does this.
 - **Scroll-driven animations with zero JS** — reveal-on-scroll, parallax, and a reading progress
@@ -273,6 +276,51 @@ entirely and just link `dist/lunar.css`.
 
 ---
 
+## Bootstrap integration — `lunara-bootstrap`
+
+Not every site uses Tailwind. For plain-HTML sites (or anything else) built on **Bootstrap 5.3+**,
+Lunara ships a dedicated bridge stylesheet that re-themes all of Bootstrap with the night-sky
+design — buttons, cards, modals, forms, navbars, tables, pagination, toasts, dropdowns,
+accordions, and the rest — purely through Bootstrap's own `--bs-*` CSS variable API. No Sass,
+no build step, no markup changes: your existing Bootstrap classes just look lunar.
+
+```html
+<!-- 1. Bootstrap, as usual -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+<!-- 2. Lunara Bootstrap — must come AFTER bootstrap.css -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lunara-css/dist/lunar-bootstrap.min.css" />
+```
+
+Or from npm:
+
+```js
+import "bootstrap/dist/css/bootstrap.min.css";
+import "lunara-css/bootstrap";
+```
+
+What's inside `lunar-bootstrap.css`:
+
+- **The variable bridge** — Bootstrap globals (`--bs-body-bg`, `--bs-primary`, `--bs-border-radius`,
+  fonts, shadows, focus rings) and per-component variables (`--bs-btn-*`, `--bs-card-*`,
+  `--bs-modal-*`, …) mapped to Lunara's tokens, plus signature touches like a glow on
+  `.btn-primary:hover` and the nebula body backdrop.
+- **Lunara's design tokens, effect utilities, scroll motion, and moon icons** — `glow-md`,
+  `glass`, `starfield`, `moonbeam`, `text-shimmer`, `scroll-reveal-up`, `scroll-progress`,
+  `.moon.moon-live`, … all work on top of Bootstrap markup (`<div class="card moonbeam">`).
+- **Deliberately excluded:** Lunara's own components and spacing utilities — `.btn`, `.card`,
+  `.p-4`, … would collide with Bootstrap's class names, so the bridge never ships them.
+
+**Theming:** dark is the default. The bridge responds to **both** Bootstrap's native
+`data-bs-theme` attribute and Lunara's `data-theme` — and the `lunara-css/theme` helpers
+(`initTheme()`, `toggleTheme()`) set both attributes, so one toggle drives Bootstrap's color
+mode and Lunara's tokens together. Lunar-reactive glow (`initMoonPhase()`) works exactly like
+the standalone build.
+
+See [`bootstrap.html`](./bootstrap.html) for a live gallery of Bootstrap components wearing the
+theme.
+
+---
+
 ## Use with any framework
 
 Lunara's CSS has zero JS dependencies — it's just classes, attributes, and CSS variables — so it
@@ -495,11 +543,14 @@ lunar-css/
 │   ├── effects.css       # one-line effect utilities + keyframes
 │   ├── motion.css        # scroll-driven animation utilities (pure CSS)
 │   ├── components.css    # buttons, cards, inputs, badges, navbar, modal, toast, tooltip, moon icons
-│   └── utilities.css     # atomic utility classes (spacing, flex/grid, typography, borders…)
+│   ├── utilities.css     # atomic utility classes (spacing, flex/grid, typography, borders…)
+│   └── bootstrap.css     # Bootstrap --bs-* variable bridge (source of lunar-bootstrap)
 ├── dist/                 # built output (generated, do not hand-edit)
 │   ├── lunar.css
 │   ├── lunar.min.css
-│   └── lunar.tailwind.json  # pre-parsed class map consumed by the Tailwind plugin
+│   ├── lunar.tailwind.json     # pre-parsed class map consumed by the Tailwind plugin
+│   ├── lunar-bootstrap.css     # "lunara-bootstrap" — night-sky theme for Bootstrap 5.3+
+│   └── lunar-bootstrap.min.css
 ├── tailwind.css          # Tailwind v4 CSS-first entry (@theme + @plugin + dark variant)
 ├── tailwind-preset.js    # Tailwind v3 theme extension (includes the components plugin)
 ├── tailwind-plugin.js    # registers components/effects as native Tailwind classes (v3 + v4)

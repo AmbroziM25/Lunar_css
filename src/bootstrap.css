@@ -13,7 +13,9 @@
  * bridge must stay unlayered to win ties by source order.
  *
  * Theme switching: works with Bootstrap's data-bs-theme attribute AND Lunara's
- * data-theme attribute (theme.mjs sets both). Dark is the default.
+ * data-theme attribute (theme.mjs sets both). Dark is the default. Accent
+ * surfaces use var(--lunar-accent), which the theme blocks switch between
+ * tide (dark) and indigo-600 (light) automatically.
  */
 
 /* ---------------------------------------------------------------
@@ -133,8 +135,8 @@ body {
 
 .btn-primary {
   --bs-btn-color: #ffffff;
-  --bs-btn-bg: var(--tide);
-  --bs-btn-border-color: var(--tide);
+  --bs-btn-bg: var(--lunar-accent);
+  --bs-btn-border-color: var(--lunar-accent);
   --bs-btn-hover-color: #ffffff;
   --bs-btn-hover-bg: var(--indigo-500);
   --bs-btn-hover-border-color: var(--indigo-500);
@@ -156,8 +158,8 @@ body {
   --bs-btn-color: var(--lunar-accent);
   --bs-btn-border-color: var(--lunar-accent);
   --bs-btn-hover-color: #ffffff;
-  --bs-btn-hover-bg: var(--tide);
-  --bs-btn-hover-border-color: var(--tide);
+  --bs-btn-hover-bg: var(--lunar-accent);
+  --bs-btn-hover-border-color: var(--lunar-accent);
   --bs-btn-active-color: #ffffff;
   --bs-btn-active-bg: var(--indigo-600);
   --bs-btn-active-border-color: var(--indigo-600);
@@ -183,7 +185,7 @@ body {
 
 .btn-link {
   --bs-btn-color: var(--lunar-accent);
-  --bs-btn-hover-color: var(--indigo-400);
+  --bs-btn-hover-color: var(--bs-link-hover-color);
 }
 
 /* ---------------------------------------------------------------
@@ -219,7 +221,7 @@ body {
   --bs-dropdown-link-hover-color: var(--lunar-text);
   --bs-dropdown-link-hover-bg: var(--lunar-surface);
   --bs-dropdown-link-active-color: #ffffff;
-  --bs-dropdown-link-active-bg: var(--tide);
+  --bs-dropdown-link-active-bg: var(--lunar-accent);
   --bs-dropdown-divider-bg: var(--lunar-border);
   --bs-dropdown-header-color: var(--lunar-text-muted);
   box-shadow: var(--shadow-lg);
@@ -273,8 +275,8 @@ body {
 }
 
 .form-check-input:checked {
-  background-color: var(--tide);
-  border-color: var(--tide);
+  background-color: var(--lunar-accent);
+  border-color: var(--lunar-accent);
 }
 
 .form-check-input:focus {
@@ -283,11 +285,11 @@ body {
 }
 
 .form-range::-webkit-slider-thumb {
-  background-color: var(--tide);
+  background-color: var(--lunar-accent);
 }
 
 .form-range::-moz-range-thumb {
-  background-color: var(--tide);
+  background-color: var(--lunar-accent);
 }
 
 .input-group-text {
@@ -306,7 +308,7 @@ body {
 
 .nav-pills {
   --bs-nav-pills-link-active-color: #ffffff;
-  --bs-nav-pills-link-active-bg: var(--tide);
+  --bs-nav-pills-link-active-bg: var(--lunar-accent);
 }
 
 .nav-tabs {
@@ -339,8 +341,8 @@ body {
   --bs-list-group-action-active-color: var(--lunar-text);
   --bs-list-group-action-active-bg: var(--lunar-surface-hover);
   --bs-list-group-active-color: #ffffff;
-  --bs-list-group-active-bg: var(--tide);
-  --bs-list-group-active-border-color: var(--tide);
+  --bs-list-group-active-bg: var(--lunar-accent);
+  --bs-list-group-active-border-color: var(--lunar-accent);
   --bs-list-group-disabled-color: var(--lunar-text-muted);
   --bs-list-group-disabled-bg: var(--lunar-bg-elevated);
 }
@@ -368,8 +370,8 @@ body {
   --bs-pagination-focus-bg: var(--lunar-surface);
   --bs-pagination-focus-box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
   --bs-pagination-active-color: #ffffff;
-  --bs-pagination-active-bg: var(--tide);
-  --bs-pagination-active-border-color: var(--tide);
+  --bs-pagination-active-bg: var(--lunar-accent);
+  --bs-pagination-active-border-color: var(--lunar-accent);
   --bs-pagination-disabled-color: var(--moon-600);
   --bs-pagination-disabled-bg: var(--lunar-bg-elevated);
   --bs-pagination-disabled-border-color: var(--lunar-border);
@@ -378,7 +380,7 @@ body {
 .progress,
 .progress-stacked {
   --bs-progress-bg: var(--lunar-surface);
-  --bs-progress-bar-bg: var(--tide);
+  --bs-progress-bar-bg: var(--lunar-accent);
 }
 
 .accordion {

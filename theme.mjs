@@ -18,6 +18,10 @@ export function getTheme() {
 
 export function setTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
+  // Mirror to Bootstrap's color-mode attribute so lunara-bootstrap pages
+  // (and Bootstrap's own dark-mode styles) switch in lockstep. Harmless
+  // when Bootstrap isn't present.
+  document.documentElement.setAttribute('data-bs-theme', theme);
   try {
     localStorage.setItem(STORAGE_KEY, theme);
   } catch (e) {
@@ -43,7 +47,10 @@ export function initTheme() {
   } catch (e) {
     saved = null;
   }
-  if (saved) document.documentElement.setAttribute('data-theme', saved);
+  if (saved) {
+    document.documentElement.setAttribute('data-theme', saved);
+    document.documentElement.setAttribute('data-bs-theme', saved);
+  }
 }
 
 /* ------------------------------------------------------------------

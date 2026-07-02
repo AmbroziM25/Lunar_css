@@ -1,0 +1,984 @@
+/*!
+ * Lunara Bootstrap (lunara-css) v0.4.0
+ * Night-sky Bootstrap 5.3+ theme — Lunara tokens, effects, motion, and moon
+ * icons, applied to Bootstrap through its own --bs-* CSS variable API.
+ * Load AFTER bootstrap.css. https://github.com/AmbroziM25/Lunar_css#readme
+ * License: MIT
+ */
+
+/* ===== Lunara design tokens ===== */
+
+:root {
+  color-scheme: dark;
+  --moon-50: #f7f8fc;
+  --moon-100: #eceef7;
+  --moon-200: #d9dcee;
+  --moon-300: #b9bfdd;
+  --moon-400: #9298bd;
+  --moon-500: #6f76a0;
+  --moon-600: #545a80;
+  --moon-700: #3d4163;
+  --moon-800: #262844;
+  --moon-900: #14152a;
+  --moon-950: #090913;
+  --indigo-400: #818cf8;
+  --indigo-500: #6366f1;
+  --indigo-600: #4f46e5;
+  --violet-400: #a78bfa;
+  --violet-500: #8b5cf6;
+  --violet-600: #7c3aed;
+  --silver-300: #d7dbea;
+  --silver-400: #b7bcd6;
+  --eclipse: #0d0e1f;
+  --glow: #e4e8ff;
+  --tide: #6c6ff0;
+  --lunar-bg: var(--moon-950);
+  --lunar-bg-elevated: var(--moon-900);
+  --lunar-surface: var(--moon-800);
+  --lunar-surface-hover: var(--moon-700);
+  --lunar-border: var(--moon-700);
+  --lunar-text: var(--moon-50);
+  --lunar-text-muted: var(--moon-400);
+  --lunar-accent: var(--tide);
+  --lunar-accent-2: var(--violet-500);
+  --space-0: 0;
+  --space-px: 1px;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-7: 1.75rem;
+  --space-8: 2rem;
+  --space-9: 2.25rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-14: 3.5rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
+  --text-6xl: 3.75rem;
+  --leading-none: 1;
+  --leading-tight: 1.25;
+  --leading-snug: 1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  --leading-loose: 2;
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.02em;
+  --tracking-wider: 0.05em;
+  --font-thin: 100;
+  --font-light: 300;
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  --font-black: 900;
+  --radius-none: 0;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.35);
+  --shadow-md: 0 4px 12px -2px rgb(0 0 0 / 0.45), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --shadow-lg: 0 12px 24px -4px rgb(0 0 0 / 0.5), 0 4px 8px -4px rgb(0 0 0 / 0.35);
+  --shadow-xl: 0 24px 48px -8px rgb(0 0 0 / 0.55), 0 8px 16px -8px rgb(0 0 0 / 0.4);
+  --lunar-moonlight: 1;
+  --glow-color-sm: rgb(228 232 255 / calc(0.25 * var(--lunar-moonlight)));
+  --glow-color-md: rgb(108 111 240 / calc(0.35 * var(--lunar-moonlight)));
+  --glow-color-lg: rgb(108 111 240 / calc(0.45 * var(--lunar-moonlight)));
+  --glow-color-violet: rgb(139 92 246 / calc(0.45 * var(--lunar-moonlight)));
+  --shadow-glow-sm: 0 0 12px 0 var(--glow-color-sm);
+  --shadow-glow-md: 0 0 24px 2px var(--glow-color-md);
+  --shadow-glow-lg: 0 0 48px 6px var(--glow-color-lg);
+  --shadow-glow-violet: 0 0 32px 4px var(--glow-color-violet);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 450ms;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+  --z-tooltip: 600;
+}
+
+
+/* ===== Theme blocks (data-theme + data-bs-theme) ===== */
+
+:root, [data-theme="dark"], [data-bs-theme="dark"] {
+  color-scheme: dark;
+  --lunar-bg: var(--moon-950);
+  --lunar-bg-elevated: var(--moon-900);
+  --lunar-surface: var(--moon-800);
+  --lunar-surface-hover: var(--moon-700);
+  --lunar-border: var(--moon-700);
+  --lunar-text: var(--moon-50);
+  --lunar-text-muted: var(--moon-400);
+  --lunar-accent: var(--tide);
+  --lunar-accent-2: var(--violet-500);
+  --lunar-shadow-ambient: var(--shadow-md);
+}
+[data-theme="light"], [data-bs-theme="light"] {
+  color-scheme: light;
+  --lunar-bg: var(--moon-50);
+  --lunar-bg-elevated: #ffffff;
+  --lunar-surface: var(--moon-100);
+  --lunar-surface-hover: var(--moon-200);
+  --lunar-border: var(--moon-300);
+  --lunar-text: var(--moon-950);
+  --lunar-text-muted: var(--moon-600);
+  --lunar-accent: var(--indigo-600);
+  --lunar-accent-2: var(--violet-600);
+  --eclipse: var(--moon-100);
+  --glow: var(--indigo-500);
+  --glow-color-sm: rgb(79 70 229 / calc(0.12 * var(--lunar-moonlight)));
+  --glow-color-md: rgb(79 70 229 / calc(0.18 * var(--lunar-moonlight)));
+  --glow-color-lg: rgb(79 70 229 / calc(0.22 * var(--lunar-moonlight)));
+  --glow-color-violet: rgb(124 58 237 / calc(0.22 * var(--lunar-moonlight)));
+  --shadow-sm: 0 1px 2px 0 rgb(20 21 42 / 0.06);
+  --shadow-md: 0 4px 12px -2px rgb(20 21 42 / 0.1), 0 2px 4px -2px rgb(20 21 42 / 0.06);
+  --shadow-lg: 0 12px 24px -4px rgb(20 21 42 / 0.12), 0 4px 8px -4px rgb(20 21 42 / 0.08);
+  --shadow-xl: 0 24px 48px -8px rgb(20 21 42 / 0.16), 0 8px 16px -8px rgb(20 21 42 / 0.1);
+  --lunar-shadow-ambient: var(--shadow-sm);
+}
+[data-theme="light"] body, [data-bs-theme="light"] body {
+  background-image: radial-gradient(ellipse 80% 50% at 50% -20%, rgb(99 102 241 / 0.08), transparent), radial-gradient(ellipse 60% 40% at 100% 0%, rgb(124 58 237 / 0.05), transparent);
+}
+[data-theme="light"] .starfield::before, [data-theme="light"] .starfield::after, [data-bs-theme="light"] .starfield::before, [data-bs-theme="light"] .starfield::after {
+  opacity: 0.35;
+}
+[data-theme="light"] .glass, [data-bs-theme="light"] .glass {
+  background: rgb(255 255 255 / 0.6);
+  border-color: rgb(20 21 42 / 0.08);
+}
+[data-theme="light"] .glass-dark, [data-bs-theme="light"] .glass-dark {
+  background: rgb(20 21 42 / 0.06);
+  border-color: rgb(20 21 42 / 0.08);
+}
+[data-moon-phase="new"] {
+  --lunar-moonlight: 0.45;
+}
+[data-moon-phase="waxing-crescent"], [data-moon-phase="waning-crescent"] {
+  --lunar-moonlight: 0.62;
+}
+[data-moon-phase="first-quarter"], [data-moon-phase="last-quarter"] {
+  --lunar-moonlight: 0.8;
+}
+[data-moon-phase="waxing-gibbous"], [data-moon-phase="waning-gibbous"] {
+  --lunar-moonlight: 1;
+}
+[data-moon-phase="full"] {
+  --lunar-moonlight: 1.25;
+}
+
+
+@property --lunar-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+
+/* ===== Effect utilities ===== */
+
+@keyframes lunar-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+@keyframes lunar-pulse-glow {
+  0%, 100% {
+    box-shadow: var(--shadow-glow-sm);
+  }
+  50% {
+    box-shadow: var(--shadow-glow-lg);
+  }
+}
+@keyframes lunar-shimmer {
+  to {
+    background-position: -200% center;
+  }
+}
+@keyframes lunar-twinkle {
+  0%, 100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes lunar-aurora {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@keyframes lunar-eclipse-spin {
+  to {
+    --lunar-angle: 360deg;
+  }
+}
+@keyframes lunar-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes lunar-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes lunar-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.glow-sm {
+  box-shadow: var(--shadow-glow-sm);
+}
+.glow-md {
+  box-shadow: var(--shadow-glow-md);
+}
+.glow-lg {
+  box-shadow: var(--shadow-glow-lg);
+}
+.glow-violet {
+  box-shadow: var(--shadow-glow-violet);
+}
+.hover-lift {
+  transition: transform var(--duration-base) var(--ease-out), box-shadow var(--duration-base) var(--ease-out);
+}
+.hover-lift:hover, .hover-lift:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+.hover-glow {
+  box-shadow: var(--shadow-glow-sm);
+  transition: box-shadow var(--duration-base) var(--ease-out);
+}
+.hover-glow:hover, .hover-glow:focus-visible {
+  box-shadow: var(--shadow-glow-lg);
+}
+.text-shimmer {
+  background-image: linear-gradient( 90deg, var(--lunar-text-muted) 0%, var(--glow) 25%, var(--tide) 50%, var(--glow) 75%, var(--lunar-text-muted) 100% );
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: lunar-shimmer 4s linear infinite;
+}
+.float {
+  animation: lunar-float 6s var(--ease-in-out) infinite;
+}
+.pulse-glow {
+  animation: lunar-pulse-glow 2.4s var(--ease-in-out) infinite;
+}
+.glass {
+  background: rgb(255 255 255 / 0.06);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid rgb(255 255 255 / 0.12);
+}
+.glass-dark {
+  background: rgb(9 9 19 / 0.55);
+  backdrop-filter: blur(16px) saturate(120%);
+  -webkit-backdrop-filter: blur(16px) saturate(120%);
+  border: 1px solid rgb(255 255 255 / 0.08);
+}
+.starfield {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-color: var(--eclipse);
+}
+.starfield::before, .starfield::after {
+  content: "";
+  position: absolute;
+  inset: -10%;
+  z-index: -1;
+  pointer-events: none;
+  background-repeat: repeat;
+  background-image: radial-gradient(1px 1px at 10% 20%, #fff, transparent 100%), radial-gradient(1px 1px at 80% 10%, #fff, transparent 100%), radial-gradient(1.5px 1.5px at 40% 70%, #fff, transparent 100%), radial-gradient(1px 1px at 90% 60%, #fff, transparent 100%), radial-gradient(1px 1px at 60% 90%, #fff, transparent 100%), radial-gradient(1.5px 1.5px at 15% 85%, #fff, transparent 100%), radial-gradient(1px 1px at 25% 45%, #fff, transparent 100%), radial-gradient(1px 1px at 70% 35%, #fff, transparent 100%);
+  background-size: 220px 220px;
+  animation: lunar-twinkle 5s ease-in-out infinite;
+}
+.starfield::after {
+  background-size: 320px 320px;
+  background-position: 50px 80px;
+  animation-duration: 7s;
+  animation-delay: -3.5s;
+}
+.gradient-aurora {
+  background-image: linear-gradient( 120deg, var(--indigo-600), var(--violet-600), var(--tide), var(--indigo-500) );
+  background-size: 300% 300%;
+  animation: lunar-aurora 12s ease-in-out infinite;
+}
+.eclipse-border {
+  position: relative;
+  background-color: var(--lunar-surface);
+}
+.eclipse-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  padding: 2px;
+  border-radius: inherit;
+  background-image: conic-gradient( from var(--lunar-angle), var(--tide), var(--violet-500), var(--silver-300), var(--tide) );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  animation: lunar-eclipse-spin 6s linear infinite;
+}
+.moonbeam {
+  position: relative;
+}
+.moonbeam::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--duration-slow) var(--ease-out);
+  background: radial-gradient( 260px circle at var(--beam-x, 50%) var(--beam-y, 50%), rgb(228 232 255 / 0.12), transparent 65% );
+}
+.moonbeam:hover::after, .moonbeam:focus-within::after {
+  opacity: 1;
+}
+.fade-in {
+  animation: lunar-fade-in var(--duration-slow) var(--ease-out) both;
+}
+.slide-up {
+  animation: lunar-slide-up var(--duration-slow) var(--ease-out) both;
+}
+.scale-in {
+  animation: lunar-scale-in var(--duration-slow) var(--ease-out) both;
+}
+.delay-1 {
+  animation-delay: 100ms;
+}
+.delay-2 {
+  animation-delay: 200ms;
+}
+.delay-3 {
+  animation-delay: 300ms;
+}
+.delay-4 {
+  animation-delay: 400ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  .float, .pulse-glow, .text-shimmer, .starfield::before, .starfield::after, .gradient-aurora, .eclipse-border::before, .fade-in, .slide-up, .scale-in {
+    animation: none;
+  }
+  .hover-lift, .hover-glow {
+    transition: none;
+  }
+}
+
+
+/* ===== Scroll-driven motion ===== */
+
+@keyframes lunar-scroll-reveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes lunar-scroll-reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(48px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes lunar-scroll-reveal-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes lunar-scroll-reveal-blur {
+  from {
+    opacity: 0;
+    filter: blur(12px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+@keyframes lunar-scroll-parallax {
+  from {
+    transform: translateY(48px);
+  }
+  to {
+    transform: translateY(-48px);
+  }
+}
+@keyframes lunar-scroll-grow-x {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@supports (animation-timeline: view()) {
+  .scroll-reveal, .scroll-reveal-up, .scroll-reveal-scale, .scroll-reveal-blur {
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: view();
+    animation-range: entry 10% entry 70%;
+  }
+  .scroll-reveal {
+    animation-name: lunar-scroll-reveal;
+  }
+  .scroll-reveal-up {
+    animation-name: lunar-scroll-reveal-up;
+  }
+  .scroll-reveal-scale {
+    animation-name: lunar-scroll-reveal-scale;
+  }
+  .scroll-reveal-blur {
+    animation-name: lunar-scroll-reveal-blur;
+  }
+  .scroll-parallax {
+    animation: lunar-scroll-parallax linear both;
+    animation-timeline: view();
+    animation-range: cover 0% cover 100%;
+  }
+  .scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    z-index: var(--z-toast);
+    pointer-events: none;
+    transform-origin: 0 50%;
+    background-image: linear-gradient(90deg, var(--tide), var(--violet-500), var(--glow));
+    box-shadow: 0 0 8px var(--glow-color-md);
+    animation: lunar-scroll-grow-x linear both;
+    animation-timeline: scroll(root);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-reveal, .scroll-reveal-up, .scroll-reveal-scale, .scroll-reveal-blur, .scroll-parallax {
+      animation: none;
+    }
+  }
+}
+
+
+/* ===== Moon-phase icons ===== */
+
+.moon {
+  --moon-size: 3rem;
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  width: var(--moon-size);
+  height: var(--moon-size);
+  border-radius: var(--radius-full);
+  background-color: var(--glow);
+  overflow: hidden;
+  box-shadow: inset 0 0 calc(var(--moon-size) / 10) rgb(9 9 19 / 0.25), var(--shadow-glow-sm);
+}
+.moon::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background-color: var(--moon-800);
+  display: none;
+}
+.moon::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-full);
+  background-color: var(--moon-800);
+  transform: scaleX(0);
+}
+.moon-new::before, [data-moon-phase="new"] .moon-live::before {
+  display: block;
+  left: 0;
+  right: 0;
+  width: auto;
+}
+.moon-waxing-crescent::before, .moon-first-quarter::before, .moon-waxing-gibbous::before, [data-moon-phase="waxing-crescent"] .moon-live::before, [data-moon-phase="first-quarter"] .moon-live::before, [data-moon-phase="waxing-gibbous"] .moon-live::before {
+  display: block;
+  left: 0;
+}
+.moon-waning-gibbous::before, .moon-last-quarter::before, .moon-waning-crescent::before, [data-moon-phase="waning-gibbous"] .moon-live::before, [data-moon-phase="last-quarter"] .moon-live::before, [data-moon-phase="waning-crescent"] .moon-live::before {
+  display: block;
+  right: 0;
+}
+.moon-waxing-crescent::after, .moon-waning-crescent::after, [data-moon-phase="waxing-crescent"] .moon-live::after, [data-moon-phase="waning-crescent"] .moon-live::after {
+  transform: scaleX(0.65);
+}
+.moon-waxing-gibbous::after, .moon-waning-gibbous::after, [data-moon-phase="waxing-gibbous"] .moon-live::after, [data-moon-phase="waning-gibbous"] .moon-live::after {
+  transform: scaleX(0.65);
+  background-color: var(--glow);
+}
+
+
+/* ===== Bootstrap variable bridge ===== */
+
+/*!
+ * Lunara CSS — bootstrap.css (the "lunara-bootstrap" bridge)
+ *
+ * Re-themes Bootstrap 5.3+ with Lunara's night-sky design system, purely by
+ * overriding Bootstrap's own --bs-* CSS variable API — no Sass, no build step.
+ * Load AFTER bootstrap.css:
+ *
+ *   <link rel="stylesheet" href=".../bootstrap.min.css" />
+ *   <link rel="stylesheet" href=".../lunar-bootstrap.min.css" />
+ *
+ * This file is intentionally NOT wrapped in a cascade @layer: Bootstrap's own
+ * styles are unlayered, and unlayered CSS always beats layered CSS, so the
+ * bridge must stay unlayered to win ties by source order.
+ *
+ * Theme switching: works with Bootstrap's data-bs-theme attribute AND Lunara's
+ * data-theme attribute (theme.mjs sets both). Dark is the default. Accent
+ * surfaces use var(--lunar-accent), which the theme blocks switch between
+ * tide (dark) and indigo-600 (light) automatically.
+ */
+
+/* ---------------------------------------------------------------
+ * Root variable mapping — Bootstrap globals → Lunara tokens.
+ * Component vars point at Lunara's semantic aliases, so the
+ * data-theme / data-bs-theme switch re-themes everything at once.
+ * --------------------------------------------------------------- */
+:root,
+[data-bs-theme="dark"],
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bs-body-bg: var(--lunar-bg);
+  --bs-body-bg-rgb: 9, 9, 19;
+  --bs-body-color: var(--lunar-text);
+  --bs-body-color-rgb: 247, 248, 252;
+  --bs-emphasis-color: #ffffff;
+  --bs-emphasis-color-rgb: 255, 255, 255;
+
+  --bs-secondary-color: var(--lunar-text-muted);
+  --bs-secondary-color-rgb: 146, 152, 189;
+  --bs-secondary-bg: var(--lunar-surface);
+  --bs-secondary-bg-rgb: 38, 40, 68;
+  --bs-tertiary-color: var(--moon-500);
+  --bs-tertiary-color-rgb: 111, 118, 160;
+  --bs-tertiary-bg: var(--lunar-bg-elevated);
+  --bs-tertiary-bg-rgb: 20, 21, 42;
+
+  --bs-border-color: var(--lunar-border);
+  --bs-border-color-translucent: rgb(217 220 238 / 0.12);
+
+  --bs-primary: var(--tide);
+  --bs-primary-rgb: 108, 111, 240;
+  --bs-primary-text-emphasis: var(--indigo-400);
+  --bs-primary-bg-subtle: rgb(108 111 240 / 0.12);
+  --bs-primary-border-subtle: rgb(108 111 240 / 0.4);
+
+  --bs-link-color: var(--lunar-accent);
+  --bs-link-color-rgb: 108, 111, 240;
+  --bs-link-hover-color: var(--indigo-400);
+  --bs-link-hover-color-rgb: 129, 140, 248;
+
+  --bs-code-color: var(--violet-400);
+  --bs-highlight-bg: rgb(108 111 240 / 0.25);
+  --bs-heading-color: var(--lunar-text);
+
+  --bs-focus-ring-color: rgb(108 111 240 / 0.35);
+
+  --bs-body-font-family: var(--font-sans);
+
+  --bs-border-radius: var(--radius-md);
+  --bs-border-radius-sm: var(--radius-sm);
+  --bs-border-radius-lg: var(--radius-lg);
+  --bs-border-radius-xl: var(--radius-xl);
+  --bs-border-radius-xxl: var(--radius-2xl);
+
+  --bs-box-shadow: var(--shadow-md);
+  --bs-box-shadow-sm: var(--shadow-sm);
+  --bs-box-shadow-lg: var(--shadow-lg);
+}
+
+[data-bs-theme="light"],
+[data-theme="light"] {
+  color-scheme: light;
+
+  --bs-body-bg-rgb: 247, 248, 252;
+  --bs-body-color-rgb: 9, 9, 19;
+  --bs-emphasis-color: #000000;
+  --bs-emphasis-color-rgb: 0, 0, 0;
+
+  --bs-secondary-color-rgb: 84, 90, 128;
+  --bs-secondary-bg-rgb: 236, 238, 247;
+  --bs-tertiary-color: var(--moon-500);
+  --bs-tertiary-color-rgb: 111, 118, 160;
+  --bs-tertiary-bg-rgb: 255, 255, 255;
+
+  --bs-border-color-translucent: rgb(20 21 42 / 0.12);
+
+  --bs-primary: var(--indigo-600);
+  --bs-primary-rgb: 79, 70, 229;
+  --bs-primary-text-emphasis: var(--indigo-600);
+  --bs-primary-bg-subtle: rgb(79 70 229 / 0.1);
+  --bs-primary-border-subtle: rgb(79 70 229 / 0.35);
+
+  --bs-link-color-rgb: 79, 70, 229;
+  --bs-link-hover-color: var(--indigo-500);
+  --bs-link-hover-color-rgb: 99, 102, 241;
+
+  --bs-code-color: var(--violet-600);
+  --bs-highlight-bg: rgb(99 102 241 / 0.2);
+
+  --bs-focus-ring-color: rgb(79 70 229 / 0.25);
+}
+
+/* Night-sky nebula backdrop (the daylight variant is provided by the
+   mirrored [data-theme="light"] body rule from themes.css above). */
+body {
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgb(108 111 240 / 0.12), transparent),
+    radial-gradient(ellipse 60% 40% at 100% 0%, rgb(139 92 246 / 0.08), transparent);
+  background-attachment: fixed;
+}
+
+::selection {
+  background: var(--tide);
+  color: var(--moon-50);
+}
+
+/* ---------------------------------------------------------------
+ * Buttons
+ * --------------------------------------------------------------- */
+.btn {
+  --bs-btn-font-weight: 500;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.25s ease-in-out;
+}
+
+.btn-primary {
+  --bs-btn-color: #ffffff;
+  --bs-btn-bg: var(--lunar-accent);
+  --bs-btn-border-color: var(--lunar-accent);
+  --bs-btn-hover-color: #ffffff;
+  --bs-btn-hover-bg: var(--indigo-500);
+  --bs-btn-hover-border-color: var(--indigo-500);
+  --bs-btn-active-color: #ffffff;
+  --bs-btn-active-bg: var(--indigo-600);
+  --bs-btn-active-border-color: var(--indigo-600);
+  --bs-btn-disabled-color: var(--moon-400);
+  --bs-btn-disabled-bg: var(--moon-700);
+  --bs-btn-disabled-border-color: var(--moon-700);
+  --bs-btn-focus-shadow-rgb: 108, 111, 240;
+}
+
+.btn-primary:hover,
+.btn-primary:focus-visible {
+  box-shadow: var(--shadow-glow-md);
+}
+
+.btn-outline-primary {
+  --bs-btn-color: var(--lunar-accent);
+  --bs-btn-border-color: var(--lunar-accent);
+  --bs-btn-hover-color: #ffffff;
+  --bs-btn-hover-bg: var(--lunar-accent);
+  --bs-btn-hover-border-color: var(--lunar-accent);
+  --bs-btn-active-color: #ffffff;
+  --bs-btn-active-bg: var(--indigo-600);
+  --bs-btn-active-border-color: var(--indigo-600);
+  --bs-btn-focus-shadow-rgb: 108, 111, 240;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus-visible {
+  box-shadow: var(--shadow-glow-sm);
+}
+
+.btn-secondary {
+  --bs-btn-color: var(--lunar-text);
+  --bs-btn-bg: var(--lunar-surface);
+  --bs-btn-border-color: var(--lunar-border);
+  --bs-btn-hover-color: var(--lunar-text);
+  --bs-btn-hover-bg: var(--lunar-surface-hover);
+  --bs-btn-hover-border-color: var(--lunar-border);
+  --bs-btn-active-color: var(--lunar-text);
+  --bs-btn-active-bg: var(--lunar-surface-hover);
+  --bs-btn-active-border-color: var(--lunar-border);
+}
+
+.btn-link {
+  --bs-btn-color: var(--lunar-accent);
+  --bs-btn-hover-color: var(--bs-link-hover-color);
+}
+
+/* ---------------------------------------------------------------
+ * Surfaces — cards, modals, dropdowns, toasts, offcanvas, popovers
+ * --------------------------------------------------------------- */
+.card {
+  --bs-card-bg: var(--lunar-bg-elevated);
+  --bs-card-border-color: var(--lunar-border);
+  --bs-card-cap-bg: rgb(217 220 238 / 0.03);
+}
+
+.modal {
+  --bs-modal-bg: var(--lunar-bg-elevated);
+  --bs-modal-border-color: var(--lunar-border);
+  --bs-modal-header-border-color: var(--lunar-border);
+  --bs-modal-footer-border-color: var(--lunar-border);
+}
+
+.modal-content {
+  box-shadow: var(--shadow-xl), var(--shadow-glow-sm);
+}
+
+.modal-backdrop {
+  --bs-backdrop-bg: var(--moon-950);
+  --bs-backdrop-opacity: 0.7;
+}
+
+.dropdown-menu {
+  --bs-dropdown-bg: var(--lunar-bg-elevated);
+  --bs-dropdown-border-color: var(--lunar-border);
+  --bs-dropdown-color: var(--lunar-text);
+  --bs-dropdown-link-color: var(--lunar-text);
+  --bs-dropdown-link-hover-color: var(--lunar-text);
+  --bs-dropdown-link-hover-bg: var(--lunar-surface);
+  --bs-dropdown-link-active-color: #ffffff;
+  --bs-dropdown-link-active-bg: var(--lunar-accent);
+  --bs-dropdown-divider-bg: var(--lunar-border);
+  --bs-dropdown-header-color: var(--lunar-text-muted);
+  box-shadow: var(--shadow-lg);
+}
+
+.toast {
+  --bs-toast-bg: var(--lunar-bg-elevated);
+  --bs-toast-color: var(--lunar-text);
+  --bs-toast-border-color: var(--lunar-border);
+  --bs-toast-header-bg: transparent;
+  --bs-toast-header-color: var(--lunar-text-muted);
+  --bs-toast-header-border-color: var(--lunar-border);
+  box-shadow: var(--shadow-lg);
+}
+
+.offcanvas,
+.offcanvas-sm,
+.offcanvas-md,
+.offcanvas-lg,
+.offcanvas-xl,
+.offcanvas-xxl {
+  --bs-offcanvas-bg: var(--lunar-bg-elevated);
+  --bs-offcanvas-color: var(--lunar-text);
+  --bs-offcanvas-border-color: var(--lunar-border);
+}
+
+.popover {
+  --bs-popover-bg: var(--lunar-bg-elevated);
+  --bs-popover-border-color: var(--lunar-border);
+  --bs-popover-header-bg: var(--lunar-surface);
+  --bs-popover-header-color: var(--lunar-text);
+  --bs-popover-body-color: var(--lunar-text);
+}
+
+.tooltip {
+  --bs-tooltip-bg: var(--moon-800);
+  --bs-tooltip-color: var(--moon-50);
+}
+
+/* ---------------------------------------------------------------
+ * Forms
+ * --------------------------------------------------------------- */
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--lunar-accent);
+  box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
+}
+
+.form-control::placeholder {
+  color: var(--lunar-text-muted);
+}
+
+.form-check-input:checked {
+  background-color: var(--lunar-accent);
+  border-color: var(--lunar-accent);
+}
+
+.form-check-input:focus {
+  border-color: var(--lunar-accent);
+  box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
+}
+
+.form-range::-webkit-slider-thumb {
+  background-color: var(--lunar-accent);
+}
+
+.form-range::-moz-range-thumb {
+  background-color: var(--lunar-accent);
+}
+
+.input-group-text {
+  background-color: var(--lunar-surface);
+  border-color: var(--lunar-border);
+  color: var(--lunar-text-muted);
+}
+
+/* ---------------------------------------------------------------
+ * Navs & navbar
+ * --------------------------------------------------------------- */
+.nav {
+  --bs-nav-link-color: var(--lunar-text-muted);
+  --bs-nav-link-hover-color: var(--lunar-text);
+}
+
+.nav-pills {
+  --bs-nav-pills-link-active-color: #ffffff;
+  --bs-nav-pills-link-active-bg: var(--lunar-accent);
+}
+
+.nav-tabs {
+  --bs-nav-tabs-border-color: var(--lunar-border);
+  --bs-nav-tabs-link-hover-border-color: var(--lunar-border) var(--lunar-border) transparent;
+  --bs-nav-tabs-link-active-color: var(--lunar-text);
+  --bs-nav-tabs-link-active-bg: var(--lunar-bg-elevated);
+  --bs-nav-tabs-link-active-border-color: var(--lunar-border) var(--lunar-border) var(--lunar-bg-elevated);
+}
+
+.navbar {
+  --bs-navbar-color: var(--lunar-text-muted);
+  --bs-navbar-hover-color: var(--lunar-text);
+  --bs-navbar-active-color: var(--lunar-text);
+  --bs-navbar-brand-color: var(--lunar-text);
+  --bs-navbar-brand-hover-color: var(--lunar-accent);
+  --bs-navbar-toggler-border-color: var(--lunar-border);
+}
+
+/* ---------------------------------------------------------------
+ * List group, table, pagination, progress, accordion, breadcrumb
+ * --------------------------------------------------------------- */
+.list-group {
+  --bs-list-group-bg: var(--lunar-bg-elevated);
+  --bs-list-group-color: var(--lunar-text);
+  --bs-list-group-border-color: var(--lunar-border);
+  --bs-list-group-action-color: var(--lunar-text);
+  --bs-list-group-action-hover-color: var(--lunar-text);
+  --bs-list-group-action-hover-bg: var(--lunar-surface);
+  --bs-list-group-action-active-color: var(--lunar-text);
+  --bs-list-group-action-active-bg: var(--lunar-surface-hover);
+  --bs-list-group-active-color: #ffffff;
+  --bs-list-group-active-bg: var(--lunar-accent);
+  --bs-list-group-active-border-color: var(--lunar-accent);
+  --bs-list-group-disabled-color: var(--lunar-text-muted);
+  --bs-list-group-disabled-bg: var(--lunar-bg-elevated);
+}
+
+.table {
+  --bs-table-color: var(--lunar-text);
+  --bs-table-bg: transparent;
+  --bs-table-border-color: var(--lunar-border);
+  --bs-table-striped-color: var(--lunar-text);
+  --bs-table-striped-bg: rgb(217 220 238 / 0.03);
+  --bs-table-hover-color: var(--lunar-text);
+  --bs-table-hover-bg: rgb(108 111 240 / 0.08);
+  --bs-table-active-color: var(--lunar-text);
+  --bs-table-active-bg: rgb(108 111 240 / 0.12);
+}
+
+.pagination {
+  --bs-pagination-color: var(--lunar-text-muted);
+  --bs-pagination-bg: var(--lunar-bg-elevated);
+  --bs-pagination-border-color: var(--lunar-border);
+  --bs-pagination-hover-color: var(--lunar-text);
+  --bs-pagination-hover-bg: var(--lunar-surface);
+  --bs-pagination-hover-border-color: var(--lunar-border);
+  --bs-pagination-focus-color: var(--lunar-text);
+  --bs-pagination-focus-bg: var(--lunar-surface);
+  --bs-pagination-focus-box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
+  --bs-pagination-active-color: #ffffff;
+  --bs-pagination-active-bg: var(--lunar-accent);
+  --bs-pagination-active-border-color: var(--lunar-accent);
+  --bs-pagination-disabled-color: var(--moon-600);
+  --bs-pagination-disabled-bg: var(--lunar-bg-elevated);
+  --bs-pagination-disabled-border-color: var(--lunar-border);
+}
+
+.progress,
+.progress-stacked {
+  --bs-progress-bg: var(--lunar-surface);
+  --bs-progress-bar-bg: var(--lunar-accent);
+}
+
+.accordion {
+  --bs-accordion-bg: var(--lunar-bg-elevated);
+  --bs-accordion-color: var(--lunar-text);
+  --bs-accordion-border-color: var(--lunar-border);
+  --bs-accordion-btn-color: var(--lunar-text);
+  --bs-accordion-active-color: var(--lunar-accent);
+  --bs-accordion-active-bg: rgb(108 111 240 / 0.1);
+  --bs-accordion-btn-focus-box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
+}
+
+.breadcrumb {
+  --bs-breadcrumb-divider-color: var(--lunar-text-muted);
+  --bs-breadcrumb-item-active-color: var(--lunar-text-muted);
+}
+
+/* Bootstrap only inverts .btn-close under its own attribute; mirror
+   that for pages driven purely by Lunara's data-theme. */
+[data-theme="dark"] .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+

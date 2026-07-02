@@ -283,6 +283,100 @@ function restructureBucket(nodes) {
   return out;
 }
 
+/* ------------------------------------------------------------------
+ * Bootstrap bridge — dist/lunar-bootstrap.css ("lunara-bootstrap")
+ *
+ * A standalone stylesheet for Bootstrap 5.3+ projects: Lunara's design
+ * tokens, theme blocks, effects, scroll motion, and moon icons, plus
+ * src/bootstrap.css which re-themes Bootstrap through its --bs-*
+ * variable API. Lunara's own components/utilities are deliberately
+ * excluded — .btn, .card, .p-4 … would collide with Bootstrap's.
+ *
+ * Emitted UNLAYERED: Bootstrap's CSS is unlayered, and unlayered CSS
+ * beats @layer CSS, so the bridge must be unlayered (and loaded after
+ * bootstrap.css) to win by source order.
+ * ------------------------------------------------------------------ */
+
+/** Serialize parsed nodes back to CSS text. */
+function serializeNodes(nodes, indent = '') {
+  let out = '';
+  for (const node of nodes) {
+    if (node.type === 'decl') {
+      out += `${indent}${node.prop}: ${node.value};\n`;
+    } else if (node.type === 'rule') {
+      const selector = node.selector.replace(/\s+/g, ' ');
+      out += `${indent}${selector} {\n${serializeNodes(node.nodes, indent + '  ')}${indent}}\n`;
+    } else if (node.type === 'atrule') {
+      const head = '@' + node.name + (node.params ? ' ' + node.params : '');
+      if (node.nodes) {
+        out += `${indent}${head} {\n${serializeNodes(node.nodes, indent + '  ')}${indent}}\n`;
+      } else {
+        out += `${indent}${head};\n`;
+      }
+    }
+  }
+  return out;
+}
+
+/**
+ * Duplicate every [data-theme=…] selector group with a [data-bs-theme=…]
+ * twin, so Bootstrap's native color-mode attribute drives Lunara's theme
+ * blocks too.
+ */
+function mirrorThemeSelectors(nodes) {
+  return nodes.map((node) => {
+    if (node.type !== 'rule' || !node.selector.includes('[data-theme=')) return node;
+    const groups = splitSelectorList(node.selector);
+    const mirrored = groups
+      .filter((g) => g.includes('[data-theme='))
+      .map((g) => g.replace(/\[data-theme=/g, '[data-bs-theme='));
+    return { ...node, selector: groups.concat(mirrored).join(',\n') };
+  });
+}
+
+function buildBootstrap(fullCss) {
+  const root = parseCss(fullCss);
+
+  const bsBanner = `/*!
+ * Lunara Bootstrap (lunara-css) v${pkg.version}
+ * Night-sky Bootstrap 5.3+ theme — Lunara tokens, effects, motion, and moon
+ * icons, applied to Bootstrap through its own --bs-* CSS variable API.
+ * Load AFTER bootstrap.css. ${pkg.homepage || ''}
+ * License: MIT
+ */`;
+
+  const tokens = collectLayer(root, 'lunar-base').filter(
+    (n) => n.type === 'rule' && n.selector.trim() === ':root'
+  );
+  const themes = mirrorThemeSelectors(collectLayer(root, 'lunar-themes'));
+  const properties = root.filter((n) => n.type === 'atrule' && n.name === 'property');
+  const effects = collectLayer(root, 'lunar-effects');
+  const motion = collectLayer(root, 'lunar-motion');
+  const moonIcons = collectLayer(root, 'lunar-components').filter(
+    (n) => n.type === 'rule' && n.selector.includes('.moon')
+  );
+
+  const bridge = fs.readFileSync(path.join(SRC_DIR, 'bootstrap.css'), 'utf8').trim();
+
+  return [
+    bsBanner,
+    '/* ===== Lunara design tokens ===== */',
+    serializeNodes(tokens),
+    '/* ===== Theme blocks (data-theme + data-bs-theme) ===== */',
+    serializeNodes(themes),
+    serializeNodes(properties),
+    '/* ===== Effect utilities ===== */',
+    serializeNodes(effects),
+    '/* ===== Scroll-driven motion ===== */',
+    serializeNodes(motion),
+    '/* ===== Moon-phase icons ===== */',
+    serializeNodes(moonIcons),
+    '/* ===== Bootstrap variable bridge ===== */',
+    bridge,
+    '',
+  ].join('\n\n');
+}
+
 function buildTailwindMap(css) {
   const root = parseCss(css);
 
