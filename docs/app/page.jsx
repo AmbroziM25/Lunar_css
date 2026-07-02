@@ -43,7 +43,7 @@ export default function Home() {
   return (
     <main>
       <section className="hero starfield">
-        <p className="badge badge-glow fade-in">v0.3.0 · MIT · zero dependencies</p>
+        <p className="badge badge-glow fade-in">v 0.4.0 · MIT · zero dependencies</p>
         <h1 className="hero-title mt-4 slide-up">
           The <span className="text-shimmer">night-sky</span>
           <br />
