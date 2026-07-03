@@ -71,6 +71,7 @@ function minify(css) {
     .replace(/\s+/g, ' ') // collapse whitespace runs — never deletes a lone space (safe for calc())
     .replace(/\s*([{}:;,])\s*/g, '$1') // tighten spacing around structural punctuation
     .replace(/;}/g, '}') // drop redundant trailing semicolons
+    .replace(/([\s(,:])0\.(\d)/g, '$1.$2') // 0.5 → .5 (only in value position, after a delimiter)
     .trim();
 
   return head ? `${head}\n${body}\n` : `${body}\n`;

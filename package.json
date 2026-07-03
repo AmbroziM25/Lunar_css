@@ -1,12 +1,14 @@
 {
   "name": "lunara-css",
-  "version": "0.5.0",
+  "version": "1.0.0",
   "publishConfig": {
     "access": "public"
   },
   "description": "A lightweight, utility-first CSS framework with a dark \"night sky\" aesthetic — pure CSS, zero build step, with a Tailwind preset for drop-in integration.",
   "main": "dist/lunar.css",
   "style": "dist/lunar.css",
+  "unpkg": "dist/lunar.min.css",
+  "jsdelivr": "dist/lunar.min.css",
   "sideEffects": [
     "**/*.css"
   ],
@@ -32,15 +34,14 @@
   },
   "files": [
     "dist",
-    "src",
     "tailwind.css",
     "tailwind-preset.js",
     "tailwind-plugin.js",
-    "theme.mjs",
-    "README.md"
+    "theme.mjs"
   ],
   "scripts": {
-    "build": "node build.js"
+    "build": "node build.js",
+    "prepublishOnly": "node build.js"
   },
   "keywords": [
     "css",

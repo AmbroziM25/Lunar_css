@@ -48,6 +48,7 @@
   font-weight: var(--font-medium);
   line-height: 1;
   white-space: nowrap;
+  -webkit-user-select: none;
   user-select: none;
   border: 1px solid var(--btn-border-color);
   border-radius: var(--btn-radius);
@@ -302,6 +303,7 @@
 .navbar-nav {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: var(--space-6);
   list-style: none;
   padding: 0;
@@ -336,6 +338,7 @@
   justify-content: center;
   padding: var(--space-6);
   background-color: var(--modal-backdrop-color);
+  -webkit-backdrop-filter: blur(var(--modal-backdrop-blur));
   backdrop-filter: blur(var(--modal-backdrop-blur));
   z-index: var(--z-modal);
   opacity: 0;
@@ -441,6 +444,14 @@
   }
 }
 
+/* Browsers without the Popover API don't hide [popover] elements (the UA
+   rule `[popover]:not(:popover-open) { display: none }` doesn't exist
+   there), so the modal's content would render inline mid-page. Hide it —
+   without the API the trigger can't open it anyway. */
+@supports not selector(:popover-open) {
+  .modal[popover] { display: none; }
+}
+
 /* ---------------------------------------------------------------
  * Toast
  * Custom properties: --toast-bg, --toast-border-color, --toast-accent,
@@ -529,13 +540,25 @@
   transform: scaleX(0);
 }
 
-/* Fully dark / fully lit */
+/* Fully dark / fully lit. (.moon-full is the .moon default state — the
+   explicit rules exist so the class is a real, greppable part of the API
+   and keeps working even when other phase classes are combined.) */
 .moon-new::before,
 [data-moon-phase="new"] .moon-live::before {
   display: block;
   left: 0;
   right: 0;
   width: auto;
+}
+
+.moon-full::before,
+[data-moon-phase="full"] .moon-live::before {
+  display: none;
+}
+
+.moon-full::after,
+[data-moon-phase="full"] .moon-live::after {
+  transform: scaleX(0);
 }
 
 /* Waxing phases: shadow on the left, light grows on the right */

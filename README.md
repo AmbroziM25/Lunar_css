@@ -28,13 +28,13 @@ violet.
 - **Zero-JavaScript modal** — Lunara styles the native Popover API, so two HTML attributes give
   you a fully animated modal with backdrop blur, Esc, and light-dismiss. No script.
 
-[View the live component + effects gallery →](./index.html)
+[View the live component + effects gallery →](./index.html) ·
+[Release QA page (renders every class) →](./test/index.html)
 
-**Full documentation site** (Next.js, built with Lunara itself) lives on the
-[`docs-site` branch](https://github.com/AmbroziM25/Lunar_css/tree/docs-site):
+**Full documentation site** (Next.js, built with Lunara itself) lives in [`docs/`](./docs):
 
 ```bash
-git switch docs-site
+cd docs
 npm install
 npm run dev   # http://localhost:3000
 ```
@@ -46,8 +46,11 @@ npm run dev   # http://localhost:3000
 ### CDN (no build step)
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lunara-css/dist/lunar.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lunara-css@1/dist/lunar.min.css" />
 ```
+
+(Or via unpkg: `https://unpkg.com/lunara-css@1/dist/lunar.min.css` — the `@1` pin keeps you on
+1.x without surprise majors.)
 
 ### npm
 
@@ -90,6 +93,64 @@ is the minified production build.
 
 Switch to the light "daylight" theme by setting `data-theme="light"` on `<html>` (or any
 container) — no attribute, or `data-theme="dark"`, gives you the default night-sky theme.
+
+---
+
+## Copy-paste examples
+
+### Hero section
+
+```html
+<section class="starfield gradient-aurora py-16 px-6">
+  <div class="container max-w-3xl relative z-10">
+    <span class="badge badge-glow mb-4">Now in v1.0</span>
+    <h1 class="text-4xl md:text-6xl font-bold text-moon-50">
+      Ship faster, <span class="text-shimmer">under the stars</span>
+    </h1>
+    <p class="mt-4 text-lg text-moon-200 max-w-xl">
+      A dark-first design system with one-line glow, glass, and aurora effects.
+    </p>
+    <div class="mt-6 flex flex-wrap gap-4">
+      <a href="#" class="btn btn-glow btn-lg hover-lift">Get started</a>
+      <a href="#" class="btn btn-secondary btn-lg glass hover-glow">Live demo</a>
+    </div>
+  </div>
+</section>
+```
+
+### Card
+
+```html
+<div class="card hover-lift glow-sm max-w-sm">
+  <div class="card-header flex items-center gap-2">
+    <span class="moon moon-waxing-gibbous" style="--moon-size: 1.5rem"></span>
+    Tonight's forecast
+  </div>
+  <div class="card-body">
+    <p class="text-muted">Clear skies, waxing gibbous, 84% illuminated.
+    Perfect conditions for shipping.</p>
+  </div>
+  <div class="card-footer justify-between">
+    <span class="badge badge-primary">astronomy</span>
+    <button class="btn btn-primary btn-sm">Details</button>
+  </div>
+</div>
+```
+
+### Button set
+
+```html
+<div class="flex flex-wrap items-center gap-3">
+  <button class="btn btn-primary">Save</button>
+  <button class="btn btn-secondary">Cancel</button>
+  <button class="btn btn-outline">Preview</button>
+  <button class="btn btn-ghost">Skip</button>
+  <button class="btn btn-glow pulse-glow">Launch 🚀</button>
+  <button class="btn btn-primary btn-sm">Small</button>
+  <button class="btn btn-primary btn-lg">Large</button>
+  <button class="btn btn-primary" disabled>Disabled</button>
+</div>
+```
 
 ---
 
@@ -566,6 +627,59 @@ plain elements. See the [live gallery](./index.html#effects) for interactive dem
 
 All animations respect `prefers-reduced-motion: reduce`.
 
+---
+
+## Utility class reference
+
+Atomic, Tailwind-compatible utilities. Spacing utilities run on the `--space-*` scale
+(`1` = 0.25rem), so `p-4` = 1rem, exactly like Tailwind.
+
+| Category | Classes |
+|---|---|
+| Container | `container` (centered, breakpoint max-widths, `--space-4` side padding) |
+| Display | `block` `inline-block` `inline` `flex` `inline-flex` `grid` `inline-grid` `hidden` |
+| Position | `static` `relative` `absolute` `fixed` `sticky` · `inset-0` `inset-x-0` `inset-y-0` `top-0` `right-0` `bottom-0` `left-0` |
+| Flex direction / wrap | `flex-row` `flex-row-reverse` `flex-col` `flex-col-reverse` `flex-wrap` `flex-nowrap` |
+| Align / justify | `items-{start,center,end,baseline,stretch}` · `justify-{start,center,end,between,around,evenly}` · `self-{start,center,end,stretch}` |
+| Flex sizing | `flex-1` `flex-auto` `flex-initial` `flex-none` `grow` `grow-0` `shrink` `shrink-0` |
+| Grid | `grid-cols-{1–12}` · `col-span-{1–12,full}` · `grid-rows-{1–3}` |
+| Gap | `gap-{0–6,8,10,12}` · `gap-x-*` / `gap-y-*` (same scale) |
+| Padding | `p-{0–6,8,10,12,16}` · `px-*` / `py-*` (same scale) · `pt-*` / `pr-*` / `pb-*` / `pl-*` `{0–6,8,10,12}` |
+| Margin | `m-{0–6,8,10,12,auto}` · `mx-*` / `my-*` (same scale) · `mt-*` / `mb-*` `{0–6,8,10,12,auto}` · `mr-*` / `ml-*` `{0–6,8,auto}` |
+| Width | `w-auto` `w-full` `w-screen` `w-fit` `w-1/2` `w-1/3` `w-2/3` `w-1/4` `w-3/4` `min-w-0` |
+| Height | `h-auto` `h-full` `h-screen` `h-fit` `min-h-screen` `min-h-full` |
+| Max width | `max-w-{xs,sm,md,lg,xl,2xl,3xl,4xl,5xl,6xl,7xl,prose,full}` |
+| Font size | `text-{xs,sm,base,lg,xl,2xl,3xl,4xl,5xl,6xl}` |
+| Font weight / style | `font-{thin,light,normal,medium,semibold,bold,black}` · `italic` `not-italic` |
+| Text align / transform | `text-{left,center,right,justify}` · `uppercase` `lowercase` `capitalize` `normal-case` |
+| Line height / tracking | `leading-{none,tight,snug,normal,relaxed,loose}` · `tracking-{tight,normal,wide,wider}` |
+| Decoration / wrap | `underline` `no-underline` `line-through` · `truncate` `whitespace-nowrap` `whitespace-pre-wrap` |
+| Text color | `text-moon-{50–950}` · `text-glow` `text-tide` `text-eclipse` `text-violet` `text-indigo` `text-muted` `text-current` |
+| Background | `bg-moon-{50–950}` · `bg-glow` `bg-tide` `bg-eclipse` `bg-violet` `bg-indigo` `bg-surface` `bg-transparent` |
+| Border | `border` `border-0` `border-2` `border-4` `border-{t,r,b,l}` · `border-{moon-700,moon-800,tide,violet,transparent}` |
+| Radius | `rounded-{none,sm,md,lg,xl,2xl,full}` |
+| Shadow | `shadow-none` `shadow-sm` `shadow` `shadow-md` `shadow-lg` `shadow-xl` |
+| Opacity | `opacity-{0,25,50,75,100}` |
+| Overflow | `overflow-{auto,hidden,visible,scroll}` · `overflow-x-{auto,hidden}` `overflow-y-{auto,hidden}` |
+| Z-index | `z-{0,10,20,30,40,50,auto}` |
+| Interactivity | `cursor-{pointer,not-allowed,default}` `select-none` `pointer-events-none` |
+| Accessibility | `sr-only` (visually hidden, screen-reader accessible) |
+
+### Responsive design
+
+Five Tailwind-compatible, mobile-first breakpoints: `sm:` ≥640px, `md:` ≥768px, `lg:` ≥1024px,
+`xl:` ≥1280px, `2xl:` ≥1536px. Every breakpoint exposes the **same** variant set over the
+layout-relevant utilities — display, flex direction/wrap, align/justify, `grid-cols`, `col-span`,
+`gap`, `p`/`px`/`py`, `mx-auto`, text alignment, font size, and width:
+
+```html
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">…</div>
+<h1 class="text-3xl md:text-5xl 2xl:text-6xl">Scales with the viewport</h1>
+<nav class="hidden lg:flex gap-6">Desktop-only nav</nav>
+```
+
+The [test page](./test/index.html) renders the full matrix and verifies all 851 classes exist.
+
 > **Note:** `.slide-up` and `.scale-in` animate `transform`, and (per the CSS spec) any element
 > with a non-`none` computed `transform` becomes the containing block for `position: fixed`
 > descendants — including after the entrance animation finishes, since it holds its end state via
@@ -599,7 +713,12 @@ lunar-css/
 ├── tailwind-plugin.js    # registers components/effects as native Tailwind classes (v3 + v4)
 ├── theme.mjs             # optional framework-agnostic theme + moon-phase helpers (ESM)
 ├── index.html            # palette / typography / component / effects gallery
+├── bootstrap.html        # lunara-bootstrap live gallery
+├── test/index.html       # release QA page — renders every class + automated inventory check
+├── docs/                 # Next.js documentation site (built with Lunara itself)
 ├── build.js              # concatenates + minifies src/ → dist/
+├── CHANGELOG.md
+├── LICENSE               # MIT
 └── package.json
 ```
 
@@ -609,10 +728,12 @@ lunar-css/
 npm run build
 ```
 
-Runs `build.js`, a small dependency-free Node script: concatenates `src/*.css` in cascade order
-(base → themes → effects → components → utilities, so utilities always win) into `dist/lunar.css`,
-then writes a minified `dist/lunar.min.css`. No bundler or PostCSS required to build or to consume
-the framework.
+Runs `build.js`, a small dependency-free Node script: concatenates `src/*.css`
+(base → themes → effects → motion → components → utilities) into `dist/lunar.css` — cascade
+priority is governed by the `@layer` order declared in `base.css`, with utilities last so they
+always win — then writes a minified `dist/lunar.min.css`, the Tailwind class map
+(`dist/lunar.tailwind.json`), and the Bootstrap bridge builds. No bundler or PostCSS required
+to build or to consume the framework.
 
 ---
 
@@ -627,8 +748,15 @@ The signature features are progressive enhancements on newer platform APIs:
   `@supports`, so unsupported browsers show content normally, just without the scroll effects.
 - **Zero-JS modal** (Popover API + `@starting-style`) — Chrome/Edge 125+, Safari 17.4+,
   Firefox 129+ for the full animated experience; the popover itself works wherever the Popover
-  API does.
+  API does. In browsers without the Popover API the modal is hidden entirely (via
+  `@supports not selector(:popover-open)`) instead of leaking inline into the page.
+- **Eclipse border spin** (`@property`) — browsers without `@property` (old Firefox) show the
+  gradient ring statically instead of animating it; nothing breaks.
 - **Moon-phase icons and lunar theming** — plain CSS + a tiny JS helper; works everywhere.
+
+Prefixed fallbacks ship for `backdrop-filter`, `mask`/`mask-composite`, and `user-select`
+(`-webkit-*`), and viewport heights use `100vh` with a `100dvh` progressive override, so nothing
+in the core requires a feature below ~95% global support without a graceful fallback.
 
 ## License
 

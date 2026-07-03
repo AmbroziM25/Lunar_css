@@ -1,0 +1,687 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lunara CSS v1.0.0 — release QA page</title>
+<meta name="description" content="Visual QA page: renders every Lunara utility, component, and effect class, grouped by category." />
+<link rel="stylesheet" href="../dist/lunar.css" />
+<style>
+  /* Test-page-only chrome (not part of the framework) */
+  .qa-box { background: var(--lunar-surface); border: 1px dashed var(--moon-600); }
+  .qa-inner { background: rgb(108 111 240 / 0.35); min-width: 1.5rem; min-height: 1.5rem; }
+  .qa-cell { background: var(--lunar-surface); border: 1px solid var(--lunar-border); text-align: center; font-size: var(--text-xs); padding: 0.25rem; }
+  .qa-label { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--lunar-text-muted); }
+  .qa-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4); margin-bottom: var(--space-2); }
+  .qa-row > .qa-label { width: 11rem; flex-shrink: 0; }
+  .qa-swatch { width: 100%; height: 2.25rem; border-radius: var(--radius-sm); border: 1px solid var(--lunar-border); }
+  .qa-section { margin-bottom: var(--space-16); scroll-margin-top: 5rem; }
+  .qa-demo-strip { position: relative; }
+  #inventory-report table { font-size: var(--text-sm); }
+  #inventory-report td, #inventory-report th { padding: 0.375rem 0.75rem; border-bottom: 1px solid var(--lunar-border); text-align: left; }
+</style>
+</head>
+<body>
+
+<div class="scroll-progress" aria-hidden="true"></div>
+<a href="#inventory" class="sr-only">Skip to inventory report</a>
+
+<header class="navbar">
+  <span class="navbar-brand">🌙 Lunara CSS <span class="badge badge-glow">v1.0.0 QA</span></span>
+  <nav class="navbar-nav flex-wrap">
+    <a class="navbar-link" href="#inventory">Inventory</a>
+    <a class="navbar-link" href="#responsive">Responsive</a>
+    <a class="navbar-link" href="#layout">Layout</a>
+    <a class="navbar-link" href="#flexgrid">Flex/Grid</a>
+    <a class="navbar-link" href="#spacing">Spacing</a>
+    <a class="navbar-link" href="#sizing">Sizing</a>
+    <a class="navbar-link" href="#typography">Type</a>
+    <a class="navbar-link" href="#colors">Colors</a>
+    <a class="navbar-link" href="#borders">Borders</a>
+    <a class="navbar-link" href="#misc">Misc</a>
+    <a class="navbar-link" href="#components">Components</a>
+    <a class="navbar-link" href="#effects">Effects</a>
+    <a class="navbar-link" href="#motion">Motion</a>
+  </nav>
+</header>
+
+<main class="container py-10">
+
+  <!-- ============ INVENTORY (automated class coverage check) ============ -->
+  <section id="inventory" class="qa-section">
+    <h2>Class inventory check</h2>
+    <p class="text-muted mt-2 mb-4">
+      Parses <code>dist/lunar.css</code> and asserts every expected class exists (including the full
+      sm/md/lg/xl/2xl responsive matrix). Serve this page over HTTP for the check to run.
+    </p>
+    <div id="inventory-report" class="card"><div class="card-body text-muted">Running…</div></div>
+  </section>
+
+  <!-- ============ RESPONSIVE ============ -->
+  <section id="responsive" class="qa-section">
+    <h2>Responsive breakpoints</h2>
+    <p class="text-muted mt-2 mb-4">Resize the window. Exactly one badge below should glow per range, and the demo grid re-flows at each breakpoint (1 → 2 → 3 → 4 → 6 → 12 columns).</p>
+    <div class="flex gap-3 flex-wrap mb-6">
+      <span class="badge badge-glow sm:hidden">base &lt;640</span>
+      <span class="badge hidden sm:inline-flex md:hidden badge-glow">sm ≥640</span>
+      <span class="badge hidden md:inline-flex lg:hidden badge-glow">md ≥768</span>
+      <span class="badge hidden lg:inline-flex xl:hidden badge-glow">lg ≥1024</span>
+      <span class="badge hidden xl:inline-flex 2xl:hidden badge-glow">xl ≥1280</span>
+      <span class="badge hidden 2xl:inline-flex badge-glow">2xl ≥1536</span>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-12 gap-2 mb-6">
+      <div class="qa-cell">1</div><div class="qa-cell">2</div><div class="qa-cell">3</div><div class="qa-cell">4</div>
+      <div class="qa-cell">5</div><div class="qa-cell">6</div><div class="qa-cell">7</div><div class="qa-cell">8</div>
+      <div class="qa-cell">9</div><div class="qa-cell">10</div><div class="qa-cell">11</div><div class="qa-cell">12</div>
+    </div>
+    <p class="qa-label mb-2">text alignment flips center at md, right at xl; size steps up per breakpoint:</p>
+    <p class="text-left md:text-center xl:text-right text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl qa-box p-4 rounded-md">
+      sm:text-base · md:text-lg + md:text-center · lg:text-xl · xl:text-2xl + xl:text-right · 2xl:text-3xl
+    </p>
+  </section>
+
+  <!-- ============ LAYOUT ============ -->
+  <section id="layout" class="qa-section">
+    <h2>Layout — display, position, overflow, z-index</h2>
+    <div class="card mt-4"><div class="card-body" id="display-demos"></div></div>
+    <h3 class="mt-6 mb-3 text-lg">Position + inset</h3>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="relative qa-box rounded-md" style="height:5rem"><span class="absolute top-0 left-0 badge">top-0 left-0</span></div>
+      <div class="relative qa-box rounded-md" style="height:5rem"><span class="absolute bottom-0 right-0 badge">bottom-0 right-0</span></div>
+      <div class="relative qa-box rounded-md" style="height:5rem"><span class="absolute inset-x-0 top-0 qa-inner qa-label text-center">inset-x-0</span></div>
+      <div class="relative qa-box rounded-md" style="height:5rem"><span class="absolute inset-y-0 left-0 qa-inner qa-label" style="writing-mode:vertical-rl">inset-y-0</span></div>
+    </div>
+    <div class="qa-row mt-4"><span class="qa-label">.inset-0</span><div class="relative qa-box rounded-md w-full" style="height:3rem"><div class="absolute inset-0 qa-inner rounded-md"></div></div></div>
+    <div class="qa-row"><span class="qa-label">static/relative/fixed/sticky</span><span class="text-muted text-sm">.static .relative .absolute .fixed .sticky — .sticky is used by the navbar above; .fixed by the toast region &amp; scroll-progress.</span></div>
+    <h3 class="mt-6 mb-3 text-lg">Overflow</h3>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="overflow-demos"></div>
+    <h3 class="mt-6 mb-3 text-lg">z-index</h3>
+    <div class="overflow-x-auto"><div class="relative" style="height:5.5rem; min-width:26rem" id="z-demos"></div></div>
+  </section>
+
+  <!-- ============ FLEX & GRID ============ -->
+  <section id="flexgrid" class="qa-section">
+    <h2>Flexbox &amp; Grid</h2>
+    <div id="flex-demos" class="mt-4"></div>
+    <h3 class="mt-8 mb-3 text-lg">grid-cols-1 … grid-cols-12</h3>
+    <div id="gridcols-demos"></div>
+    <h3 class="mt-8 mb-3 text-lg">col-span-1 … col-span-12 / col-span-full (on a 12-col grid)</h3>
+    <div id="colspan-demos"></div>
+    <h3 class="mt-8 mb-3 text-lg">grid-rows / self-*</h3>
+    <div id="gridrows-demos"></div>
+  </section>
+
+  <!-- ============ SPACING ============ -->
+  <section id="spacing" class="qa-section">
+    <h2>Spacing — gap, padding, margin</h2>
+    <p class="text-muted mt-2 mb-4">Every step of every family. The tinted inner box shows the box content; the dashed box shows the padded/margined boundary.</p>
+    <div id="spacing-demos"></div>
+  </section>
+
+  <!-- ============ SIZING ============ -->
+  <section id="sizing" class="qa-section">
+    <h2>Sizing — width, height, min/max</h2>
+    <div id="sizing-demos" class="mt-4"></div>
+  </section>
+
+  <!-- ============ TYPOGRAPHY ============ -->
+  <section id="typography" class="qa-section">
+    <h2>Typography</h2>
+    <div id="type-demos" class="mt-4"></div>
+    <h3 class="mt-6 mb-3 text-lg">Truncate / whitespace</h3>
+    <div class="qa-row"><span class="qa-label">.truncate</span><p class="truncate qa-box rounded-md p-2" style="max-width:16rem">This long moonlit sentence is far too long for its container and must truncate with an ellipsis.</p></div>
+    <div class="qa-row"><span class="qa-label">.whitespace-nowrap</span><div class="overflow-x-auto qa-box rounded-md p-2" style="max-width:16rem"><p class="whitespace-nowrap">No wrapping happens here no matter how long this gets.</p></div></div>
+    <div class="qa-row"><span class="qa-label">.whitespace-pre-wrap</span><p class="whitespace-pre-wrap qa-box rounded-md p-2">Preserved   spaces
+and line breaks.</p></div>
+  </section>
+
+  <!-- ============ COLORS ============ -->
+  <section id="colors" class="qa-section">
+    <h2>Colors — text &amp; background</h2>
+    <h3 class="mt-4 mb-3 text-lg">Text colors</h3>
+    <div id="textcolor-demos" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2"></div>
+    <h3 class="mt-6 mb-3 text-lg">Background colors</h3>
+    <div id="bgcolor-demos" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2"></div>
+  </section>
+
+  <!-- ============ BORDERS, RADIUS, SHADOWS, OPACITY ============ -->
+  <section id="borders" class="qa-section">
+    <h2>Borders, radius, shadows, opacity</h2>
+    <div id="border-demos" class="mt-4"></div>
+  </section>
+
+  <!-- ============ MISC ============ -->
+  <section id="misc" class="qa-section">
+    <h2>Misc — cursor, select, pointer-events, sr-only, container</h2>
+    <div class="qa-row mt-4"><span class="qa-label">.cursor-pointer</span><span class="badge cursor-pointer">hover me — pointer</span></div>
+    <div class="qa-row"><span class="qa-label">.cursor-not-allowed</span><span class="badge cursor-not-allowed">hover me — not-allowed</span></div>
+    <div class="qa-row"><span class="qa-label">.cursor-default</span><span class="badge cursor-default">hover me — default</span></div>
+    <div class="qa-row"><span class="qa-label">.select-none</span><span class="badge select-none">try selecting this text</span></div>
+    <div class="qa-row"><span class="qa-label">.pointer-events-none</span><button class="btn btn-primary pointer-events-none">unclickable button</button></div>
+    <div class="qa-row"><span class="qa-label">.sr-only</span><span>visible before<span class="sr-only"> (this text is screen-reader-only) </span> and after — nothing between the words</span></div>
+    <div class="qa-row"><span class="qa-label">.container</span><span class="text-muted text-sm">this whole page body uses .container (centered, breakpoint max-widths)</span></div>
+  </section>
+
+  <!-- ============ COMPONENTS ============ -->
+  <section id="components" class="qa-section">
+    <h2>Components</h2>
+
+    <h3 class="mt-4 mb-3 text-lg">Buttons</h3>
+    <div class="card"><div class="card-body flex flex-wrap gap-3 items-center">
+      <button class="btn">.btn</button>
+      <button class="btn btn-primary">.btn-primary</button>
+      <button class="btn btn-secondary">.btn-secondary</button>
+      <button class="btn btn-ghost">.btn-ghost</button>
+      <button class="btn btn-outline">.btn-outline</button>
+      <button class="btn btn-glow">.btn-glow</button>
+      <button class="btn btn-primary btn-sm">.btn-sm</button>
+      <button class="btn btn-primary btn-lg">.btn-lg</button>
+      <button class="btn btn-primary" disabled>disabled</button>
+    </div></div>
+
+    <h3 class="mt-6 mb-3 text-lg">Cards</h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="card"><div class="card-header">.card-header</div><div class="card-body">.card-body</div><div class="card-footer">.card-footer</div></div>
+      <div class="card glass"><div class="card-body">.card + .glass</div></div>
+      <div class="card eclipse-border"><div class="card-body">.card + .eclipse-border</div></div>
+    </div>
+
+    <h3 class="mt-6 mb-3 text-lg">Forms</h3>
+    <div class="card"><div class="card-body grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="form-group mb-0"><label class="label" for="qa-input">.label + .input</label><input id="qa-input" class="input" placeholder="placeholder" /><div class="form-hint">.form-hint</div></div>
+      <div class="form-group mb-0"><label class="label" for="qa-select">.select</label><select id="qa-select" class="select"><option>Option A</option><option>Option B</option></select></div>
+      <div class="form-group mb-0"><label class="label" for="qa-textarea">.textarea</label><textarea id="qa-textarea" class="textarea" placeholder="resize me vertically"></textarea></div>
+      <div class="form-group mb-0"><label class="label" for="qa-disabled">disabled input</label><input id="qa-disabled" class="input" disabled placeholder="disabled" /></div>
+    </div></div>
+
+    <h3 class="mt-6 mb-3 text-lg">Badges</h3>
+    <div class="card"><div class="card-body flex flex-wrap gap-3">
+      <span class="badge">.badge</span>
+      <span class="badge badge-primary">.badge-primary</span>
+      <span class="badge badge-violet">.badge-violet</span>
+      <span class="badge badge-outline">.badge-outline</span>
+      <span class="badge badge-glow">.badge-glow</span>
+    </div></div>
+
+    <h3 class="mt-6 mb-3 text-lg">Navbar (page header above) · Modal · Toast · Tooltip</h3>
+    <div class="card"><div class="card-body flex flex-wrap gap-3 items-center">
+      <button class="btn btn-primary" id="qa-open-modal">JS modal (.modal-overlay)</button>
+      <button class="btn btn-glow" popovertarget="qa-popover">Zero-JS modal ([popover])</button>
+      <button class="btn btn-secondary" id="qa-show-toasts">Show all 4 toasts</button>
+      <button class="btn btn-outline" data-tooltip="pure-CSS tooltip">[data-tooltip] — hover</button>
+    </div></div>
+
+    <h3 class="mt-6 mb-3 text-lg">Moon phases (all 9 classes)</h3>
+    <div class="card"><div class="card-body flex flex-wrap gap-5 justify-between">
+      <div class="text-center"><span class="moon moon-new"></span><div class="qa-label mt-1">moon-new</div></div>
+      <div class="text-center"><span class="moon moon-waxing-crescent"></span><div class="qa-label mt-1">waxing-crescent</div></div>
+      <div class="text-center"><span class="moon moon-first-quarter"></span><div class="qa-label mt-1">first-quarter</div></div>
+      <div class="text-center"><span class="moon moon-waxing-gibbous"></span><div class="qa-label mt-1">waxing-gibbous</div></div>
+      <div class="text-center"><span class="moon moon-full"></span><div class="qa-label mt-1">moon-full</div></div>
+      <div class="text-center"><span class="moon moon-waning-gibbous"></span><div class="qa-label mt-1">waning-gibbous</div></div>
+      <div class="text-center"><span class="moon moon-last-quarter"></span><div class="qa-label mt-1">last-quarter</div></div>
+      <div class="text-center"><span class="moon moon-waning-crescent"></span><div class="qa-label mt-1">waning-crescent</div></div>
+      <div class="text-center"><span class="moon moon-live"></span><div class="qa-label mt-1">moon-live (tonight)</div></div>
+    </div></div>
+  </section>
+
+  <!-- ============ EFFECTS ============ -->
+  <section id="effects" class="qa-section">
+    <h2>Effects</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+      <div class="card p-6 flex items-center justify-center"><button class="btn btn-secondary glow-sm">.glow-sm</button></div>
+      <div class="card p-6 flex items-center justify-center"><button class="btn btn-secondary glow-md">.glow-md</button></div>
+      <div class="card p-6 flex items-center justify-center"><button class="btn btn-secondary glow-lg">.glow-lg</button></div>
+      <div class="card p-6 flex items-center justify-center"><button class="btn btn-secondary glow-violet">.glow-violet</button></div>
+      <div class="card p-6 flex items-center justify-center"><button class="btn btn-secondary hover-lift">.hover-lift</button></div>
+      <div class="card p-6 flex items-center justify-center"><button class="btn btn-secondary hover-glow">.hover-glow</button></div>
+      <div class="card p-6 flex items-center justify-center"><span class="text-shimmer text-xl font-bold">.text-shimmer</span></div>
+      <div class="card p-6 flex items-center justify-center"><span class="float text-3xl">🌙</span> <span class="qa-label ml-2">.float</span></div>
+      <div class="card p-6 flex items-center justify-center"><button class="btn btn-primary pulse-glow">.pulse-glow</button></div>
+      <div class="card p-6 flex items-center justify-center glass">.glass</div>
+      <div class="card p-6 flex items-center justify-center starfield"><span class="glass-dark p-3 rounded-md">.glass-dark on .starfield</span></div>
+      <div class="card p-6 flex items-center justify-center gradient-aurora font-semibold">.gradient-aurora</div>
+      <div class="card p-6 flex items-center justify-center"><span class="eclipse-border p-3 rounded-md">.eclipse-border</span></div>
+      <div class="card p-6 flex items-center justify-center moonbeam">.moonbeam (move cursor)</div>
+      <div class="card p-6 flex items-center justify-center gap-2">
+        <span class="fade-in badge">.fade-in</span>
+        <span class="slide-up badge">.slide-up</span>
+        <span class="scale-in badge">.scale-in</span>
+      </div>
+      <div class="card p-6 flex items-center justify-center gap-2">
+        <span class="fade-in badge">0</span>
+        <span class="fade-in delay-1 badge">.delay-1</span>
+        <span class="fade-in delay-2 badge">.delay-2</span>
+        <span class="fade-in delay-3 badge">.delay-3</span>
+        <span class="fade-in delay-4 badge">.delay-4</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MOTION ============ -->
+  <section id="motion" class="qa-section">
+    <h2>Scroll-driven motion</h2>
+    <p class="text-muted mt-2 mb-4">Scroll down/up — reveals scrub with the scroll position. The progress bar at the very top of the page is <code>.scroll-progress</code>. (No-ops gracefully in browsers without <code>animation-timeline</code>.)</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="card p-8 scroll-reveal">.scroll-reveal</div>
+      <div class="card p-8 scroll-reveal-up">.scroll-reveal-up</div>
+      <div class="card p-8 scroll-reveal-scale">.scroll-reveal-scale</div>
+      <div class="card p-8 scroll-reveal-blur">.scroll-reveal-blur</div>
+    </div>
+    <div class="card p-8 mt-6 overflow-hidden" style="height:10rem"><div class="scroll-parallax qa-inner rounded-md p-3 w-fit">.scroll-parallax</div></div>
+  </section>
+
+</main>
+
+<!-- JS modal -->
+<div class="modal-overlay" id="qa-modal">
+  <div class="modal">
+    <div class="modal-header"><span>.modal-header</span><button class="modal-close" id="qa-close-modal" aria-label="Close">&times;</button></div>
+    <div class="modal-body">.modal-body — toggled with .is-open on .modal-overlay.</div>
+    <div class="modal-footer"><button class="btn btn-secondary" id="qa-cancel-modal">Close</button></div>
+  </div>
+</div>
+
+<!-- Zero-JS popover modal -->
+<div id="qa-popover" popover class="modal">
+  <div class="modal-header"><span>Zero-JS modal</span><button class="modal-close" popovertarget="qa-popover" popovertargetaction="hide" aria-label="Close">&times;</button></div>
+  <div class="modal-body">Native Popover API + @starting-style transitions. Esc / click outside to dismiss.</div>
+</div>
+
+<div id="qa-toast-region" class="fixed z-50" style="bottom: var(--space-6); right: var(--space-6); display:flex; flex-direction:column; gap: var(--space-3);"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* -----------------------------------------------------------------
+   * Shared class lists — the single source the demos AND the inventory
+   * check both consume, so the page can't silently skip a class.
+   * ----------------------------------------------------------------- */
+  var SPACE_FULL = [0, 1, 2, 3, 4, 5, 6, 8, 10, 12];
+  var lists = {
+    display: ['block', 'inline-block', 'inline', 'flex', 'inline-flex', 'grid', 'inline-grid', 'hidden'],
+    position: ['static', 'relative', 'absolute', 'fixed', 'sticky', 'inset-0', 'inset-x-0', 'inset-y-0', 'top-0', 'right-0', 'bottom-0', 'left-0'],
+    flex: ['flex-row', 'flex-row-reverse', 'flex-col', 'flex-col-reverse', 'flex-wrap', 'flex-nowrap',
+      'items-start', 'items-center', 'items-end', 'items-baseline', 'items-stretch',
+      'justify-start', 'justify-center', 'justify-end', 'justify-between', 'justify-around', 'justify-evenly',
+      'flex-1', 'flex-auto', 'flex-initial', 'flex-none', 'grow', 'grow-0', 'shrink', 'shrink-0'],
+    gridCols: range(1, 12).map(function (n) { return 'grid-cols-' + n; }),
+    colSpan: range(1, 12).map(function (n) { return 'col-span-' + n; }).concat(['col-span-full']),
+    gridRows: ['grid-rows-1', 'grid-rows-2', 'grid-rows-3'],
+    self: ['self-start', 'self-center', 'self-end', 'self-stretch'],
+    gap: SPACE_FULL.map(function (n) { return 'gap-' + n; }),
+    gapX: SPACE_FULL.map(function (n) { return 'gap-x-' + n; }),
+    gapY: SPACE_FULL.map(function (n) { return 'gap-y-' + n; }),
+    p: SPACE_FULL.concat([16]).map(function (n) { return 'p-' + n; }),
+    px: SPACE_FULL.concat([16]).map(function (n) { return 'px-' + n; }),
+    py: SPACE_FULL.concat([16]).map(function (n) { return 'py-' + n; }),
+    pt: SPACE_FULL.map(function (n) { return 'pt-' + n; }),
+    pr: SPACE_FULL.map(function (n) { return 'pr-' + n; }),
+    pb: SPACE_FULL.map(function (n) { return 'pb-' + n; }),
+    pl: SPACE_FULL.map(function (n) { return 'pl-' + n; }),
+    m: SPACE_FULL.map(function (n) { return 'm-' + n; }).concat(['m-auto']),
+    mx: SPACE_FULL.map(function (n) { return 'mx-' + n; }).concat(['mx-auto']),
+    my: SPACE_FULL.map(function (n) { return 'my-' + n; }),
+    mt: SPACE_FULL.map(function (n) { return 'mt-' + n; }).concat(['mt-auto']),
+    mr: [0, 1, 2, 3, 4, 5, 6, 8].map(function (n) { return 'mr-' + n; }).concat(['mr-auto']),
+    mb: SPACE_FULL.map(function (n) { return 'mb-' + n; }).concat(['mb-auto']),
+    ml: [0, 1, 2, 3, 4, 5, 6, 8].map(function (n) { return 'ml-' + n; }).concat(['ml-auto']),
+    width: ['w-auto', 'w-full', 'w-screen', 'w-fit', 'w-1/2', 'w-1/3', 'w-2/3', 'w-1/4', 'w-3/4'],
+    height: ['h-auto', 'h-full', 'h-screen', 'h-fit'],
+    minmax: ['min-w-0', 'min-h-screen', 'min-h-full'],
+    maxW: ['max-w-xs', 'max-w-sm', 'max-w-md', 'max-w-lg', 'max-w-xl', 'max-w-2xl', 'max-w-3xl', 'max-w-4xl', 'max-w-5xl', 'max-w-6xl', 'max-w-7xl', 'max-w-prose', 'max-w-full'],
+    textSize: ['text-xs', 'text-sm', 'text-base', 'text-lg', 'text-xl', 'text-2xl', 'text-3xl', 'text-4xl', 'text-5xl', 'text-6xl'],
+    fontWeight: ['font-thin', 'font-light', 'font-normal', 'font-medium', 'font-semibold', 'font-bold', 'font-black'],
+    fontStyle: ['italic', 'not-italic'],
+    textAlign: ['text-left', 'text-center', 'text-right', 'text-justify'],
+    textTransform: ['uppercase', 'lowercase', 'capitalize', 'normal-case'],
+    leading: ['leading-none', 'leading-tight', 'leading-snug', 'leading-normal', 'leading-relaxed', 'leading-loose'],
+    tracking: ['tracking-tight', 'tracking-normal', 'tracking-wide', 'tracking-wider'],
+    decoration: ['underline', 'no-underline', 'line-through'],
+    wrap: ['truncate', 'whitespace-nowrap', 'whitespace-pre-wrap'],
+    textColor: ['text-moon-50', 'text-moon-100', 'text-moon-200', 'text-moon-300', 'text-moon-400', 'text-moon-500', 'text-moon-600', 'text-moon-700', 'text-moon-800', 'text-moon-900', 'text-moon-950', 'text-glow', 'text-tide', 'text-eclipse', 'text-violet', 'text-indigo', 'text-muted', 'text-current'],
+    bgColor: ['bg-moon-50', 'bg-moon-100', 'bg-moon-200', 'bg-moon-300', 'bg-moon-400', 'bg-moon-500', 'bg-moon-600', 'bg-moon-700', 'bg-moon-800', 'bg-moon-900', 'bg-moon-950', 'bg-glow', 'bg-tide', 'bg-eclipse', 'bg-violet', 'bg-indigo', 'bg-transparent', 'bg-surface'],
+    border: ['border', 'border-0', 'border-2', 'border-4', 'border-t', 'border-r', 'border-b', 'border-l'],
+    borderColor: ['border-moon-700', 'border-moon-800', 'border-tide', 'border-violet', 'border-transparent'],
+    rounded: ['rounded-none', 'rounded-sm', 'rounded-md', 'rounded-lg', 'rounded-xl', 'rounded-2xl', 'rounded-full'],
+    shadow: ['shadow-none', 'shadow-sm', 'shadow', 'shadow-md', 'shadow-lg', 'shadow-xl'],
+    opacity: ['opacity-0', 'opacity-25', 'opacity-50', 'opacity-75', 'opacity-100'],
+    overflow: ['overflow-auto', 'overflow-hidden', 'overflow-visible', 'overflow-scroll', 'overflow-x-auto', 'overflow-y-auto', 'overflow-x-hidden', 'overflow-y-hidden'],
+    misc: ['cursor-pointer', 'cursor-not-allowed', 'cursor-default', 'select-none', 'pointer-events-none', 'sr-only', 'container'],
+    z: ['z-0', 'z-10', 'z-20', 'z-30', 'z-40', 'z-50', 'z-auto'],
+  };
+
+  // The responsive matrix (must match src/utilities.css exactly)
+  var RESPONSIVE_UTILS = ['hidden', 'block', 'inline-block', 'flex', 'inline-flex', 'grid',
+    'flex-row', 'flex-col', 'flex-wrap', 'flex-nowrap',
+    'items-start', 'items-center', 'items-end',
+    'justify-start', 'justify-center', 'justify-end', 'justify-between']
+    .concat([1, 2, 3, 4, 5, 6, 12].map(function (n) { return 'grid-cols-' + n; }))
+    .concat([1, 2, 3, 4, 6, 12].map(function (n) { return 'col-span-' + n; }), ['col-span-full'])
+    .concat([0, 2, 4, 6, 8].map(function (n) { return 'gap-' + n; }))
+    .concat([0, 2, 4, 6, 8].map(function (n) { return 'p-' + n; }))
+    .concat([0, 2, 4, 6, 8].map(function (n) { return 'px-' + n; }))
+    .concat([0, 2, 4, 6, 8].map(function (n) { return 'py-' + n; }))
+    .concat(['mx-auto', 'text-left', 'text-center', 'text-right'])
+    .concat(['sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl'].map(function (s) { return 'text-' + s; }))
+    .concat(['w-auto', 'w-full', 'w-fit', 'w-1/2', 'w-1/3', 'w-2/3', 'w-1/4', 'w-3/4']);
+  var BREAKPOINTS = ['sm', 'md', 'lg', 'xl', '2xl'];
+
+  function range(a, b) { var r = []; for (var i = a; i <= b; i++) r.push(i); return r; }
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  function row(host, label, demo) {
+    var r = el('div', 'qa-row');
+    r.appendChild(el('span', 'qa-label', '.' + label));
+    r.appendChild(demo);
+    host.appendChild(r);
+  }
+
+  /* ---------------- Display ---------------- */
+  (function () {
+    var host = document.getElementById('display-demos');
+    lists.display.forEach(function (c) {
+      var demo = el('div', 'qa-box rounded-md p-1 w-full');
+      var a = el('span', c === 'hidden' ? '' : c, '[' + c + ']');
+      a.classList.add('qa-inner', 'rounded-sm');
+      if (c !== 'hidden') a.classList.add(c);
+      else { a.classList.add('hidden'); demo.appendChild(el('span', 'qa-label', 'the .hidden element next to this label is invisible → ')); }
+      demo.appendChild(a);
+      demo.appendChild(el('span', 'qa-label', ' sibling'));
+      row(host, c, demo);
+    });
+  })();
+
+  /* ---------------- Overflow ---------------- */
+  (function () {
+    var host = document.getElementById('overflow-demos');
+    lists.overflow.forEach(function (c) {
+      var box = el('div', c + ' qa-box rounded-md p-2');
+      box.style.height = '5rem';
+      var inner = el('div', 'qa-inner rounded-sm p-2', '.' + c);
+      inner.style.width = '140%';
+      inner.style.height = '6rem';
+      box.appendChild(inner);
+      host.appendChild(box);
+    });
+  })();
+
+  /* ---------------- z-index ---------------- */
+  (function () {
+    var host = document.getElementById('z-demos');
+    lists.z.forEach(function (c, i) {
+      var chip = el('div', c + ' absolute qa-cell rounded-md shadow-md', '.' + c);
+      chip.style.left = (i * 3.2) + 'rem';
+      chip.style.top = (i % 2) + 'rem';
+      chip.style.width = '5rem';
+      chip.style.background = 'var(--moon-' + [800, 700, 600, 500, 400, 300, 200][i] + ')';
+      if (i >= 4) chip.style.color = 'var(--moon-950)';
+      host.appendChild(chip);
+    });
+  })();
+
+  /* ---------------- Flexbox ---------------- */
+  (function () {
+    var host = document.getElementById('flex-demos');
+    lists.flex.forEach(function (c) {
+      var isChild = /^(flex-1|flex-auto|flex-initial|flex-none|grow|grow-0|shrink|shrink-0)$/.test(c);
+      var box = el('div', 'flex qa-box rounded-md p-1 gap-1 w-full');
+      box.style.minHeight = '3rem';
+      if (!isChild) box.classList.add.apply(box.classList, c.split(' '));
+      for (var i = 1; i <= 3; i++) {
+        var kid = el('div', 'qa-cell rounded-sm', String(i));
+        if (isChild && i === 2) { kid.classList.add(c); kid.textContent = '.' + c; }
+        if (/^(shrink|shrink-0)$/.test(c) && i === 2) kid.style.width = '60%';
+        box.appendChild(kid);
+      }
+      row(host, c, box);
+    });
+  })();
+
+  /* ---------------- grid-cols ---------------- */
+  (function () {
+    var host = document.getElementById('gridcols-demos');
+    lists.gridCols.forEach(function (c, idx) {
+      var n = idx + 1;
+      var g = el('div', 'grid ' + c + ' gap-1 w-full');
+      for (var i = 0; i < n; i++) g.appendChild(el('div', 'qa-cell rounded-sm', String(i + 1)));
+      row(host, c, g);
+    });
+  })();
+
+  /* ---------------- col-span ---------------- */
+  (function () {
+    var host = document.getElementById('colspan-demos');
+    lists.colSpan.forEach(function (c) {
+      var g = el('div', 'grid grid-cols-12 gap-1 w-full');
+      var span = el('div', c + ' qa-inner rounded-sm text-center qa-label', '.' + c);
+      g.appendChild(span);
+      var used = c === 'col-span-full' ? 12 : parseInt(c.replace('col-span-', ''), 10);
+      for (var i = 0; i < 12 - used; i++) g.appendChild(el('div', 'qa-cell rounded-sm', ''));
+      row(host, c, g);
+    });
+  })();
+
+  /* ---------------- grid-rows + self ---------------- */
+  (function () {
+    var host = document.getElementById('gridrows-demos');
+    lists.gridRows.forEach(function (c, idx) {
+      var g = el('div', 'grid ' + c + ' gap-1 w-full');
+      g.style.height = '6rem';
+      g.style.gridAutoFlow = 'column';
+      for (var i = 0; i <= idx; i++) g.appendChild(el('div', 'qa-cell rounded-sm', 'row ' + (i + 1)));
+      row(host, c, g);
+    });
+    lists.self.forEach(function (c) {
+      var box = el('div', 'flex items-stretch qa-box rounded-md p-1 gap-1 w-full');
+      box.style.height = '4rem';
+      box.appendChild(el('div', 'qa-cell rounded-sm', 'sib'));
+      box.appendChild(el('div', c + ' qa-inner rounded-sm p-1 qa-label', '.' + c));
+      box.appendChild(el('div', 'qa-cell rounded-sm', 'sib'));
+      row(host, c, box);
+    });
+  })();
+
+  /* ---------------- Spacing families ---------------- */
+  (function () {
+    var host = document.getElementById('spacing-demos');
+    function family(title, classes, build) {
+      host.appendChild(el('h3', 'mt-6 mb-3 text-lg', title));
+      classes.forEach(function (c) { row(host, c, build(c)); });
+    }
+    ['gap', 'gapX', 'gapY'].forEach(function (key) {
+      family('.' + lists[key][0].replace(/-\d+$/, '') + '-*', lists[key], function (c) {
+        var box = el('div', 'flex ' + c + ' qa-box rounded-md p-1 w-fit');
+        for (var i = 0; i < 3; i++) box.appendChild(el('div', 'qa-inner rounded-sm'));
+        return box;
+      });
+    });
+    ['p', 'px', 'py', 'pt', 'pr', 'pb', 'pl'].forEach(function (key) {
+      family('.' + key + '-*', lists[key], function (c) {
+        var box = el('div', c + ' qa-box rounded-md w-fit');
+        box.appendChild(el('div', 'qa-inner rounded-sm'));
+        return box;
+      });
+    });
+    ['m', 'mx', 'my', 'mt', 'mr', 'mb', 'ml'].forEach(function (key) {
+      family('.' + key + '-*', lists[key], function (c) {
+        var outer = el('div', 'qa-box rounded-md w-fit');
+        var inner = el('div', c + ' qa-inner rounded-sm');
+        outer.appendChild(inner);
+        return outer;
+      });
+    });
+  })();
+
+  /* ---------------- Sizing ---------------- */
+  (function () {
+    var host = document.getElementById('sizing-demos');
+    lists.width.forEach(function (c) {
+      var wrap = el('div', 'qa-box rounded-md w-full');
+      var bar = el('div', c + ' qa-inner rounded-sm qa-label', '.' + c);
+      if (c === 'w-screen') { bar.textContent += ' (100vw — wider than this box)'; wrap.classList.add('overflow-x-hidden'); }
+      wrap.appendChild(bar);
+      row(host, c, wrap);
+    });
+    lists.height.concat(lists.minmax).forEach(function (c) {
+      var wrap = el('div', 'qa-box rounded-md w-full overflow-y-hidden');
+      wrap.style.height = '4rem';
+      var bar = el('div', c + ' qa-inner rounded-sm qa-label px-2', '.' + c + (/screen/.test(c) ? ' (viewport-tall, clipped here)' : ''));
+      wrap.appendChild(bar);
+      row(host, c, wrap);
+    });
+    lists.maxW.forEach(function (c) {
+      var wrap = el('div', 'qa-box rounded-md w-full');
+      wrap.appendChild(el('div', c + ' qa-inner rounded-sm qa-label px-2', '.' + c));
+      row(host, c, wrap);
+    });
+  })();
+
+  /* ---------------- Typography ---------------- */
+  (function () {
+    var host = document.getElementById('type-demos');
+    var sample = 'The quiet hush before moonrise';
+    [['textSize', sample], ['fontWeight', sample], ['fontStyle', sample], ['textTransform', 'Mixed Case sample TEXT'], ['tracking', sample], ['decoration', sample]].forEach(function (pair) {
+      lists[pair[0]].forEach(function (c) {
+        row(host, c, el('span', c, pair[1]));
+      });
+    });
+    lists.textAlign.forEach(function (c) {
+      row(host, c, el('p', c + ' qa-box rounded-md p-2 w-full', 'aligned sample text — aligned sample text — aligned sample text'));
+    });
+    lists.leading.forEach(function (c) {
+      row(host, c, el('p', c + ' qa-box rounded-md p-2 w-full', 'Line one of the sample. Line two of the sample. Line three of the sample. Line four wraps to show the leading between wrapped lines clearly.'));
+    });
+  })();
+
+  /* ---------------- Colors ---------------- */
+  (function () {
+    var t = document.getElementById('textcolor-demos');
+    lists.textColor.forEach(function (c) {
+      var chip = el('div', 'qa-cell rounded-md', null);
+      chip.appendChild(el('span', c + ' font-semibold', '.' + c));
+      if (/moon-(50|100|200|300)|text-glow/.test(c)) chip.style.background = 'var(--moon-900)';
+      if (/moon-(800|900|950)|text-eclipse/.test(c)) chip.style.background = 'var(--moon-200)';
+      t.appendChild(chip);
+    });
+    var b = document.getElementById('bgcolor-demos');
+    lists.bgColor.forEach(function (c) {
+      var chip = el('div', c + ' qa-swatch flex items-center justify-center', null);
+      var label = el('span', 'qa-label', '.' + c);
+      if (/moon-(50|100|200|300|400)|bg-glow/.test(c)) label.style.color = 'var(--moon-950)';
+      chip.appendChild(label);
+      b.appendChild(chip);
+    });
+  })();
+
+  /* ---------------- Borders / radius / shadow / opacity ---------------- */
+  (function () {
+    var host = document.getElementById('border-demos');
+    lists.border.concat(lists.borderColor).forEach(function (c) {
+      var box = el('div', c + ' qa-cell rounded-md', '.' + c);
+      if (lists.borderColor.indexOf(c) !== -1) box.classList.add('border-2');
+      box.style.width = '11rem';
+      row(host, c, box);
+    });
+    lists.rounded.forEach(function (c) {
+      var box = el('div', c + ' qa-inner p-3 qa-label w-fit', '.' + c);
+      row(host, c, box);
+    });
+    lists.shadow.forEach(function (c) {
+      var box = el('div', c + ' qa-cell rounded-md p-3', '.' + c);
+      box.style.width = '11rem';
+      row(host, c, box);
+    });
+    lists.opacity.forEach(function (c) {
+      row(host, c, el('div', c + ' qa-inner rounded-md p-2 qa-label w-fit', '.' + c + (c === 'opacity-0' ? ' (invisible)' : '')));
+    });
+  })();
+
+  /* ---------------- Modal / toast wiring ---------------- */
+  (function () {
+    var overlay = document.getElementById('qa-modal');
+    document.getElementById('qa-open-modal').addEventListener('click', function () { overlay.classList.add('is-open'); });
+    document.getElementById('qa-close-modal').addEventListener('click', function () { overlay.classList.remove('is-open'); });
+    document.getElementById('qa-cancel-modal').addEventListener('click', function () { overlay.classList.remove('is-open'); });
+    overlay.addEventListener('click', function (e) { if (e.target === overlay) overlay.classList.remove('is-open'); });
+
+    document.getElementById('qa-show-toasts').addEventListener('click', function () {
+      var region = document.getElementById('qa-toast-region');
+      region.innerHTML = '';
+      ['success', 'error', 'warning', 'info'].forEach(function (kind) {
+        var toast = el('div', 'toast toast-' + kind);
+        var body = el('div');
+        body.appendChild(el('div', 'toast-title', '.toast-' + kind));
+        body.appendChild(el('div', 'toast-message', 'Accent bar should differ per variant.'));
+        toast.appendChild(body);
+        region.appendChild(toast);
+      });
+      setTimeout(function () { region.innerHTML = ''; }, 5000);
+    });
+  })();
+
+  /* ---------------- Inventory check ---------------- */
+  (function () {
+    var report = document.getElementById('inventory-report');
+
+    // Build the complete expected class list
+    var expected = [];
+    Object.keys(lists).forEach(function (k) { expected = expected.concat(lists[k]); });
+    BREAKPOINTS.forEach(function (bp) {
+      RESPONSIVE_UTILS.forEach(function (u) { expected.push(bp + ':' + u); });
+    });
+    var components = ['btn', 'btn-primary', 'btn-secondary', 'btn-ghost', 'btn-outline', 'btn-glow', 'btn-sm', 'btn-lg',
+      'card', 'card-header', 'card-body', 'card-footer', 'label', 'input', 'textarea', 'select', 'form-group', 'form-hint',
+      'badge', 'badge-primary', 'badge-violet', 'badge-outline', 'badge-glow',
+      'navbar', 'navbar-brand', 'navbar-nav', 'navbar-link',
+      'modal-overlay', 'modal', 'modal-header', 'modal-body', 'modal-footer', 'modal-close',
+      'toast', 'toast-title', 'toast-message', 'toast-success', 'toast-error', 'toast-warning', 'toast-info',
+      'moon', 'moon-new', 'moon-waxing-crescent', 'moon-first-quarter', 'moon-waxing-gibbous', 'moon-full',
+      'moon-waning-gibbous', 'moon-last-quarter', 'moon-waning-crescent', 'moon-live'];
+    var effects = ['glow-sm', 'glow-md', 'glow-lg', 'glow-violet', 'hover-lift', 'hover-glow', 'text-shimmer', 'float',
+      'pulse-glow', 'glass', 'glass-dark', 'starfield', 'gradient-aurora', 'eclipse-border', 'moonbeam',
+      'fade-in', 'slide-up', 'scale-in', 'delay-1', 'delay-2', 'delay-3', 'delay-4',
+      'scroll-reveal', 'scroll-reveal-up', 'scroll-reveal-scale', 'scroll-reveal-blur', 'scroll-parallax', 'scroll-progress'];
+    expected = expected.concat(components, effects);
+
+    fetch('../dist/lunar.css')
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+      .then(function (css) {
+        // collect every class token in the stylesheet (unescape \: \/ \32)
+        var found = {};
+        var re = /\.((?:\\.|[A-Za-z0-9_-])+)/g;
+        var m;
+        while ((m = re.exec(css))) {
+          var name = m[1]
+            .replace(/\\32\s?/g, '2')
+            .replace(/\\([:/])/g, '$1');
+          found[name] = true;
+        }
+        var missing = expected.filter(function (c) { return !found[c]; });
+        var extra = Object.keys(found).filter(function (c) {
+          return expected.indexOf(c) === -1;
+        });
+        var html = '<div class="card-body">' +
+          '<p><strong>' + (expected.length - missing.length) + ' / ' + expected.length + '</strong> expected classes found in dist/lunar.css.</p>';
+        if (missing.length) {
+          html += '<p class="mt-2" style="color:#f87171"><strong>MISSING (' + missing.length + '):</strong> ' + missing.join(', ') + '</p>';
+        } else {
+          html += '<p class="mt-2 text-glow">✔ No missing classes — full coverage, including all 5 responsive breakpoints.</p>';
+        }
+        html += '<p class="mt-2 text-muted text-sm">Classes in the stylesheet not under test (docs-page helpers, pseudo-selector fragments): ' + (extra.length ? extra.join(', ') : 'none') + '</p></div>';
+        report.innerHTML = html;
+      })
+      .catch(function (e) {
+        report.innerHTML = '<div class="card-body text-muted">Could not fetch dist/lunar.css (' + e.message + '). Serve this page over HTTP (e.g. <code>npx serve</code>) to run the automated inventory.</div>';
+      });
+  })();
+})();
+</script>
+
+</body>
+</html>

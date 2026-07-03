@@ -1,5 +1,5 @@
 /*!
- * Lunara Bootstrap (lunara-css) v0.5.0
+ * Lunara Bootstrap (lunara-css) v1.0.0
  * Night-sky Bootstrap 5.3+ theme — Lunara tokens, effects, motion, and moon
  * icons, applied to Bootstrap through its own --bs-* CSS variable API.
  * Load AFTER bootstrap.css. https://github.com/AmbroziM25/Lunar_css#readme
@@ -135,7 +135,6 @@
   --lunar-text-muted: var(--moon-400);
   --lunar-accent: var(--tide);
   --lunar-accent-2: var(--violet-500);
-  --lunar-shadow-ambient: var(--shadow-md);
 }
 [data-theme="light"], [data-bs-theme="light"] {
   color-scheme: light;
@@ -158,7 +157,6 @@
   --shadow-md: 0 4px 12px -2px rgb(20 21 42 / 0.1), 0 2px 4px -2px rgb(20 21 42 / 0.06);
   --shadow-lg: 0 12px 24px -4px rgb(20 21 42 / 0.12), 0 4px 8px -4px rgb(20 21 42 / 0.08);
   --shadow-xl: 0 24px 48px -8px rgb(20 21 42 / 0.16), 0 8px 16px -8px rgb(20 21 42 / 0.1);
-  --lunar-shadow-ambient: var(--shadow-sm);
 }
 [data-theme="light"] body, [data-bs-theme="light"] body {
   background-image: radial-gradient(ellipse 80% 50% at 50% -20%, rgb(99 102 241 / 0.08), transparent), radial-gradient(ellipse 60% 40% at 100% 0%, rgb(124 58 237 / 0.05), transparent);
@@ -377,6 +375,7 @@
   background-image: conic-gradient( from var(--lunar-angle), var(--eclipse-color-1, var(--tide)), var(--eclipse-color-2, var(--violet-500)), var(--eclipse-color-3, var(--silver-300)), var(--eclipse-color-1, var(--tide)) );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask-composite: exclude;
   pointer-events: none;
   animation: lunar-eclipse-spin var(--eclipse-speed, 6s) linear infinite;
@@ -569,6 +568,12 @@
   left: 0;
   right: 0;
   width: auto;
+}
+.moon-full::before, [data-moon-phase="full"] .moon-live::before {
+  display: none;
+}
+.moon-full::after, [data-moon-phase="full"] .moon-live::after {
+  transform: scaleX(0);
 }
 .moon-waxing-crescent::before, .moon-first-quarter::before, .moon-waxing-gibbous::before, [data-moon-phase="waxing-crescent"] .moon-live::before, [data-moon-phase="first-quarter"] .moon-live::before, [data-moon-phase="waxing-gibbous"] .moon-live::before {
   display: block;
