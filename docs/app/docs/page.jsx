@@ -21,7 +21,9 @@ export default function Introduction() {
         <li>
           <strong>Utility-first, Tailwind-like class names</strong>{" "}
           (<code>bg-moon-900</code>, <code>text-glow</code>, <code>p-4</code>,{" "}
-          <code>rounded-lg</code>) — muscle memory carries over either direction.
+          <code>rounded-lg</code>) with five responsive breakpoints
+          (<code>sm:</code>, <code>md:</code>, <code>lg:</code>, <code>xl:</code>,{" "}
+          <code>2xl:</code>) — muscle memory carries over either direction.
         </li>
         <li>
           <strong>Tailwind-native.</strong> One preset line registers the full palette
@@ -94,12 +96,20 @@ export default function Introduction() {
         <li>
           <strong>Zero-JS modal</strong> (Popover API + <code>@starting-style</code>) —
           Chrome/Edge 125+, Safari 17.4+, Firefox 129+ for the full animated experience.
+          Browsers without the Popover API hide the modal instead of leaking its content
+          inline.
         </li>
         <li>
           <strong>Moon icons and lunar theming</strong> — plain CSS + a tiny JS helper;
           works everywhere.
         </li>
       </ul>
+      <p>
+        Prefixed fallbacks ship for <code>backdrop-filter</code>, <code>mask</code>, and{" "}
+        <code>user-select</code>, and viewport heights use <code>dvh</code> with a{" "}
+        <code>vh</code> fallback — nothing in the core needs a feature below ~95% support
+        without a graceful fallback.
+      </p>
 
       <div className="card glass-dark p-6 mt-8 flex items-center justify-between flex-wrap gap-4">
         <span className="font-semibold">Ready to install?</span>

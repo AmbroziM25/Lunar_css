@@ -19,7 +19,7 @@ const FEATURES = [
   },
   {
     title: "Utility-first",
-    body: "Tailwind-shaped class names — bg-moon-900, p-4, rounded-lg — so your muscle memory carries over in both directions.",
+    body: "Tailwind-shaped class names — bg-moon-900, p-4, rounded-lg — with five responsive breakpoints (sm: to 2xl:), so your muscle memory carries over in both directions.",
   },
   {
     title: "Tailwind-native preset",

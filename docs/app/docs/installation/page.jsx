@@ -16,8 +16,12 @@ export default function Installation() {
       <p>The fastest way to try Lunara. Add one line to your HTML:</p>
       <CodeBlock
         lang="html"
-        code={`<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lunara-css/dist/lunar.min.css" />`}
+        code={`<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lunara-css@1/dist/lunar.min.css" />`}
       />
+      <p className="text-muted">
+        The <code>@1</code> pin keeps you on 1.x without surprise majors. unpkg works too:{" "}
+        <code>https://unpkg.com/lunara-css@1/dist/lunar.min.css</code>
+      </p>
 
       <h2 className="text-2xl font-bold">npm</h2>
       <CodeBlock lang="bash" code={`npm install lunara-css`} />
@@ -66,12 +70,23 @@ bun add lunara-css`}
             <td>Optional ESM helpers: theme toggle, moon phase, moonbeam</td>
           </tr>
           <tr>
+            <td><code>lunara-css/tailwind</code></td>
+            <td>Tailwind v4 CSS-first entry (<code>@theme</code> tokens + plugin + dark variant)</td>
+          </tr>
+          <tr>
             <td><code>lunara-css/tailwind-preset</code></td>
-            <td>Tailwind preset — full theme + components plugin</td>
+            <td>Tailwind v3 preset — full theme + components plugin</td>
           </tr>
           <tr>
             <td><code>lunara-css/tailwind-plugin</code></td>
-            <td>Components/effects only, on top of your own Tailwind theme</td>
+            <td>Components/effects only, on top of your own Tailwind theme (v3 + v4)</td>
+          </tr>
+          <tr>
+            <td><code>lunara-css/bootstrap</code></td>
+            <td>
+              <code>lunara-bootstrap</code> — night-sky theme for Bootstrap 5.3+ (also{" "}
+              <code>bootstrap.min.css</code>)
+            </td>
           </tr>
         </tbody>
       </table>
@@ -84,9 +99,12 @@ bun add lunara-css`}
       <CodeBlock lang="bash" code={`npm run build`} />
       <p>
         This runs a small dependency-free Node script that concatenates{" "}
-        <code>src/*.css</code> in cascade order (base → themes → effects → components →
-        utilities, so utilities always win) and writes the minified build. No bundler or
-        PostCSS required.
+        <code>src/*.css</code> (base → themes → effects → motion → components → utilities;
+        cascade priority comes from the <code>@layer</code> order, with utilities last so they
+        always win) and writes the minified build, the Tailwind class map, and the Bootstrap
+        bridge. No bundler or PostCSS required. The repo also ships{" "}
+        <code>test/index.html</code> — a QA page that renders every class and verifies the
+        full inventory.
       </p>
 
       <div className="card glass-dark p-6 mt-8 flex items-center justify-between flex-wrap gap-4">

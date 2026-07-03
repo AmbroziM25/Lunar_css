@@ -11,6 +11,7 @@ export const docsNav = [
     title: "Core",
     items: [
       { href: "/docs/theming", label: "Theming & tokens" },
+      { href: "/docs/utilities", label: "Utilities & responsive" },
       { href: "/docs/customization", label: "Customization" },
       { href: "/docs/components", label: "Components" },
       { href: "/docs/effects", label: "Effects" },

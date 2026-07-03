@@ -17,7 +17,7 @@ export default function QuickStart() {
         code={`<!doctype html>
 <html lang="en" data-theme="dark">
 <head>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lunara-css/dist/lunar.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lunara-css@1/dist/lunar.min.css" />
 </head>
 <body>
   <div class="card glow-sm hover-lift p-6 max-w-sm">
@@ -52,7 +52,9 @@ export default function QuickStart() {
         <li>
           <strong>Utilities</strong> — <code>p-6</code>, <code>mt-2</code>,{" "}
           <code>max-w-sm</code>, <code>flex</code>, <code>gap-4</code> — Tailwind-shaped
-          atomic classes for layout and spacing.
+          atomic classes for layout and spacing, with five responsive breakpoints
+          (<code>sm:</code> … <code>2xl:</code>). See{" "}
+          <Link href="/docs/utilities">Utilities &amp; responsive</Link>.
         </li>
       </ul>
 
