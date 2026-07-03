@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { initTheme, initMoonPhase, initMoonbeam } from "lunara-css/theme";
+import { initTheme, initMoonPhase, initMoonbeam } from "../../theme.mjs";
 
 /**
  * Wires up Lunara's optional JS helpers once for the whole site:

@@ -480,6 +480,49 @@ theming stays a one-attribute switch.
 
 ---
 
+## Per-element customization
+
+Every component and effect exposes its **own** custom properties — colors, opacity, radius,
+sizing, speed — with token-based defaults. Variants only reassign those variables, so you can
+restyle any single instance inline (or per-scope) without writing a selector or fighting
+specificity:
+
+```html
+<button class="btn btn-primary" style="--btn-bg: #f472b6; --btn-hover-bg: #ec4899">Pink</button>
+<div class="card" style="--card-opacity: 0.6; --card-radius: 2rem; --card-border-color: #34d399">…</div>
+<div class="glow-md" style="--glow-color: rgb(244 114 182 / 0.5)">Pink glow</div>
+<div class="glass" style="--glass-blur: 32px; --glass-bg: rgb(255 255 255 / 0.12)">Frostier</div>
+<span class="moon moon-full" style="--moon-size: 5rem; --moon-light: #ffc864"></span>
+<span class="text-shimmer" style="--shimmer-accent: #34d399; --shimmer-speed: 2s">Fast green</span>
+```
+
+| Component / effect | Custom properties |
+|---|---|
+| `.btn` | `--btn-bg`, `--btn-color`, `--btn-border-color`, `--btn-hover-bg/-color/-border-color`, `--btn-glow`, `--btn-hover-glow`, `--btn-gradient`, `--btn-radius`, `--btn-padding-x/y`, `--btn-font-size`, `--btn-opacity` |
+| `.card` | `--card-bg`, `--card-border-color`, `--card-hover-border-color`, `--card-radius`, `--card-shadow`, `--card-padding-x/y`, `--card-opacity` |
+| `.input` / `.textarea` / `.select` | `--input-bg`, `--input-color`, `--input-border-color`, `--input-focus-border-color`, `--input-focus-ring-color`, `--input-radius`, `--input-opacity` |
+| `.badge` | `--badge-bg`, `--badge-color`, `--badge-border-color`, `--badge-glow`, `--badge-radius`, `--badge-opacity` |
+| `.navbar` | `--navbar-bg`, `--navbar-blur`, `--navbar-border-color`, `--navbar-link-color/-hover-color/-active-color` |
+| `.modal` (+ overlay/popover) | `--modal-bg`, `--modal-border-color`, `--modal-radius`, `--modal-max-width`, `--modal-shadow`, `--modal-backdrop-color`, `--modal-backdrop-blur` |
+| `.toast` | `--toast-bg`, `--toast-border-color`, `--toast-accent`, `--toast-radius`, `--toast-shadow`, `--toast-opacity` |
+| `.moon` | `--moon-size`, `--moon-light`, `--moon-dark`, `--moon-glow` |
+| `[data-tooltip]` | `--tooltip-bg`, `--tooltip-color`, `--tooltip-radius` |
+| `.glow-sm/-md/-lg/-violet`, `.hover-glow`, `.pulse-glow` | `--glow-color` (any color, alpha included), `--pulse-speed` |
+| `.hover-lift` | `--lift-distance` |
+| `.glass` / `.glass-dark` | `--glass-bg`, `--glass-border-color`, `--glass-blur`, `--glass-opacity` |
+| `.starfield` | `--starfield-bg`, `--star-color` |
+| `.gradient-aurora` | `--aurora-gradient`, `--aurora-speed` |
+| `.eclipse-border` | `--eclipse-color-1/-2/-3`, `--eclipse-width`, `--eclipse-speed` |
+| `.moonbeam` | `--beam-color`, `--beam-size` |
+| `.text-shimmer` | `--shimmer-base`, `--shimmer-glow`, `--shimmer-accent`, `--shimmer-speed` |
+| `.float` | `--float-distance`, `--float-speed` |
+
+The same variables also work per-scope (set them on any ancestor, or in a class of your own) and
+in Tailwind builds via arbitrary properties: `class="btn [--btn-bg:#f472b6]"`. Global glow
+intensity is still one dial — `--lunar-moonlight` on `:root` (or `initMoonPhase()`).
+
+---
+
 ## Components
 
 `btn` (+ `-primary/-secondary/-ghost/-outline/-glow`, `-sm/-lg`) · `card` (+ `card-header/-body/-footer`)

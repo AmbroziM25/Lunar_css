@@ -60,20 +60,13 @@
 }
 
 /* Daylight variant dims the more theatrical night-sky effects so they read
-   as gentle accents rather than a dark-mode effect transplanted onto a light page. */
+   as gentle accents rather than a dark-mode effect transplanted onto a light page.
+   (The .glass daylight variants live in effects.css next to .glass itself:
+   the lunar-effects layer outranks lunar-themes, so an override here would
+   never win.) */
 [data-theme="light"] .starfield::before,
 [data-theme="light"] .starfield::after {
   opacity: 0.35;
-}
-
-[data-theme="light"] .glass {
-  background: rgb(255 255 255 / 0.6);
-  border-color: rgb(20 21 42 / 0.08);
-}
-
-[data-theme="light"] .glass-dark {
-  background: rgb(20 21 42 / 0.06);
-  border-color: rgb(20 21 42 / 0.08);
 }
 
 /* ---------------------------------------------------------------

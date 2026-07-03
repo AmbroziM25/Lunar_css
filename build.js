@@ -350,7 +350,8 @@ function buildBootstrap(fullCss) {
   );
   const themes = mirrorThemeSelectors(collectLayer(root, 'lunar-themes'));
   const properties = root.filter((n) => n.type === 'atrule' && n.name === 'property');
-  const effects = collectLayer(root, 'lunar-effects');
+  // Effects carry a few [data-theme=…] rules of their own (e.g. daylight glass) — mirror those too.
+  const effects = mirrorThemeSelectors(collectLayer(root, 'lunar-effects'));
   const motion = collectLayer(root, 'lunar-motion');
   const moonIcons = collectLayer(root, 'lunar-components').filter(
     (n) => n.type === 'rule' && n.selector.includes('.moon')

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { toggleTheme } from "lunara-css/theme";
+import { toggleTheme } from "../../theme.mjs";
 
 export default function ThemeToggle() {
   const [, rerender] = useState(0);

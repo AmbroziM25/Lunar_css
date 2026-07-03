@@ -11,9 +11,16 @@ export const docsNav = [
     title: "Core",
     items: [
       { href: "/docs/theming", label: "Theming & tokens" },
+      { href: "/docs/customization", label: "Customization" },
       { href: "/docs/components", label: "Components" },
       { href: "/docs/effects", label: "Effects" },
       { href: "/docs/motion", label: "Scroll-driven motion" },
+    ],
+  },
+  {
+    title: "UI Kit",
+    items: [
+      { href: "/docs/ui-kit", label: "Premade blocks" },
     ],
   },
   {

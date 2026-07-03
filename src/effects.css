@@ -3,6 +3,16 @@
  * One-line, no-custom-CSS effect utilities. Each class is a complete,
  * self-contained effect — no hand-written keyframes or shadow stacks required.
  * Entirely opt-in: nothing here applies unless the class is used.
+ *
+ * Per-element customization: each effect exposes its own custom properties
+ * (colors, opacity, speed, size) that can be overridden inline or per-scope:
+ *
+ *   <div class="glow-md" style="--glow-color: rgb(244 114 182 / 0.5)">…</div>
+ *   <div class="glass" style="--glass-blur: 32px; --glass-bg: rgb(255 255 255 / 0.12)">…</div>
+ *
+ * Glow opacity additionally follows the global --lunar-moonlight dial
+ * (set on :root, or driven by initMoonPhase()); per-element glow color and
+ * opacity go through --glow-color, which takes any color incl. alpha.
  */
 
 @property --lunar-angle {
@@ -18,12 +28,12 @@
  * --------------------------------------------------------------- */
 @keyframes lunar-float {
   0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-10px); }
+  50%      { transform: translateY(var(--float-distance, -10px)); }
 }
 
 @keyframes lunar-pulse-glow {
-  0%, 100% { box-shadow: var(--shadow-glow-sm); }
-  50%      { box-shadow: var(--shadow-glow-lg); }
+  0%, 100% { box-shadow: 0 0 12px 0 var(--glow-color, var(--glow-color-sm)); }
+  50%      { box-shadow: 0 0 48px 6px var(--glow-color, var(--glow-color-lg)); }
 }
 
 @keyframes lunar-shimmer {
@@ -62,14 +72,17 @@
 
 /* ---------------------------------------------------------------
  * Glow — soft moonlight box-shadow glows
+ * Custom properties: --glow-color (hue + opacity in one, e.g.
+ * rgb(244 114 182 / 0.5)). Defaults track --lunar-moonlight.
  * --------------------------------------------------------------- */
-.glow-sm     { box-shadow: var(--shadow-glow-sm); }
-.glow-md     { box-shadow: var(--shadow-glow-md); }
-.glow-lg     { box-shadow: var(--shadow-glow-lg); }
-.glow-violet { box-shadow: var(--shadow-glow-violet); }
+.glow-sm     { box-shadow: 0 0 12px 0 var(--glow-color, var(--glow-color-sm)); }
+.glow-md     { box-shadow: 0 0 24px 2px var(--glow-color, var(--glow-color-md)); }
+.glow-lg     { box-shadow: 0 0 48px 6px var(--glow-color, var(--glow-color-lg)); }
+.glow-violet { box-shadow: 0 0 32px 4px var(--glow-color, var(--glow-color-violet)); }
 
 /* ---------------------------------------------------------------
  * Hover interactions
+ * Custom properties: --glow-color (hover-glow), --lift-distance
  * --------------------------------------------------------------- */
 .hover-lift {
   transition: transform var(--duration-base) var(--ease-out),
@@ -77,77 +90,109 @@
 }
 .hover-lift:hover,
 .hover-lift:focus-visible {
-  transform: translateY(-4px);
+  transform: translateY(var(--lift-distance, -4px));
   box-shadow: var(--shadow-lg);
 }
 
 .hover-glow {
-  box-shadow: var(--shadow-glow-sm);
+  box-shadow: 0 0 12px 0 var(--glow-color, var(--glow-color-sm));
   transition: box-shadow var(--duration-base) var(--ease-out);
 }
 .hover-glow:hover,
 .hover-glow:focus-visible {
-  box-shadow: var(--shadow-glow-lg);
+  box-shadow: 0 0 48px 6px var(--glow-color, var(--glow-color-lg));
 }
 
 /* ---------------------------------------------------------------
  * Text shimmer — animated gradient sweep across text
+ * Custom properties: --shimmer-base, --shimmer-glow, --shimmer-accent,
+ * --shimmer-speed
  * --------------------------------------------------------------- */
 .text-shimmer {
   background-image: linear-gradient(
     90deg,
-    var(--lunar-text-muted) 0%,
-    var(--glow) 25%,
-    var(--tide) 50%,
-    var(--glow) 75%,
-    var(--lunar-text-muted) 100%
+    var(--shimmer-base, var(--lunar-text-muted)) 0%,
+    var(--shimmer-glow, var(--glow)) 25%,
+    var(--shimmer-accent, var(--tide)) 50%,
+    var(--shimmer-glow, var(--glow)) 75%,
+    var(--shimmer-base, var(--lunar-text-muted)) 100%
   );
   background-size: 200% auto;
   color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
-  animation: lunar-shimmer 4s linear infinite;
+  animation: lunar-shimmer var(--shimmer-speed, 4s) linear infinite;
 }
 
 /* ---------------------------------------------------------------
  * Float — gentle infinite moon-drift motion
+ * Custom properties: --float-distance, --float-speed
  * --------------------------------------------------------------- */
 .float {
-  animation: lunar-float 6s var(--ease-in-out) infinite;
+  animation: lunar-float var(--float-speed, 6s) var(--ease-in-out) infinite;
 }
 
 /* ---------------------------------------------------------------
  * Pulse glow — breathing glow animation
+ * Custom properties: --glow-color, --pulse-speed
  * --------------------------------------------------------------- */
 .pulse-glow {
-  animation: lunar-pulse-glow 2.4s var(--ease-in-out) infinite;
+  animation: lunar-pulse-glow var(--pulse-speed, 2.4s) var(--ease-in-out) infinite;
 }
 
 /* ---------------------------------------------------------------
  * Glassmorphism panels
+ * Custom properties: --glass-bg, --glass-border-color, --glass-blur,
+ * --glass-opacity
  * --------------------------------------------------------------- */
 .glass {
-  background: rgb(255 255 255 / 0.06);
-  backdrop-filter: blur(16px) saturate(140%);
-  -webkit-backdrop-filter: blur(16px) saturate(140%);
-  border: 1px solid rgb(255 255 255 / 0.12);
+  --glass-bg: rgb(255 255 255 / 0.06);
+  --glass-border-color: rgb(255 255 255 / 0.12);
+  --glass-blur: 16px;
+
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  border: 1px solid var(--glass-border-color);
+  opacity: var(--glass-opacity, 1);
 }
 
 .glass-dark {
-  background: rgb(9 9 19 / 0.55);
-  backdrop-filter: blur(16px) saturate(120%);
-  -webkit-backdrop-filter: blur(16px) saturate(120%);
-  border: 1px solid rgb(255 255 255 / 0.08);
+  --glass-bg: rgb(9 9 19 / 0.55);
+  --glass-border-color: rgb(255 255 255 / 0.08);
+  --glass-blur: 16px;
+
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(120%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(120%);
+  border: 1px solid var(--glass-border-color);
+  opacity: var(--glass-opacity, 1);
+}
+
+/* Daylight variants — declared here rather than in themes.css because the
+   lunar-effects layer outranks lunar-themes for the same element. */
+[data-theme="light"] .glass {
+  --glass-bg: rgb(255 255 255 / 0.6);
+  --glass-border-color: rgb(20 21 42 / 0.08);
+}
+
+[data-theme="light"] .glass-dark {
+  --glass-bg: rgb(20 21 42 / 0.06);
+  --glass-border-color: rgb(20 21 42 / 0.08);
 }
 
 /* ---------------------------------------------------------------
  * Starfield — animated twinkling star background
+ * Custom properties: --starfield-bg, --star-color
  * --------------------------------------------------------------- */
 .starfield {
+  --starfield-bg: var(--eclipse);
+  --star-color: #ffffff;
+
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  background-color: var(--eclipse);
+  background-color: var(--starfield-bg);
 }
 
 .starfield::before,
@@ -159,14 +204,14 @@
   pointer-events: none;
   background-repeat: repeat;
   background-image:
-    radial-gradient(1px 1px at 10% 20%, #fff, transparent 100%),
-    radial-gradient(1px 1px at 80% 10%, #fff, transparent 100%),
-    radial-gradient(1.5px 1.5px at 40% 70%, #fff, transparent 100%),
-    radial-gradient(1px 1px at 90% 60%, #fff, transparent 100%),
-    radial-gradient(1px 1px at 60% 90%, #fff, transparent 100%),
-    radial-gradient(1.5px 1.5px at 15% 85%, #fff, transparent 100%),
-    radial-gradient(1px 1px at 25% 45%, #fff, transparent 100%),
-    radial-gradient(1px 1px at 70% 35%, #fff, transparent 100%);
+    radial-gradient(1px 1px at 10% 20%, var(--star-color), transparent 100%),
+    radial-gradient(1px 1px at 80% 10%, var(--star-color), transparent 100%),
+    radial-gradient(1.5px 1.5px at 40% 70%, var(--star-color), transparent 100%),
+    radial-gradient(1px 1px at 90% 60%, var(--star-color), transparent 100%),
+    radial-gradient(1px 1px at 60% 90%, var(--star-color), transparent 100%),
+    radial-gradient(1.5px 1.5px at 15% 85%, var(--star-color), transparent 100%),
+    radial-gradient(1px 1px at 25% 45%, var(--star-color), transparent 100%),
+    radial-gradient(1px 1px at 70% 35%, var(--star-color), transparent 100%);
   background-size: 220px 220px;
   animation: lunar-twinkle 5s ease-in-out infinite;
 }
@@ -180,24 +225,28 @@
 
 /* ---------------------------------------------------------------
  * Gradient aurora — animated shifting aurora/nebula background
+ * Custom properties: --aurora-gradient (full gradient override),
+ * --aurora-speed
  * --------------------------------------------------------------- */
 .gradient-aurora {
-  background-image: linear-gradient(
+  background-image: var(--aurora-gradient, linear-gradient(
     120deg,
     var(--indigo-600),
     var(--violet-600),
     var(--tide),
     var(--indigo-500)
-  );
+  ));
   background-size: 300% 300%;
-  animation: lunar-aurora 12s ease-in-out infinite;
+  animation: lunar-aurora var(--aurora-speed, 12s) ease-in-out infinite;
 }
 
 /* ---------------------------------------------------------------
  * Eclipse border — animated gradient border ring.
- * The ring is masked to a 2px band (content-box XOR padding-box), so it
+ * The ring is masked to a band (content-box XOR padding-box), so it
  * paints as a thin outline regardless of what's inside — no dependency on
  * the host's background, child markup, or stacking order.
+ * Custom properties: --eclipse-color-1/-2/-3, --eclipse-width,
+ * --eclipse-speed
  * --------------------------------------------------------------- */
 .eclipse-border {
   position: relative;
@@ -209,20 +258,20 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  padding: 2px;
+  padding: var(--eclipse-width, 2px);
   border-radius: inherit;
   background-image: conic-gradient(
     from var(--lunar-angle),
-    var(--tide),
-    var(--violet-500),
-    var(--silver-300),
-    var(--tide)
+    var(--eclipse-color-1, var(--tide)),
+    var(--eclipse-color-2, var(--violet-500)),
+    var(--eclipse-color-3, var(--silver-300)),
+    var(--eclipse-color-1, var(--tide))
   );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
-  animation: lunar-eclipse-spin 6s linear infinite;
+  animation: lunar-eclipse-spin var(--eclipse-speed, 6s) linear infinite;
 }
 
 /* ---------------------------------------------------------------
@@ -230,6 +279,7 @@
  * the element. Pair with initMoonbeam() from theme.mjs (one global
  * listener updates --beam-x/--beam-y). Without the JS, it degrades
  * to a centered glow on hover.
+ * Custom properties: --beam-color, --beam-size
  * --------------------------------------------------------------- */
 .moonbeam {
   position: relative;
@@ -244,8 +294,8 @@
   opacity: 0;
   transition: opacity var(--duration-slow) var(--ease-out);
   background: radial-gradient(
-    260px circle at var(--beam-x, 50%) var(--beam-y, 50%),
-    rgb(228 232 255 / 0.12),
+    var(--beam-size, 260px) circle at var(--beam-x, 50%) var(--beam-y, 50%),
+    var(--beam-color, rgb(228 232 255 / 0.12)),
     transparent 65%
   );
 }

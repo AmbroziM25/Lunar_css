@@ -5,9 +5,11 @@
  * silver/indigo/violet glow accents.
  */
 
-/* Layer order (declared once, populated across base/themes/effects/components/utilities).
-   Utilities intentionally win the cascade last, mirroring Tailwind's utility-first behavior. */
-@layer lunar-base, lunar-themes, lunar-effects, lunar-motion, lunar-components, lunar-utilities;
+/* Layer order (declared once, populated across base/themes/components/effects/utilities).
+   Components come before effects: effect classes (.glow-md, .glass, .scroll-reveal…) are
+   opt-in additions ON components, so they must out-cascade a component's own defaults
+   (e.g. .card's box-shadow). Utilities intentionally win last, mirroring Tailwind. */
+@layer lunar-base, lunar-themes, lunar-components, lunar-effects, lunar-motion, lunar-utilities;
 
 @layer lunar-base {
 

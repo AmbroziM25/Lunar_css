@@ -1,4 +1,7 @@
-import "lunara-css/dist/lunar.css";
+// Import the framework straight from the repo's dist so the docs always
+// reflect the current build — a node_modules copy goes stale because npm
+// skips repacking file: deps when the version number hasn't changed.
+import "../../dist/lunar.css";
 import "./globals.css";
 import Link from "next/link";
 import ThemeToggle from "../components/ThemeToggle";

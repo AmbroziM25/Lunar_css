@@ -3,33 +3,71 @@
  * Prebuilt, themeable components. Every component reads from the same
  * design tokens (base.css) and leans on the effect utilities (effects.css)
  * for glow/motion, so it feels premium without any extra classes.
+ *
+ * Per-element customization: every component exposes its own --<component>-*
+ * variables (colors, opacity, radius, sizing) with token-based defaults.
+ * Variants only reassign those variables, so you can restyle any single
+ * instance inline or per-scope without touching the classes:
+ *
+ *   <button class="btn btn-primary" style="--btn-bg: #f472b6">Pink</button>
+ *   <div class="card" style="--card-opacity: 0.6; --card-radius: 2rem">…</div>
  */
 
 @layer lunar-components {
 
 /* ---------------------------------------------------------------
  * Buttons
+ * Custom properties: --btn-bg, --btn-color, --btn-border-color,
+ * --btn-hover-bg/-color/-border-color, --btn-glow, --btn-hover-glow,
+ * --btn-gradient, --btn-radius, --btn-padding-x/y, --btn-font-size,
+ * --btn-opacity
  * --------------------------------------------------------------- */
 .btn {
+  --btn-bg: var(--lunar-surface);
+  --btn-color: var(--lunar-text);
+  --btn-border-color: transparent;
+  --btn-hover-bg: var(--btn-bg);
+  --btn-hover-color: var(--btn-color);
+  --btn-hover-border-color: var(--btn-border-color);
+  --btn-glow: 0 0 0 0 transparent;
+  --btn-hover-glow: var(--btn-glow);
+  --btn-gradient: none;
+  --btn-radius: var(--radius-md);
+  --btn-padding-x: 1.25rem;
+  --btn-padding-y: 0.625rem;
+  --btn-font-size: var(--text-sm);
+  --btn-opacity: 1;
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  padding: 0.625rem 1.25rem;
+  padding: var(--btn-padding-y) var(--btn-padding-x);
   font-family: inherit;
-  font-size: var(--text-sm);
+  font-size: var(--btn-font-size);
   font-weight: var(--font-medium);
   line-height: 1;
   white-space: nowrap;
   user-select: none;
-  border: 1px solid transparent;
-  border-radius: var(--radius-md);
-  color: var(--lunar-text);
-  background-color: var(--lunar-surface);
+  border: 1px solid var(--btn-border-color);
+  border-radius: var(--btn-radius);
+  color: var(--btn-color);
+  background-color: var(--btn-bg);
+  background-image: var(--btn-gradient);
+  box-shadow: var(--btn-glow);
+  opacity: var(--btn-opacity);
   transition: background-color var(--duration-base) var(--ease-out),
               border-color var(--duration-base) var(--ease-out),
               box-shadow var(--duration-base) var(--ease-out),
               transform var(--duration-fast) var(--ease-out);
+}
+
+.btn:hover:not(:disabled),
+.btn:focus-visible:not(:disabled) {
+  background-color: var(--btn-hover-bg);
+  border-color: var(--btn-hover-border-color);
+  color: var(--btn-hover-color);
+  box-shadow: var(--btn-hover-glow);
 }
 
 .btn:disabled {
@@ -40,80 +78,85 @@
 }
 
 .btn-primary {
-  background-color: var(--tide);
-  color: var(--moon-50);
-  box-shadow: var(--shadow-glow-sm);
+  --btn-bg: var(--tide);
+  --btn-color: var(--moon-50);
+  --btn-glow: var(--shadow-glow-sm);
+  --btn-hover-bg: var(--indigo-600);
+  --btn-hover-glow: var(--shadow-glow-md);
 }
 .btn-primary:hover:not(:disabled),
 .btn-primary:focus-visible:not(:disabled) {
-  background-color: var(--indigo-600);
-  box-shadow: var(--shadow-glow-md);
   transform: translateY(-1px);
 }
 
 .btn-secondary {
-  background-color: var(--lunar-surface);
-  border-color: var(--lunar-border);
-  color: var(--lunar-text);
-}
-.btn-secondary:hover:not(:disabled) {
-  background-color: var(--lunar-surface-hover);
+  --btn-bg: var(--lunar-surface);
+  --btn-border-color: var(--lunar-border);
+  --btn-hover-bg: var(--lunar-surface-hover);
 }
 
 .btn-ghost {
-  background-color: transparent;
-  color: var(--lunar-text);
-}
-.btn-ghost:hover:not(:disabled) {
-  background-color: var(--lunar-surface);
+  --btn-bg: transparent;
+  --btn-hover-bg: var(--lunar-surface);
 }
 
 .btn-outline {
-  background-color: transparent;
-  border-color: var(--tide);
-  color: var(--tide);
-}
-.btn-outline:hover:not(:disabled) {
-  background-color: rgb(108 111 240 / 0.1);
+  --btn-bg: transparent;
+  --btn-border-color: var(--tide);
+  --btn-color: var(--tide);
+  --btn-hover-bg: rgb(108 111 240 / 0.1);
 }
 
 .btn-glow {
-  background-image: linear-gradient(135deg, var(--tide), var(--violet-500));
-  color: var(--moon-50);
-  box-shadow: var(--shadow-glow-violet);
+  --btn-gradient: linear-gradient(135deg, var(--tide), var(--violet-500));
+  --btn-color: var(--moon-50);
+  --btn-glow: var(--shadow-glow-violet);
+  --btn-hover-glow: var(--shadow-glow-lg);
 }
 .btn-glow:hover:not(:disabled) {
-  box-shadow: var(--shadow-glow-lg);
   transform: translateY(-1px);
 }
 
-.btn-sm { padding: 0.375rem 0.875rem; font-size: var(--text-xs); }
-.btn-lg { padding: 0.875rem 1.75rem; font-size: var(--text-base); }
+.btn-sm { --btn-padding-x: 0.875rem; --btn-padding-y: 0.375rem; --btn-font-size: var(--text-xs); }
+.btn-lg { --btn-padding-x: 1.75rem; --btn-padding-y: 0.875rem; --btn-font-size: var(--text-base); }
 
 /* ---------------------------------------------------------------
  * Cards
+ * Custom properties: --card-bg, --card-border-color,
+ * --card-hover-border-color, --card-radius, --card-shadow,
+ * --card-padding-x/y, --card-opacity
  * --------------------------------------------------------------- */
 .card {
-  background-color: var(--lunar-bg-elevated);
-  border: 1px solid var(--lunar-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
+  --card-bg: var(--lunar-bg-elevated);
+  --card-border-color: var(--lunar-border);
+  --card-hover-border-color: var(--moon-600);
+  --card-radius: var(--radius-lg);
+  --card-shadow: var(--shadow-md);
+  --card-padding-x: var(--space-6);
+  --card-padding-y: var(--space-5);
+  --card-opacity: 1;
+
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border-color);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  opacity: var(--card-opacity);
   overflow: hidden;
   transition: transform var(--duration-base) var(--ease-out),
               box-shadow var(--duration-base) var(--ease-out),
               border-color var(--duration-base) var(--ease-out);
 }
-.card:hover { border-color: var(--moon-600); }
+.card:hover { border-color: var(--card-hover-border-color); }
 
 .card-header {
-  padding: var(--space-5) var(--space-6);
-  border-bottom: 1px solid var(--lunar-border);
+  padding: var(--card-padding-y, var(--space-5)) var(--card-padding-x, var(--space-6));
+  border-bottom: 1px solid var(--card-border-color, var(--lunar-border));
   font-weight: var(--font-semibold);
 }
-.card-body { padding: var(--space-6); }
+.card-body { padding: var(--card-padding-x, var(--space-6)); }
 .card-footer {
-  padding: var(--space-5) var(--space-6);
-  border-top: 1px solid var(--lunar-border);
+  padding: var(--card-padding-y, var(--space-5)) var(--card-padding-x, var(--space-6));
+  border-top: 1px solid var(--card-border-color, var(--lunar-border));
   display: flex;
   align-items: center;
   gap: var(--space-3);
@@ -121,6 +164,9 @@
 
 /* ---------------------------------------------------------------
  * Inputs
+ * Custom properties: --input-bg, --input-color, --input-border-color,
+ * --input-focus-border-color, --input-focus-ring-color, --input-radius,
+ * --input-opacity
  * --------------------------------------------------------------- */
 .label {
   display: block;
@@ -131,15 +177,24 @@
 }
 
 .input, .textarea, .select {
+  --input-bg: var(--lunar-surface);
+  --input-color: var(--lunar-text);
+  --input-border-color: var(--lunar-border);
+  --input-focus-border-color: var(--tide);
+  --input-focus-ring-color: rgb(108 111 240 / 0.25);
+  --input-radius: var(--radius-md);
+  --input-opacity: 1;
+
   display: block;
   width: 100%;
   padding: 0.625rem 0.875rem;
   font-family: inherit;
   font-size: var(--text-sm);
-  color: var(--lunar-text);
-  background-color: var(--lunar-surface);
-  border: 1px solid var(--lunar-border);
-  border-radius: var(--radius-md);
+  color: var(--input-color);
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border-color);
+  border-radius: var(--input-radius);
+  opacity: var(--input-opacity);
   transition: border-color var(--duration-base) var(--ease-out),
               box-shadow var(--duration-base) var(--ease-out);
 }
@@ -148,8 +203,8 @@
 
 .input:focus, .textarea:focus, .select:focus {
   outline: none;
-  border-color: var(--tide);
-  box-shadow: 0 0 0 3px rgb(108 111 240 / 0.25), var(--shadow-glow-sm);
+  border-color: var(--input-focus-border-color);
+  box-shadow: 0 0 0 3px var(--input-focus-ring-color), var(--shadow-glow-sm);
 }
 
 .input:disabled, .textarea:disabled, .select:disabled {
@@ -168,50 +223,70 @@
 
 /* ---------------------------------------------------------------
  * Badges
+ * Custom properties: --badge-bg, --badge-color, --badge-border-color,
+ * --badge-glow, --badge-radius, --badge-opacity
  * --------------------------------------------------------------- */
 .badge {
+  --badge-bg: var(--lunar-surface);
+  --badge-color: var(--lunar-text);
+  --badge-border-color: var(--lunar-border);
+  --badge-glow: 0 0 0 0 transparent;
+  --badge-radius: var(--radius-full);
+  --badge-opacity: 1;
+
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
   padding: 0.2rem 0.625rem;
   font-size: var(--text-xs);
   font-weight: var(--font-medium);
-  border-radius: var(--radius-full);
-  background-color: var(--lunar-surface);
-  color: var(--lunar-text);
-  border: 1px solid var(--lunar-border);
+  border-radius: var(--badge-radius);
+  background-color: var(--badge-bg);
+  color: var(--badge-color);
+  border: 1px solid var(--badge-border-color);
+  box-shadow: var(--badge-glow);
+  opacity: var(--badge-opacity);
 }
 .badge-primary {
-  background-color: rgb(108 111 240 / 0.15);
-  color: var(--indigo-400);
-  border-color: rgb(108 111 240 / 0.3);
+  --badge-bg: rgb(108 111 240 / 0.15);
+  --badge-color: var(--indigo-400);
+  --badge-border-color: rgb(108 111 240 / 0.3);
 }
 .badge-violet {
-  background-color: rgb(139 92 246 / 0.15);
-  color: var(--violet-400);
-  border-color: rgb(139 92 246 / 0.3);
+  --badge-bg: rgb(139 92 246 / 0.15);
+  --badge-color: var(--violet-400);
+  --badge-border-color: rgb(139 92 246 / 0.3);
 }
-.badge-outline { background-color: transparent; }
+.badge-outline { --badge-bg: transparent; }
 .badge-glow {
-  background-color: var(--tide);
-  color: var(--moon-50);
-  border-color: transparent;
-  box-shadow: var(--shadow-glow-sm);
+  --badge-bg: var(--tide);
+  --badge-color: var(--moon-50);
+  --badge-border-color: transparent;
+  --badge-glow: var(--shadow-glow-sm);
 }
 
 /* ---------------------------------------------------------------
  * Navbar
+ * Custom properties: --navbar-bg, --navbar-blur, --navbar-border-color,
+ * --navbar-link-color, --navbar-link-hover-color, --navbar-link-active-color
  * --------------------------------------------------------------- */
 .navbar {
+  --navbar-bg: rgb(9 9 19 / 0.7);
+  --navbar-blur: 12px;
+  --navbar-border-color: var(--lunar-border);
+  --navbar-link-color: var(--lunar-text-muted);
+  --navbar-link-hover-color: var(--lunar-text);
+  --navbar-link-active-color: var(--tide);
+
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-6);
   padding: var(--space-4) var(--space-6);
-  background-color: rgb(9 9 19 / 0.7);
-  backdrop-filter: blur(12px) saturate(140%);
-  -webkit-backdrop-filter: blur(12px) saturate(140%);
-  border-bottom: 1px solid var(--lunar-border);
+  background-color: var(--navbar-bg);
+  backdrop-filter: blur(var(--navbar-blur)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--navbar-blur)) saturate(140%);
+  border-bottom: 1px solid var(--navbar-border-color);
   position: sticky;
   top: 0;
   z-index: var(--z-sticky);
@@ -233,29 +308,35 @@
   margin: 0;
 }
 .navbar-link {
-  color: var(--lunar-text-muted);
+  color: var(--navbar-link-color, var(--lunar-text-muted));
   font-size: var(--text-sm);
   font-weight: var(--font-medium);
   transition: color var(--duration-base) var(--ease-out);
 }
 .navbar-link:hover, .navbar-link.is-active {
-  color: var(--lunar-text);
+  color: var(--navbar-link-hover-color, var(--lunar-text));
   text-decoration: none;
 }
-.navbar-link.is-active { color: var(--tide); }
+.navbar-link.is-active { color: var(--navbar-link-active-color, var(--tide)); }
 
 /* ---------------------------------------------------------------
  * Modal
+ * Custom properties: --modal-bg, --modal-border-color, --modal-radius,
+ * --modal-max-width, --modal-shadow, --modal-backdrop-color,
+ * --modal-backdrop-blur
  * --------------------------------------------------------------- */
 .modal-overlay {
+  --modal-backdrop-color: rgb(9 9 19 / 0.7);
+  --modal-backdrop-blur: 4px;
+
   position: fixed;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: var(--space-6);
-  background-color: rgb(9 9 19 / 0.7);
-  backdrop-filter: blur(4px);
+  background-color: var(--modal-backdrop-color);
+  backdrop-filter: blur(var(--modal-backdrop-blur));
   z-index: var(--z-modal);
   opacity: 0;
   visibility: hidden;
@@ -264,12 +345,18 @@
 .modal-overlay.is-open { opacity: 1; visibility: visible; }
 
 .modal {
+  --modal-bg: var(--lunar-bg-elevated);
+  --modal-border-color: var(--lunar-border);
+  --modal-radius: var(--radius-lg);
+  --modal-max-width: 28rem;
+  --modal-shadow: var(--shadow-xl), var(--shadow-glow-sm);
+
   width: 100%;
-  max-width: 28rem;
-  background-color: var(--lunar-bg-elevated);
-  border: 1px solid var(--lunar-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-xl), var(--shadow-glow-sm);
+  max-width: var(--modal-max-width);
+  background-color: var(--modal-bg);
+  border: 1px solid var(--modal-border-color);
+  border-radius: var(--modal-radius);
+  box-shadow: var(--modal-shadow);
   transform: scale(0.95) translateY(8px);
   transition: transform var(--duration-base) var(--ease-out);
 }
@@ -280,7 +367,7 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--space-5) var(--space-6);
-  border-bottom: 1px solid var(--lunar-border);
+  border-bottom: 1px solid var(--modal-border-color, var(--lunar-border));
   font-weight: var(--font-semibold);
 }
 .modal-body { padding: var(--space-6); color: var(--lunar-text-muted); }
@@ -289,7 +376,7 @@
   justify-content: flex-end;
   gap: var(--space-3);
   padding: var(--space-5) var(--space-6);
-  border-top: 1px solid var(--lunar-border);
+  border-top: 1px solid var(--modal-border-color, var(--lunar-border));
 }
 .modal-close {
   font-size: var(--text-xl);
@@ -311,8 +398,8 @@
 .modal[popover] {
   margin: auto;
   padding: 0;
-  width: min(28rem, 100vw - 3rem);
-  border: 1px solid var(--lunar-border);
+  width: min(var(--modal-max-width, 28rem), 100vw - 3rem);
+  border: 1px solid var(--modal-border-color, var(--lunar-border));
   opacity: 0;
   transform: scale(0.95) translateY(8px);
   transition:
@@ -335,9 +422,9 @@
 }
 
 .modal[popover]::backdrop {
-  background-color: rgb(9 9 19 / 0.7);
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
+  background-color: var(--modal-backdrop-color, rgb(9 9 19 / 0.7));
+  -webkit-backdrop-filter: blur(var(--modal-backdrop-blur, 4px));
+  backdrop-filter: blur(var(--modal-backdrop-blur, 4px));
   transition:
     background-color 250ms ease-out,
     -webkit-backdrop-filter 250ms ease-out,
@@ -356,30 +443,43 @@
 
 /* ---------------------------------------------------------------
  * Toast
+ * Custom properties: --toast-bg, --toast-border-color, --toast-accent,
+ * --toast-radius, --toast-shadow, --toast-opacity
  * --------------------------------------------------------------- */
 .toast {
+  --toast-bg: var(--lunar-bg-elevated);
+  --toast-border-color: var(--lunar-border);
+  --toast-accent: var(--tide);
+  --toast-radius: var(--radius-md);
+  --toast-shadow: var(--shadow-lg);
+  --toast-opacity: 1;
+
   display: flex;
   align-items: flex-start;
   gap: var(--space-3);
   max-width: 24rem;
   padding: var(--space-4) var(--space-5);
-  background-color: var(--lunar-bg-elevated);
-  border: 1px solid var(--lunar-border);
-  border-left: 3px solid var(--tide);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg);
+  background-color: var(--toast-bg);
+  border: 1px solid var(--toast-border-color);
+  border-left: 3px solid var(--toast-accent);
+  border-radius: var(--toast-radius);
+  box-shadow: var(--toast-shadow);
+  opacity: var(--toast-opacity);
   animation: lunar-slide-up var(--duration-slow) var(--ease-out) both;
 }
 .toast-title { font-weight: var(--font-semibold); font-size: var(--text-sm); }
 .toast-message { font-size: var(--text-sm); color: var(--lunar-text-muted); }
-.toast-success { border-left-color: #34d399; }
-.toast-error   { border-left-color: #f87171; }
-.toast-warning { border-left-color: #fbbf24; }
-.toast-info    { border-left-color: var(--indigo-400); }
+.toast-success { --toast-accent: #34d399; }
+.toast-error   { --toast-accent: #f87171; }
+.toast-warning { --toast-accent: #fbbf24; }
+.toast-info    { --toast-accent: var(--indigo-400); }
 
 /* ---------------------------------------------------------------
  * Moon-phase icons — astronomically shaped moon glyphs in pure CSS.
- * No images, no SVG. Size via --moon-size (default 3rem).
+ * No images, no SVG.
+ * Custom properties: --moon-size (default 3rem), --moon-light (lit
+ * surface color), --moon-dark (shadowed surface color), --moon-glow
+ * (outer glow shadow)
  *
  *   <span class="moon moon-waxing-gibbous"></span>
  *
@@ -393,17 +493,21 @@
  * --------------------------------------------------------------- */
 .moon {
   --moon-size: 3rem;
+  --moon-light: var(--glow);
+  --moon-dark: var(--moon-800);
+  --moon-glow: var(--shadow-glow-sm);
+
   position: relative;
   display: inline-block;
   flex-shrink: 0;
   width: var(--moon-size);
   height: var(--moon-size);
   border-radius: var(--radius-full);
-  background-color: var(--glow);
+  background-color: var(--moon-light);
   overflow: hidden;
   box-shadow:
     inset 0 0 calc(var(--moon-size) / 10) rgb(9 9 19 / 0.25),
-    var(--shadow-glow-sm);
+    var(--moon-glow);
 }
 
 .moon::before {
@@ -412,7 +516,7 @@
   top: 0;
   bottom: 0;
   width: 50%;
-  background-color: var(--moon-800);
+  background-color: var(--moon-dark);
   display: none;
 }
 
@@ -421,7 +525,7 @@
   position: absolute;
   inset: 0;
   border-radius: var(--radius-full);
-  background-color: var(--moon-800);
+  background-color: var(--moon-dark);
   transform: scaleX(0);
 }
 
@@ -470,11 +574,12 @@
 [data-moon-phase="waxing-gibbous"] .moon-live::after,
 [data-moon-phase="waning-gibbous"] .moon-live::after {
   transform: scaleX(0.65);
-  background-color: var(--glow);
+  background-color: var(--moon-light, var(--glow));
 }
 
 /* ---------------------------------------------------------------
  * Tooltip — pure CSS via data-tooltip attribute
+ * Custom properties: --tooltip-bg, --tooltip-color, --tooltip-radius
  * --------------------------------------------------------------- */
 [data-tooltip] { position: relative; }
 
@@ -498,9 +603,9 @@
   padding: 0.375rem 0.625rem;
   font-size: var(--text-xs);
   font-weight: var(--font-medium);
-  color: var(--moon-50);
-  background-color: var(--moon-900);
-  border-radius: var(--radius-sm);
+  color: var(--tooltip-color, var(--moon-50));
+  background-color: var(--tooltip-bg, var(--moon-900));
+  border-radius: var(--tooltip-radius, var(--radius-sm));
   box-shadow: var(--shadow-md);
 }
 
@@ -508,7 +613,7 @@
   content: "";
   bottom: 100%;
   border: 5px solid transparent;
-  border-top-color: var(--moon-900);
+  border-top-color: var(--tooltip-bg, var(--moon-900));
 }
 
 [data-tooltip]:hover::after, [data-tooltip]:hover::before,
