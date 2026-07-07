@@ -26,12 +26,15 @@ const VARS = [
 export default function Customization() {
   return (
     <>
-      <h1 className="text-4xl font-bold">Customization</h1>
+      <h1 className="text-4xl font-bold">Customization — local variables</h1>
       <p className="text-muted text-lg">
-        Every component and effect exposes its own custom properties — colors, opacity,
-        radius, sizing, speed — with token-based defaults. Variants only reassign those
-        variables, so you can restyle any single instance inline or per-scope, without
-        writing a selector or fighting specificity.
+        Every component and effect exposes its own <em>local variables</em> — colors,
+        opacity, radius, sizing, speed — named <code>--&lt;component&gt;-&lt;prop&gt;</code>{" "}
+        (<code>--btn-bg</code>, <code>--card-radius</code>, <code>--glow-color</code>).
+        Lunara never declares these on the component; it only <em>reads</em> them with a
+        token-based fallback. That means you can set a knob inline, on the element, or on
+        any ancestor, without writing a selector or fighting specificity — and unset knobs
+        keep following the global theme.
       </p>
 
       <h2 className="text-2xl font-bold">Three levels of theming</h2>
@@ -46,11 +49,42 @@ export default function Customization() {
           <code>&quot;dark&quot;</code> swaps the semantic aliases everywhere at once.
         </li>
         <li>
-          <strong>Per-element variables</strong> — this page: set{" "}
+          <strong>Local variables</strong> — this page: set{" "}
           <code>--btn-bg</code>, <code>--card-opacity</code>, <code>--glow-color</code>…
-          on a single element (inline, or in a class of your own).
+          on a single element, or on a wrapper (&ldquo;scope class&rdquo;) to re-skin
+          everything inside it.
         </li>
       </ul>
+
+      <h2 className="text-2xl font-bold">How it works</h2>
+      <p>Components consume their knobs with a fallback instead of declaring them:</p>
+      <CodeBlock
+        lang="css"
+        code={`/* inside Lunara */
+.card {
+  background-color: var(--card-bg, var(--lunar-bg-elevated));
+  border-radius: var(--card-radius, var(--radius-lg));
+}`}
+      />
+      <p>
+        Because unset custom properties inherit, precedence works out exactly how you&rsquo;d
+        want, most-specific first:
+      </p>
+      <ol>
+        <li>inline <code>style=&quot;--card-bg: …&quot;</code> on the element</li>
+        <li>a variant class on the element (<code>.btn-primary</code> declares <code>--btn-bg</code>)</li>
+        <li>a knob set on any ancestor — your scope class</li>
+        <li>
+          the fallback, which routes through the <code>--lunar-*</code> semantic tokens —
+          so <code>data-theme</code> switching keeps working for anything you haven&rsquo;t
+          overridden
+        </li>
+      </ol>
+      <p className="text-muted">
+        Names starting with <code>--_</code> (e.g. <code>--_glass-bg</code>) are private
+        internals, not API. To reset a knob back to its default inside a scope, set it to{" "}
+        <code>initial</code>.
+      </p>
 
       <h2 className="text-2xl font-bold">Live examples</h2>
       <div className="demo-panel">
@@ -123,10 +157,12 @@ export default function Customization() {
         </tbody>
       </table>
 
-      <h2 className="text-2xl font-bold">Scoped and Tailwind usage</h2>
+      <h2 className="text-2xl font-bold">Scope classes — override via a wrapper</h2>
       <p>
-        The variables cascade, so you can set them on any ancestor — a section, a page, a
-        class of your own — and every instance inside picks them up:
+        Set knobs on any ancestor — a section, a page, a class of your own — and every
+        instance inside picks them up. Explicit variants (like{" "}
+        <code>.btn-primary</code>) intentionally win over the scope, and the theme keeps
+        driving whatever you didn&rsquo;t set:
       </p>
       <CodeBlock
         lang="css"
@@ -134,8 +170,36 @@ export default function Customization() {
 .checkout-flow {
   --btn-bg: #059669;
   --btn-hover-bg: #047857;
+  --card-bg: #06281f;
   --card-radius: 1.25rem;
 }`}
+      />
+      <div
+        className="demo-panel"
+        style={{
+          "--btn-bg": "#059669",
+          "--btn-hover-bg": "#047857",
+          "--card-bg": "#06281f",
+          "--card-border-color": "#065f46",
+          "--card-radius": "1.25rem",
+        }}
+      >
+        <div className="card p-4">
+          <p className="text-sm text-muted mb-3">everything in this box sits inside one scope:</p>
+          <div className="flex flex-wrap gap-3 items-center">
+            <button className="btn">plain .btn → emerald</button>
+            <button className="btn btn-primary">.btn-primary → still tide</button>
+            <div className="card p-3">nested card → emerald, 1.25rem radius</div>
+          </div>
+        </div>
+      </div>
+      <CodeBlock
+        lang="html"
+        code={`<section class="checkout-flow">
+  <button class="btn">picks up the scope</button>
+  <button class="btn btn-primary">variant wins — stays tide</button>
+  <div class="card">…scoped card…</div>
+</section>`}
       />
       <p>In Tailwind builds the same hooks work via arbitrary properties:</p>
       <CodeBlock

@@ -4,6 +4,46 @@ All notable changes to Lunara CSS are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project
 adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.1.0] — 2026-07-07
+
+### Added — local variable system (component-scoped tokens)
+
+Every component's `--<component>-*` knobs (`--btn-bg`, `--card-radius`, `--glass-blur`…) can
+now be set **on any ancestor** ("scope class"), not just inline on the element:
+
+```html
+<section style="--btn-bg: #059669; --card-radius: 1.25rem">
+  <!-- every plain .btn / .card inside is re-skinned -->
+</section>
+```
+
+Mechanically: components now **consume** their knobs with token-based fallbacks
+(`background: var(--card-bg, var(--lunar-bg-elevated))`) instead of declaring them on the
+element — a declaration on the element had always beaten inherited values, which made
+wrapper-level overrides silently no-ops in 1.0 (the docs implied this worked; now it does).
+Precedence: inline knob → variant class (`.btn-primary` intentionally beats scopes) →
+ancestor scope → theme-aware token fallback.
+
+- Converted: `.btn`, `.card`, `.input`/`.textarea`/`.select`, `.badge`, `.navbar`,
+  `.modal-overlay`, `.modal`, `.toast`, `.moon`, `.glass`/`.glass-dark`, `.starfield`
+  (tooltips and all other effects already followed the consumed pattern).
+- `.glass`/`.glass-dark` theme-dependent defaults moved to private `--_glass-*` internals,
+  so a `--glass-bg` override now wins in **both** themes (previously the light-theme rule
+  clobbered it); unset knobs still swap with `data-theme`.
+- Convention: `--_<component>-*` (leading underscore) is reserved for private internals.
+  Setting a knob to `initial` inside a scope resets it to the framework default.
+- Docs: "Customization" page and README rewritten around the pattern with live scope-class
+  examples; `test/index.html` gained a Local Variables section with 8 automated
+  precedence/theme assertions.
+
+### Changed
+
+- No class names, knob names, or computed default styles changed — verified by the QA page's
+  851-class inventory and computed-style regression checks. `dist/lunar.min.css` shrank
+  56.1 KB → 55.3 KB (removed knob declarations).
+- One observable (intended) behavior change: knobs set on a wrapper now actually apply to
+  components inside it — in 1.0 they were ignored.
+
 ## [1.0.0] — 2026-07-03
 
 First stable release. **No breaking changes for existing users** — every class that existed in

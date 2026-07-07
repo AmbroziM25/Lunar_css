@@ -19,6 +19,19 @@
   .qa-demo-strip { position: relative; }
   #inventory-report table { font-size: var(--text-sm); }
   #inventory-report td, #inventory-report th { padding: 0.375rem 0.75rem; border-bottom: 1px solid var(--lunar-border); text-align: left; }
+  /* A user-land "scope class": sets local variables on a wrapper, re-skinning
+     every Lunara component/effect inside without touching global tokens. */
+  .qa-scope-rose {
+    --btn-bg: #f43f5e;
+    --btn-hover-bg: #e11d48;
+    --btn-color: #fff1f2;
+    --card-bg: #2b0f1d;
+    --card-border-color: #7f1d3a;
+    --badge-bg: rgb(244 63 94 / 0.15);
+    --badge-color: #fda4af;
+    --badge-border-color: rgb(244 63 94 / 0.3);
+    --glow-color: rgb(244 63 94 / 0.5);
+  }
 </style>
 </head>
 <body>
@@ -39,6 +52,7 @@
     <a class="navbar-link" href="#colors">Colors</a>
     <a class="navbar-link" href="#borders">Borders</a>
     <a class="navbar-link" href="#misc">Misc</a>
+    <a class="navbar-link" href="#localvars">Local vars</a>
     <a class="navbar-link" href="#components">Components</a>
     <a class="navbar-link" href="#effects">Effects</a>
     <a class="navbar-link" href="#motion">Motion</a>
@@ -160,6 +174,48 @@ and line breaks.</p></div>
     <div class="qa-row"><span class="qa-label">.pointer-events-none</span><button class="btn btn-primary pointer-events-none">unclickable button</button></div>
     <div class="qa-row"><span class="qa-label">.sr-only</span><span>visible before<span class="sr-only"> (this text is screen-reader-only) </span> and after — nothing between the words</span></div>
     <div class="qa-row"><span class="qa-label">.container</span><span class="text-muted text-sm">this whole page body uses .container (centered, breakpoint max-widths)</span></div>
+  </section>
+
+  <!-- ============ LOCAL VARIABLES ============ -->
+  <section id="localvars" class="qa-section">
+    <h2>Local variables — scoped overrides</h2>
+    <p class="text-muted mt-2 mb-4">
+      Component knobs (<code>--btn-bg</code>, <code>--card-radius</code>, <code>--glow-color</code>…)
+      are consumed, never declared, so they can be set inline <em>or</em> on any ancestor.
+      Explicit variants beat ancestor scopes; unset knobs follow the theme.
+    </p>
+    <div id="localvars-report" class="card mb-6"><div class="card-body text-muted">Running assertions…</div></div>
+
+    <h3 class="mb-3 text-lg">Inline overrides</h3>
+    <div class="card mb-6"><div class="card-body flex flex-wrap gap-4 items-center">
+      <button class="btn btn-primary" style="--btn-bg:#f472b6; --btn-hover-bg:#ec4899">--btn-bg pink</button>
+      <button class="btn" style="--btn-radius:999px; --btn-padding-x:2rem">--btn-radius pill</button>
+      <span class="badge badge-glow" style="--badge-bg:#34d399; --badge-color:#022c22">--badge-bg mint</span>
+      <span class="moon moon-waxing-gibbous" style="--moon-size:2rem; --moon-light:#ffc864"></span>
+      <button class="btn btn-secondary glow-md" style="--glow-color: rgb(52 211 153 / 0.6)">--glow-color mint</button>
+    </div></div>
+
+    <h3 class="mb-3 text-lg">Scope class (ancestor override) + variant precedence</h3>
+    <div class="qa-scope-rose card p-6 flex flex-wrap gap-4 items-center" id="qa-rose-scope">
+      <button class="btn" id="qa-scoped-btn">plain .btn → rose</button>
+      <button class="btn btn-primary" id="qa-variant-btn">.btn-primary → stays tide</button>
+      <span class="badge">badge → rose</span>
+      <button class="btn btn-secondary glow-md" style="--btn-bg: initial">glow → rose halo</button>
+      <div class="card p-3" id="qa-scoped-card" style="--card-radius: 1.5rem">nested card → rose bg, inline radius</div>
+    </div>
+
+    <h3 class="mt-6 mb-3 text-lg">Theme interplay</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div data-theme="light" class="card p-4" style="background: var(--moon-100)">
+        <p class="qa-label mb-2">inside data-theme="light":</p>
+        <div class="glass p-3 rounded-md" id="qa-glass-light" style="color:#14152a">.glass → light default</div>
+        <div class="glass p-3 rounded-md mt-2" id="qa-glass-override" style="--glass-bg: rgb(244 63 94 / 0.25); color:#14152a">.glass + --glass-bg → override wins over theme</div>
+      </div>
+      <div class="card p-4 starfield" style="--star-color:#fda4af">
+        <p class="qa-label mb-2" style="color: var(--moon-200)">.starfield with --star-color set on the element:</p>
+        <p style="color: var(--moon-50)">rose stars</p>
+      </div>
+    </div>
   </section>
 
   <!-- ============ COMPONENTS ============ -->
@@ -623,6 +679,49 @@ and line breaks.</p></div>
       });
       setTimeout(function () { region.innerHTML = ''; }, 5000);
     });
+  })();
+
+  /* ---------------- Local variable assertions ---------------- */
+  (function () {
+    var report = document.getElementById('localvars-report');
+    var checks = [];
+    function assert(name, actual, expected) {
+      checks.push({ name: name, pass: actual === expected, actual: actual, expected: expected });
+    }
+    function bg(el) { return getComputedStyle(el).backgroundColor; }
+
+    // 1. ancestor scope reaches a plain component
+    assert('scope class re-skins plain .btn', bg(document.getElementById('qa-scoped-btn')), 'rgb(244, 63, 94)');
+    // 2. explicit variant beats the ancestor scope
+    assert('.btn-primary beats scope (stays tide)', bg(document.getElementById('qa-variant-btn')), 'rgb(108, 111, 240)');
+    // 3. scope reaches nested card; inline knob wins on the same element
+    var scopedCard = document.getElementById('qa-scoped-card');
+    assert('scope reaches nested .card bg', bg(scopedCard), 'rgb(43, 15, 29)');
+    assert('inline --card-radius wins inside scope', getComputedStyle(scopedCard).borderRadius, '24px');
+    // 4. theme switching still drives unset knobs
+    var lightZone = document.querySelector('[data-theme="light"]');
+    var probe = document.createElement('div');
+    probe.className = 'card';
+    lightZone.appendChild(probe);
+    assert('unset --card-bg follows data-theme="light"', bg(probe), 'rgb(255, 255, 255)');
+    probe.remove();
+    // 5. glass: theme swaps the default…
+    assert('.glass default follows light theme', bg(document.getElementById('qa-glass-light')), 'rgba(255, 255, 255, 0.6)');
+    // …but a knob override wins in any theme
+    assert('--glass-bg override beats theme', bg(document.getElementById('qa-glass-override')), 'rgba(244, 63, 94, 0.25)');
+    // 6. inline knob on a variant beats the variant
+    var pink = document.querySelector('[style*="--btn-bg:#f472b6"], [style*="--btn-bg: #f472b6"]');
+    assert('inline --btn-bg beats .btn-primary', bg(pink), 'rgb(244, 114, 182)');
+
+    var passed = checks.filter(function (c) { return c.pass; }).length;
+    var html = '<div class="card-body"><p><strong>' + passed + ' / ' + checks.length + '</strong> local-variable assertions passed.</p>';
+    checks.forEach(function (c) {
+      html += '<p class="mt-1 text-sm" style="color:' + (c.pass ? 'var(--lunar-text-muted)' : '#f87171') + '">' +
+        (c.pass ? '✔' : '✘ FAIL') + ' ' + c.name +
+        (c.pass ? '' : ' — expected <code>' + c.expected + '</code>, got <code>' + c.actual + '</code>') + '</p>';
+    });
+    html += '</div>';
+    report.innerHTML = html;
   })();
 
   /* ---------------- Inventory check ---------------- */

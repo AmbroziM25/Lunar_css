@@ -541,12 +541,50 @@ theming stays a one-attribute switch.
 
 ---
 
-## Per-element customization
+## Local variables — component-scoped tokens
 
-Every component and effect exposes its **own** custom properties — colors, opacity, radius,
-sizing, speed — with token-based defaults. Variants only reassign those variables, so you can
-restyle any single instance inline (or per-scope) without writing a selector or fighting
-specificity:
+Every component and effect exposes its **own local variables** — colors, opacity, radius,
+sizing, speed — named `--<component>-<prop>` (`--btn-bg`, `--card-radius`, `--glow-color`),
+distinct from the global `--lunar-*` / `--moon-*` tokens. Lunara never *declares* a local
+variable on the component; it only **reads** it with a token-based fallback:
+
+```css
+/* inside Lunara */
+.card {
+  background-color: var(--card-bg, var(--lunar-bg-elevated));
+  border-radius: var(--card-radius, var(--radius-lg));
+}
+```
+
+Because unset custom properties inherit, you can set a knob **inline, on the element, or on
+any ancestor** ("scope class") — and anything you don't set keeps following the global theme.
+Precedence, most-specific first:
+
+1. inline `style="--card-bg: …"` on the element
+2. a variant class on the element (`.btn-primary` declares `--btn-bg` — variants
+   intentionally beat scopes)
+3. a knob set on any ancestor — your scope class
+4. the fallback, which routes through the `--lunar-*` semantic tokens, so
+   `data-theme` light/dark switching keeps working for everything you haven't overridden
+
+```html
+<!-- single element -->
+<button class="btn btn-primary" style="--btn-bg: #f472b6">Pink</button>
+
+<!-- scope class: re-skin a whole section without touching Lunara's classes -->
+<style>
+  .checkout-flow { --btn-bg: #059669; --btn-hover-bg: #047857; --card-radius: 1.25rem; }
+</style>
+<section class="checkout-flow">
+  <button class="btn">picks up the scope</button>
+  <button class="btn btn-primary">variant wins — stays tide</button>
+  <div class="card">…scoped card…</div>
+</section>
+```
+
+Variables starting with `--_` (e.g. `--_glass-bg`) are private internals, not API. To reset a
+knob back to its default inside a scope, set it to `initial`. Restyle any single instance
+without writing a selector or fighting specificity:
 
 ```html
 <button class="btn btn-primary" style="--btn-bg: #f472b6; --btn-hover-bg: #ec4899">Pink</button>
@@ -578,9 +616,9 @@ specificity:
 | `.text-shimmer` | `--shimmer-base`, `--shimmer-glow`, `--shimmer-accent`, `--shimmer-speed` |
 | `.float` | `--float-distance`, `--float-speed` |
 
-The same variables also work per-scope (set them on any ancestor, or in a class of your own) and
-in Tailwind builds via arbitrary properties: `class="btn [--btn-bg:#f472b6]"`. Global glow
-intensity is still one dial — `--lunar-moonlight` on `:root` (or `initMoonPhase()`).
+In Tailwind builds the same hooks work via arbitrary properties:
+`class="btn [--btn-bg:#f472b6]"`. Global glow intensity is still one dial —
+`--lunar-moonlight` on `:root` (or `initMoonPhase()`).
 
 ---
 
