@@ -4,6 +4,13 @@ All notable changes to Lunara CSS are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project
 adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.1.1] — 2026-07-10
+
+### Changed
+
+- Package `homepage` now points to the official documentation site,
+  [lunaracss.dev](https://lunaracss.dev) (was the GitHub README). No code changes.
+
 ## [1.1.0] — 2026-07-07
 
 ### Added — local variable system (component-scoped tokens)

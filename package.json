@@ -1,6 +1,6 @@
 {
   "name": "lunara-css",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "publishConfig": {
     "access": "public"
   },
@@ -64,7 +64,7 @@
   ],
   "author": "AmbroziM25",
   "license": "MIT",
-  "homepage": "https://github.com/AmbroziM25/Lunar_css#readme",
+  "homepage": "https://lunaracss.dev",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AmbroziM25/Lunar_css.git"
