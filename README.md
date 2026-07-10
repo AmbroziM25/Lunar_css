@@ -7,8 +7,8 @@ violet.
 - **Pure CSS, zero build step.** Drop in a `<link>` tag and go.
 - **Utility-first**, Tailwind-like class names (`bg-moon-900`, `text-glow`, `p-4`, `rounded-lg`) —
   muscle memory carries over either direction.
-- **Tailwind-native, v3 and v4.** One line — `@import "lunara-css/tailwind"` on Tailwind v4, or
-  `presets: [require('lunara-css/tailwind-preset')]` on v3 — registers the full palette **and every
+- **Tailwind-native, v3 and v4.** One line — `@import "@velo0-0/lunara-css/tailwind"` on Tailwind v4, or
+  `presets: [require('@velo0-0/lunara-css/tailwind-preset')]` on v3 — registers the full palette **and every
   component/effect** as real Tailwind classes — tree-shaken, variant-aware (`hover:glow-lg`),
   emitted by your own Tailwind build.
 - **One-line effect utilities.** Glow, glass, aurora, shimmer, starfields, entrance animations —
@@ -31,13 +31,7 @@ violet.
 [View the live component + effects gallery →](./index.html) ·
 [Release QA page (renders every class) →](./test/index.html)
 
-**Full documentation site** (Next.js, built with Lunara itself) lives in [`docs/`](./docs):
-
-```bash
-cd docs
-npm install
-npm run dev   # http://localhost:3000
-```
+**Full documentation site**: [lunaracss.dev](https://lunaracss.dev)
 
 ---
 
@@ -46,26 +40,26 @@ npm run dev   # http://localhost:3000
 ### CDN (no build step)
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lunara-css@1/dist/lunar.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@velo0-0/lunara-css@1/dist/lunar.min.css" />
 ```
 
-(Or via unpkg: `https://unpkg.com/lunara-css@1/dist/lunar.min.css` — the `@1` pin keeps you on
+(Or via unpkg: `https://unpkg.com/@velo0-0/lunara-css@1/dist/lunar.min.css` — the `@1` pin keeps you on
 1.x without surprise majors.)
 
 ### npm
 
 ```bash
-npm install lunara-css
+npm install @velo0-0/lunara-css
 ```
 
 ```css
 /* import the full framework */
-@import "lunara-css/dist/lunar.css";
+@import "@velo0-0/lunara-css/dist/lunar.css";
 ```
 
 ```js
 // or in a bundler entry point
-import "lunara-css/dist/lunar.css";
+import "@velo0-0/lunara-css/dist/lunar.css";
 ```
 
 That's it — no PostCSS, no build config. `dist/lunar.css` is the readable build; `dist/lunar.min.css`
@@ -79,7 +73,7 @@ is the minified production build.
 <!doctype html>
 <html lang="en" data-theme="dark">
 <head>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lunara-css/dist/lunar.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@velo0-0/lunara-css/dist/lunar.min.css" />
 </head>
 <body>
   <div class="card glow-sm hover-lift p-6 max-w-sm">
@@ -162,7 +156,7 @@ Call one function and the framework's glow intensity tracks the **actual moon ph
 at new moon, brightest at full moon:
 
 ```js
-import { initMoonPhase } from "lunara-css/theme";
+import { initMoonPhase } from "@velo0-0/lunara-css/theme";
 
 const phase = initMoonPhase();
 // → { name: "waning-gibbous", age: 17.8, illumination: 96 }
@@ -240,7 +234,7 @@ once (a single delegated listener handles every current and future `.moonbeam` o
 ```
 
 ```js
-import { initMoonbeam } from "lunara-css/theme";
+import { initMoonbeam } from "@velo0-0/lunara-css/theme";
 initMoonbeam(); // returns a cleanup function
 ```
 
@@ -255,7 +249,7 @@ prebuilt component and effect utility, registered as native Tailwind classes. Bo
 Tailwind versions are first-class:
 
 ```bash
-npm install lunara-css tailwindcss
+npm install @velo0-0/lunara-css tailwindcss
 ```
 
 ### Tailwind v4 (CSS-first)
@@ -265,7 +259,7 @@ One import next to Tailwind's own:
 ```css
 /* app.css */
 @import "tailwindcss";
-@import "lunara-css/tailwind";
+@import "@velo0-0/lunara-css/tailwind";
 ```
 
 That registers the design tokens via `@theme` (so `bg-moon-900`, `shadow-glow-lg`,
@@ -278,7 +272,7 @@ via `@custom-variant`.
 ```js
 // tailwind.config.js
 module.exports = {
-  presets: [require("lunara-css/tailwind-preset")],
+  presets: [require("@velo0-0/lunara-css/tailwind-preset")],
   content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
 };
 ```
@@ -316,14 +310,14 @@ register just the plugin:
 ```js
 // tailwind.config.js (v3)
 module.exports = {
-  plugins: [require("lunara-css/tailwind-plugin")],
+  plugins: [require("@velo0-0/lunara-css/tailwind-plugin")],
 };
 ```
 
 ```css
 /* app.css (v4) */
 @import "tailwindcss";
-@plugin "lunara-css/tailwind-plugin";
+@plugin "@velo0-0/lunara-css/tailwind-plugin";
 ```
 
 **Dark mode:** both versions point Tailwind's own `dark:` variant convention at the same
@@ -349,14 +343,14 @@ no build step, no markup changes: your existing Bootstrap classes just look luna
 <!-- 1. Bootstrap, as usual -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
 <!-- 2. Lunara Bootstrap — must come AFTER bootstrap.css -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lunara-css/dist/lunar-bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@velo0-0/lunara-css/dist/lunar-bootstrap.min.css" />
 ```
 
 Or from npm:
 
 ```js
 import "bootstrap/dist/css/bootstrap.min.css";
-import "lunara-css/bootstrap";
+import "@velo0-0/lunara-css/bootstrap";
 ```
 
 What's inside `lunar-bootstrap.css`:
@@ -372,7 +366,7 @@ What's inside `lunar-bootstrap.css`:
   `.p-4`, … would collide with Bootstrap's class names, so the bridge never ships them.
 
 **Theming:** dark is the default. The bridge responds to **both** Bootstrap's native
-`data-bs-theme` attribute and Lunara's `data-theme` — and the `lunara-css/theme` helpers
+`data-bs-theme` attribute and Lunara's `data-theme` — and the `@velo0-0/lunara-css/theme` helpers
 (`initTheme()`, `toggleTheme()`) set both attributes, so one toggle drives Bootstrap's color
 mode and Lunara's tokens together. Lunar-reactive glow (`initMoonPhase()`) works exactly like
 the standalone build.
@@ -392,15 +386,15 @@ the theme switch, `.modal-overlay.is-open`, or a toast list — that's ordinary 
 framework of choice, driving plain Lunara class names.
 
 For the theme switch specifically, Lunara ships an optional, dependency-free ESM helper —
-`lunara-css/theme` — so you don't have to re-write the same three `localStorage`/attribute lines in
+`@velo0-0/lunara-css/theme` — so you don't have to re-write the same three `localStorage`/attribute lines in
 every project. It's the same helper [the docs page itself uses](./index.html).
 
 ### Plain HTML
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lunara-css/dist/lunar.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@velo0-0/lunara-css/dist/lunar.min.css" />
 <script type="module">
-  import { initTheme, toggleTheme } from "https://cdn.jsdelivr.net/npm/lunara-css/theme.mjs";
+  import { initTheme, toggleTheme } from "https://cdn.jsdelivr.net/npm/@velo0-0/lunara-css/theme.mjs";
   initTheme();
   document.getElementById("theme-toggle").addEventListener("click", toggleTheme);
 </script>
@@ -410,12 +404,12 @@ every project. It's the same helper [the docs page itself uses](./index.html).
 
 ```jsx
 // main.jsx / App entry point
-import "lunara-css/dist/lunar.css";
+import "@velo0-0/lunara-css/dist/lunar.css";
 ```
 
 ```jsx
 import { useEffect } from "react";
-import { initTheme, toggleTheme } from "lunara-css/theme";
+import { initTheme, toggleTheme } from "@velo0-0/lunara-css/theme";
 
 function ThemeToggle() {
   useEffect(() => { initTheme(); }, []);
@@ -438,7 +432,7 @@ global CSS to be imported from one of those top-level files, not from an arbitra
 
 ```tsx
 // app/layout.tsx (App Router)
-import "lunara-css/dist/lunar.css";
+import "@velo0-0/lunara-css/dist/lunar.css";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -459,7 +453,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 ```tsx
 // pages/_app.tsx (Pages Router)
-import "lunara-css/dist/lunar.css";
+import "@velo0-0/lunara-css/dist/lunar.css";
 export default function MyApp({ Component, pageProps }) {
   return <Component {...pageProps} />;
 }
@@ -472,13 +466,13 @@ Client Components (`"use client"`) — the inline script only handles the pre-hy
 
 ```js
 // main.js
-import "lunara-css/dist/lunar.css";
+import "@velo0-0/lunara-css/dist/lunar.css";
 ```
 
 ```vue
 <script setup>
 import { onMounted } from "vue";
-import { initTheme, toggleTheme } from "lunara-css/theme";
+import { initTheme, toggleTheme } from "@velo0-0/lunara-css/theme";
 onMounted(initTheme);
 </script>
 
@@ -491,12 +485,12 @@ onMounted(initTheme);
 
 ```json
 // angular.json
-"styles": ["node_modules/lunara-css/dist/lunar.css", "src/styles.css"]
+"styles": ["node_modules/@velo0-0/lunara-css/dist/lunar.css", "src/styles.css"]
 ```
 
 ```ts
 import { Component, OnInit } from "@angular/core";
-import { initTheme, toggleTheme } from "lunara-css/theme";
+import { initTheme, toggleTheme } from "@velo0-0/lunara-css/theme";
 
 @Component({ selector: "app-root", templateUrl: "./app.component.html" })
 export class AppComponent implements OnInit {
@@ -516,7 +510,7 @@ export class AppComponent implements OnInit {
 ### Anything else
 
 Svelte, SolidJS, Astro, Nuxt, Qwik, plain jQuery — same two ingredients: import
-`lunara-css/dist/lunar.css` (or the CDN link) once, and optionally `import` from `lunara-css/theme`.
+`@velo0-0/lunara-css/dist/lunar.css` (or the CDN link) once, and optionally `import` from `@velo0-0/lunara-css/theme`.
 Nothing in Lunara assumes a specific framework, bundler, or virtual DOM.
 
 ---
@@ -753,7 +747,6 @@ lunar-css/
 ├── index.html            # palette / typography / component / effects gallery
 ├── bootstrap.html        # lunara-bootstrap live gallery
 ├── test/index.html       # release QA page — renders every class + automated inventory check
-├── docs/                 # Next.js documentation site (built with Lunara itself)
 ├── build.js              # concatenates + minifies src/ → dist/
 ├── CHANGELOG.md
 ├── LICENSE               # MIT

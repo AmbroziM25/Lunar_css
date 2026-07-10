@@ -340,7 +340,7 @@ function buildBootstrap(fullCss) {
   const root = parseCss(fullCss);
 
   const bsBanner = `/*!
- * Lunara Bootstrap (lunara-css) v${pkg.version}
+ * Lunara Bootstrap (@velo0-0/lunara-css) v${pkg.version}
  * Night-sky Bootstrap 5.3+ theme — Lunara tokens, effects, motion, and moon
  * icons, applied to Bootstrap through its own --bs-* CSS variable API.
  * Load AFTER bootstrap.css. ${pkg.homepage || ''}

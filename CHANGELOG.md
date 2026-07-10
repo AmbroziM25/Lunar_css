@@ -11,6 +11,19 @@ adheres to [Semantic Versioning](https://semver.org/).
 - Package `homepage` now points to the official documentation site,
   [lunaracss.dev](https://lunaracss.dev) (was the GitHub README). No code changes.
 
+## [1.1.1] — 2026-07-10
+
+### Changed
+
+- **Package renamed: `lunara-css` → `@velo0-0/lunara-css`.** No CSS changes — classes,
+  tokens, local variables, and the file layout are identical. Only the npm name (and
+  therefore import specifiers and CDN URLs) changed:
+  - `npm install @velo0-0/lunara-css`
+  - `import "@velo0-0/lunara-css/dist/lunar.css"` · `@velo0-0/lunara-css/theme` ·
+    `@velo0-0/lunara-css/tailwind` · `@velo0-0/lunara-css/bootstrap` …
+  - CDN: `https://cdn.jsdelivr.net/npm/@velo0-0/lunara-css@1/dist/lunar.min.css`
+- The old `lunara-css` package (last published as 1.1.0) is superseded by this scoped name.
+
 ## [1.1.0] — 2026-07-07
 
 ### Added — local variable system (component-scoped tokens)

@@ -1,5 +1,5 @@
 {
-  "name": "lunara-css",
+  "name": "@velo0-0/lunara-css",
   "version": "1.1.1",
   "publishConfig": {
     "access": "public"

@@ -4,7 +4,7 @@
  * One import gives a Tailwind v4 project the whole framework:
  *
  *   @import "tailwindcss";
- *   @import "lunara-css/tailwind";
+ *   @import "@velo0-0/lunara-css/tailwind";
  *
  * - Design tokens registered via @theme, so native v4 utilities pick them
  *   up: bg-moon-900, text-tide, shadow-glow-lg, rounded-2xl, animate-float …
@@ -14,7 +14,7 @@
  * - Tailwind's `dark:` variant re-pointed at the same data-theme attribute
  *   Lunara itself toggles, so one attribute drives both.
  *
- * Tailwind v3 users: use `presets: [require("lunara-css/tailwind-preset")]`
+ * Tailwind v3 users: use `presets: [require("@velo0-0/lunara-css/tailwind-preset")]`
  * in tailwind.config.js instead of this file.
  */
 
