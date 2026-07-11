@@ -79,5 +79,10 @@
     "tailwindcss": {
       "optional": true
     }
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "lightningcss": "^1.32.0",
+    "typescript": "^5.9.3"
   }
 }

@@ -1,0 +1,4 @@
+{
+  "type": "module",
+  "description": "Module-system island: the optimizer is ESM while the package root stays CommonJS (build.js, tailwind-plugin.js)."
+}
