@@ -1,6 +1,6 @@
 {
   "name": "@velo0-0/lunara-css",
-  "version": "1.1.1",
+  "version": "1.2.1",
   "publishConfig": {
     "access": "public"
   },
@@ -30,18 +30,27 @@
     "./tailwind-plugin": "./tailwind-plugin.js",
     "./theme": "./theme.mjs",
     "./theme.mjs": "./theme.mjs",
+    "./server": "./compiler/dist/index.js",
     "./package.json": "./package.json"
+  },
+  "bin": {
+    "lunara": "compiler/dist/serve.js"
   },
   "files": [
     "dist",
     "tailwind.css",
     "tailwind-preset.js",
     "tailwind-plugin.js",
-    "theme.mjs"
+    "theme.mjs",
+    "compiler/dist",
+    "compiler/package.json"
   ],
   "scripts": {
     "build": "node build.js",
-    "prepublishOnly": "node build.js"
+    "build:compiler": "tsc -p compiler/tsconfig.build.json",
+    "typecheck": "tsc -p compiler/tsconfig.json",
+    "test": "node --test \"compiler/tests/*.test.ts\"",
+    "prepublishOnly": "node build.js && npm run build:compiler && npm test"
   },
   "keywords": [
     "css",
@@ -67,16 +76,24 @@
   "homepage": "https://lunaracss.dev",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AmbroziM25/Lunar_css.git"
+    "url": "git+https://github.com/AmbroziM25/Lunara_css.git"
   },
   "bugs": {
-    "url": "https://github.com/AmbroziM25/Lunar_css/issues"
+    "url": "https://github.com/AmbroziM25/Lunara_css/issues"
   },
   "peerDependencies": {
-    "tailwindcss": ">=3.4.0"
+    "tailwindcss": ">=3.4.0",
+    "lightningcss": ">=1.30.0",
+    "typescript": ">=5.0.0"
   },
   "peerDependenciesMeta": {
     "tailwindcss": {
+      "optional": true
+    },
+    "lightningcss": {
+      "optional": true
+    },
+    "typescript": {
       "optional": true
     }
   },

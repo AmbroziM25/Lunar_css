@@ -11,26 +11,51 @@ import {
 import { usageSignature } from './extract.ts';
 import { globSync, watchRoots } from './glob.ts';
 import { dim, printRebuild, printReport, red, yellow } from './report.ts';
-import type { CssFileResult, ResolvedConfig } from './types.ts';
+import type { CompileResult, CssFileResult, ResolvedConfig } from './types.ts';
 
-const WATCHED_EXT = /\.(ts|tsx|js|jsx|mjs|cjs|css)$/i;
+const WATCHED_EXT = /\.(ts|tsx|js|jsx|mjs|cjs|css|html|htm)$/i;
 const DEBOUNCE_MS = 120;
 
+export interface WatcherEvents {
+  /** Called after every build. `recompiled` = CSS files actually rewritten. */
+  onBuild(result: CompileResult, recompiled: number, initial: boolean): void;
+  onError(error: Error): void;
+  /** Non-fatal notices (e.g. an unwatchable root). */
+  onWarn?(message: string): void;
+  /**
+   * Raw (undebounced) notification for every watched-file change that passes
+   * the extension/outDir filters. The server uses this to invalidate and
+   * re-broadcast stylesheets it serves on the fly.
+   */
+  onFileChange?(file: string): void;
+}
+
+export interface Watcher {
+  close(): void;
+  /** Force a rebuild outside the file-change flow. */
+  rebuild(): void;
+  /** Latest successful result, if any. */
+  readonly last: CompileResult | undefined;
+}
+
 /**
- * Watch mode: rebuild on source/CSS changes.
+ * The rebuild engine behind both watch mode and the compile server.
  * Incremental behavior:
- * - TS/TSX extraction is cached per file (mtime) — only changed files re-parse;
+ * - extraction is cached per source file (mtime) — only changed files re-parse;
  * - CSS files are recompiled only when they changed or when the merged class
  *   usage actually changed (compared via signature).
  */
-export function runWatch(config: ResolvedConfig): void {
+export function createWatcher(config: ResolvedConfig, events: WatcherEvents): Watcher {
   const cache: ExtractCache = new Map();
   const compiled = new Map<string, { mtimeMs: number; result: CssFileResult }>();
   let lastSignature = '';
+  let lastResult: CompileResult | undefined;
   let building = false;
   let queued = false;
+  let closed = false;
 
   const rebuild = (initial: boolean): void => {
+    if (closed) return;
     if (building) {
       queued = true;
       return;
@@ -40,8 +65,10 @@ export function runWatch(config: ResolvedConfig): void {
     try {
       const { usage, files: contentFiles } = extractAll(config, cache);
       if (contentFiles.length === 0) {
-        console.error(
-          yellow(`No source files matched content globs: ${config.content.join(', ')} — skipping.`),
+        events.onError(
+          new Error(
+            `No source files matched content globs: ${config.content.join(', ')} — skipping build.`,
+          ),
         );
         return;
       }
@@ -71,17 +98,15 @@ export function runWatch(config: ResolvedConfig): void {
         recompiled++;
       }
 
-      const result = buildResult(
+      lastResult = buildResult(
         [...compiled.values()].map((c) => c.result),
         usage,
         performance.now() - start,
         config,
       );
-      if (initial) printReport(result, config);
-      else if (recompiled > 0) printRebuild(result, recompiled);
-      else console.log(dim('no CSS output affected'));
+      events.onBuild(lastResult, recompiled, initial);
     } catch (e) {
-      console.error(red(`Build failed: ${(e as Error).message}`));
+      events.onError(e as Error);
     } finally {
       building = false;
       if (queued) {
@@ -91,7 +116,7 @@ export function runWatch(config: ResolvedConfig): void {
     }
   };
 
-  // Clean once at startup; watch rebuilds overwrite in place.
+  // Clean once at startup; later rebuilds overwrite in place.
   if (config.clean) cleanOutDir(config, globSync(config.css, config.cwd));
   rebuild(true);
 
@@ -111,22 +136,49 @@ export function runWatch(config: ResolvedConfig): void {
         if (full.startsWith(config.outDir + path.sep) || full === config.outDir) return;
         if (/[\\/](node_modules|\.git)[\\/]/.test(full)) return;
         if (!WATCHED_EXT.test(full)) return;
+        events.onFileChange?.(full);
         schedule();
       });
       watchers.push(watcher);
     } catch (e) {
-      console.error(yellow(`Cannot watch ${root}: ${(e as Error).message}`));
+      events.onWarn?.(`Cannot watch ${root}: ${(e as Error).message}`);
     }
   }
-  if (watchers.length === 0) {
-    console.error(red('Nothing to watch.'));
-    process.exitCode = 2;
-    return;
-  }
-  console.log(dim(`\nWatching ${roots.map((r) => path.relative(config.cwd, r) || '.').join(', ')} for changes — Ctrl+C to stop`));
 
+  return {
+    close(): void {
+      closed = true;
+      clearTimeout(timer);
+      for (const w of watchers) w.close();
+    },
+    rebuild(): void {
+      schedule();
+    },
+    get last(): CompileResult | undefined {
+      return lastResult;
+    },
+  };
+}
+
+/** Console watch mode (programmatic use; the server is the primary consumer). */
+export function runWatch(config: ResolvedConfig): Watcher {
+  const watcher = createWatcher(config, {
+    onBuild(result, recompiled, initial) {
+      if (initial) printReport(result, config);
+      else if (recompiled > 0) printRebuild(result, recompiled);
+      else console.log(dim('no CSS output affected'));
+    },
+    onError(error) {
+      console.error(red(`Build failed: ${error.message}`));
+    },
+    onWarn(message) {
+      console.error(yellow(message));
+    },
+  });
+  console.log(dim('Watching for changes — Ctrl+C to stop'));
   process.on('SIGINT', () => {
-    for (const w of watchers) w.close();
+    watcher.close();
     process.exit(0);
   });
+  return watcher;
 }

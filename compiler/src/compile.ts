@@ -88,12 +88,12 @@ export function outputNames(cssFiles: string[], cwd: string): Map<string, string
   return names;
 }
 
-function makeUsedFn(config: ResolvedConfig, usage: Usage, fileKey: string, isModule: boolean): ClassUsedFn {
-  const safelist = compileMatcher(config.safelist);
+function makeUsedFn(safelist: string[], usage: Usage, fileKey: string, isModule: boolean): ClassUsedFn {
+  const safe = compileMatcher(safelist);
   const moduleSet = usage.modules.get(fileKey);
   const wholeModule = usage.wholeModules.has(fileKey);
   return ({ name, global }) => {
-    if (safelist.test(name)) return true;
+    if (safe.test(name)) return true;
     if (isModule && !global) {
       if (wholeModule) return true;
       return moduleSet?.has(name) ?? false;
@@ -117,6 +117,109 @@ function compressedSizes(buf: Buffer): { gzip: number; brotli: number } {
   };
 }
 
+export interface CompileStringOptions {
+  code: string;
+  /** Display name; a *.module.css name enables CSS Modules semantics. */
+  filename?: string;
+  usage: Usage;
+  /** Normalized absolute path used for CSS Module usage lookup. */
+  fileKey?: string;
+  safelist?: string[];
+  critical?: string[];
+  minify?: boolean;
+  sourceMap?: boolean;
+}
+
+export interface CompiledOutput {
+  kind: 'main' | 'critical';
+  code: string;
+  /** Raw source-map JSON (no file/sourceMappingURL applied yet). */
+  map?: string;
+}
+
+export interface CompileStringResult {
+  outputs: CompiledOutput[];
+  isModule: boolean;
+  selectorTotal: number;
+  selectorsRemoved: number;
+  removedSelectors: string[];
+  criticalSelectors: number;
+  cssWarnings: string[];
+}
+
+/**
+ * Purge + minify + (optionally) split one stylesheet entirely in memory.
+ * This is the core used by the file pipeline, the HTTP compile endpoint,
+ * and the WebSocket compile messages.
+ */
+export function compileString(opts: CompileStringOptions): CompileStringResult {
+  const filename = opts.filename ?? 'input.css';
+  const code = opts.code;
+  const isModule = /\.module\.[^.]+$/i.test(path.basename(filename));
+  const used = makeUsedFn(
+    opts.safelist ?? [],
+    opts.usage,
+    opts.fileKey ?? normalizePath(filename),
+    isModule,
+  );
+  const criticalMatcher = compileMatcher(opts.critical ?? []);
+  const splitCritical = !criticalMatcher.empty;
+  const isCritical = (sel: Selector): boolean =>
+    selectorClasses(sel).some((c) => criticalMatcher.test(c.name)) ||
+    criticalMatcher.test(serializeSelector(sel));
+
+  // Analysis pass: selector stats without modifying anything.
+  let selectorTotal = 0;
+  let criticalSelectors = 0;
+  const removedSelectors: string[] = [];
+  const cssWarnings: string[] = [];
+  const analysis = transformCss({
+    filename,
+    code,
+    minify: false,
+    sourceMap: false,
+    cssModules: isModule,
+    onSelector(sel) {
+      selectorTotal++;
+      if (!selectorMatches(sel, used)) removedSelectors.push(serializeSelector(sel));
+      else if (splitCritical && isCritical(sel)) criticalSelectors++;
+    },
+  });
+  cssWarnings.push(...analysis.warnings);
+
+  const render = (kind: 'main' | 'critical', keep: (sel: Selector) => boolean): CompiledOutput => {
+    const res = transformCss({
+      filename,
+      code,
+      minify: opts.minify ?? true,
+      sourceMap: opts.sourceMap ?? false,
+      cssModules: isModule,
+      keep,
+    });
+    const output: CompiledOutput = { kind, code: res.code };
+    if (res.map !== undefined) output.map = res.map;
+    return output;
+  };
+
+  const outputs: CompiledOutput[] = [];
+  if (splitCritical && criticalSelectors > 0) {
+    outputs.push(render('critical', (sel) => selectorMatches(sel, used) && isCritical(sel)));
+    outputs.push(render('main', (sel) => selectorMatches(sel, used) && !isCritical(sel)));
+  } else {
+    outputs.push(render('main', (sel) => selectorMatches(sel, used)));
+  }
+
+  return {
+    outputs,
+    isModule,
+    selectorTotal,
+    selectorsRemoved: removedSelectors.length,
+    removedSelectors,
+    criticalSelectors,
+    cssWarnings,
+  };
+}
+
 /** Purge + minify + (optionally) split one CSS file and write its outputs. */
 export function compileCssFile(
   config: ResolvedConfig,
@@ -131,79 +234,48 @@ export function compileCssFile(
   if (normalizePath(path.join(config.outDir, `${outName}.css`)) === normalizePath(file)) {
     outName += '.optimized';
   }
-  const isModule = /\.module\.[^.]+$/i.test(path.basename(file));
-  const used = makeUsedFn(config, usage, normalizePath(file), isModule);
-  const criticalMatcher = compileMatcher(config.critical);
-  const splitCritical = !criticalMatcher.empty;
-  const isCritical = (sel: Selector): boolean =>
-    selectorClasses(sel).some((c) => criticalMatcher.test(c.name)) ||
-    criticalMatcher.test(serializeSelector(sel));
 
-  // Analysis pass: selector stats without modifying anything.
-  let selectorTotal = 0;
-  let criticalSelectors = 0;
-  const removedSelectors: string[] = [];
-  const cssWarnings: string[] = [];
-  const analysis = transformCss({
-    filename: relInput,
+  const compiled = compileString({
     code,
-    minify: false,
-    sourceMap: false,
-    cssModules: isModule,
-    onSelector(sel) {
-      selectorTotal++;
-      if (!selectorMatches(sel, used)) removedSelectors.push(serializeSelector(sel));
-      else if (splitCritical && isCritical(sel)) criticalSelectors++;
-    },
+    filename: relInput,
+    usage,
+    fileKey: normalizePath(file),
+    safelist: config.safelist,
+    critical: config.critical,
+    minify: config.minify,
+    sourceMap: config.sourceMap,
   });
-  cssWarnings.push(...analysis.warnings);
 
   fs.mkdirSync(config.outDir, { recursive: true });
   const outputs: OutputFile[] = [];
-
-  const writeOutput = (kind: 'main' | 'critical', keep: (sel: Selector) => boolean): void => {
-    const res = transformCss({
-      filename: relInput,
-      code,
-      minify: config.minify,
-      sourceMap: config.sourceMap,
-      cssModules: isModule,
-      keep,
-    });
-    let outCode = res.code;
-    const base = kind === 'critical' ? `${outName}.critical` : outName;
+  for (const out of compiled.outputs) {
+    let outCode = out.code;
+    const base = out.kind === 'critical' ? `${outName}.critical` : outName;
     const fileName = config.hash
       ? `${base}.${crypto.createHash('sha256').update(outCode).digest('hex').slice(0, 8)}.css`
       : `${base}.css`;
-    if (config.sourceMap && res.map) {
+    if (config.sourceMap && out.map) {
       const mapName = `${fileName}.map`;
-      const mapObj = JSON.parse(res.map) as Record<string, unknown>;
+      const mapObj = JSON.parse(out.map) as Record<string, unknown>;
       mapObj['file'] = fileName;
       fs.writeFileSync(path.join(config.outDir, mapName), JSON.stringify(mapObj));
       outCode += `${config.minify ? '\n' : ''}/*# sourceMappingURL=${mapName} */\n`;
     }
     fs.writeFileSync(path.join(config.outDir, fileName), outCode);
     const buf = Buffer.from(outCode);
-    outputs.push({ kind, fileName, bytes: buf.length, ...compressedSizes(buf) });
-  };
-
-  if (splitCritical && criticalSelectors > 0) {
-    writeOutput('critical', (sel) => selectorMatches(sel, used) && isCritical(sel));
-    writeOutput('main', (sel) => selectorMatches(sel, used) && !isCritical(sel));
-  } else {
-    writeOutput('main', (sel) => selectorMatches(sel, used));
+    outputs.push({ kind: out.kind, fileName, bytes: buf.length, ...compressedSizes(buf) });
   }
 
   return {
     input: relInput,
-    isModule,
+    isModule: compiled.isModule,
     originalBytes: Buffer.byteLength(code),
     outputs,
-    selectorTotal,
-    selectorsRemoved: removedSelectors.length,
-    removedSelectors,
-    criticalSelectors,
-    cssWarnings,
+    selectorTotal: compiled.selectorTotal,
+    selectorsRemoved: compiled.selectorsRemoved,
+    removedSelectors: compiled.removedSelectors,
+    criticalSelectors: compiled.criticalSelectors,
+    cssWarnings: compiled.cssWarnings,
   };
 }
 

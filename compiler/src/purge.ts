@@ -157,20 +157,18 @@ interface LooseRule {
  * `keep`, minify, and produce a source map. Because visitors see parents
  * before children, emptied @media/@supports blocks are detected predictively:
  * a container is dropped when every nested style rule will fail `keep`.
+ *
+ * Round-trip safety: a rule returned from a JS visitor is re-deserialized by
+ * Lightning CSS, and some perfectly ordinary values do not survive that trip
+ * (e.g. `--a: var(--b)` fails with "expected an object-like struct named
+ * Specifier"). We therefore return `undefined` (= keep unchanged) whenever a
+ * rule is untouched, and only return a mutated rule when some — but not all —
+ * of its selectors were purged. If that mutated rule still fails to
+ * deserialize, the file is retried in coarse mode where partially-used rules
+ * are kept whole (their dead selector text is harmless).
  */
 export function transformCss(opts: TransformCssOptions): TransformCssResult {
   const keep = opts.keep;
-
-  const styleRule = (rule: unknown): unknown => {
-    const value = (rule as LooseRule).value as { selectors: Selector[] };
-    const selectors = value.selectors;
-    if (opts.onSelector) for (const s of selectors) opts.onSelector(s);
-    if (!keep) return rule;
-    const kept = selectors.filter((s) => keep(s));
-    if (kept.length === 0) return [];
-    value.selectors = kept;
-    return rule;
-  };
 
   const willBeEmpty = (rule: LooseRule): boolean => {
     const rules = rule.value?.rules;
@@ -187,27 +185,55 @@ export function transformCss(opts: TransformCssOptions): TransformCssResult {
     });
   };
 
-  const ruleVisitor: Record<string, (rule: unknown) => unknown> = { style: styleRule };
-  if (keep) {
-    for (const type of DROPPABLE_CONTAINERS) {
-      ruleVisitor[type] = (rule: unknown) => (willBeEmpty(rule as LooseRule) ? [] : rule);
+  const run = (coarse: boolean, withAnalysis: boolean) => {
+    const styleRule = (rule: unknown): unknown => {
+      const value = (rule as LooseRule).value as { selectors: Selector[] };
+      const selectors = value.selectors;
+      if (withAnalysis && opts.onSelector) for (const s of selectors) opts.onSelector(s);
+      if (!keep) return undefined;
+      if (coarse) {
+        return selectors.some((s) => keep(s)) ? undefined : [];
+      }
+      const kept = selectors.filter((s) => keep(s));
+      if (kept.length === selectors.length) return undefined;
+      if (kept.length === 0) return [];
+      value.selectors = kept;
+      return rule;
+    };
+    const ruleVisitor: Record<string, (rule: unknown) => unknown> = { style: styleRule };
+    if (keep) {
+      for (const type of DROPPABLE_CONTAINERS) {
+        ruleVisitor[type] = (rule: unknown) => (willBeEmpty(rule as LooseRule) ? [] : undefined);
+      }
     }
-  }
+    return lightningcss().transform({
+      filename: opts.filename,
+      code: Buffer.from(opts.code),
+      minify: opts.minify,
+      sourceMap: opts.sourceMap,
+      errorRecovery: true,
+      ...(opts.cssModules ? { cssModules: { pattern: '[local]' } } : {}),
+      // The loose structural typing above stands in for Lightning CSS's very
+      // elaborate generated union types.
+      visitor: { Rule: ruleVisitor } as never,
+    });
+  };
 
-  const res = lightningcss().transform({
-    filename: opts.filename,
-    code: Buffer.from(opts.code),
-    minify: opts.minify,
-    sourceMap: opts.sourceMap,
-    errorRecovery: true,
-    ...(opts.cssModules ? { cssModules: { pattern: '[local]' } } : {}),
-    // The loose structural typing above stands in for Lightning CSS's very
-    // elaborate generated union types.
-    visitor: { Rule: ruleVisitor } as never,
-  });
-  return {
+  const toResult = (res: ReturnType<typeof run>, extra: string[] = []): TransformCssResult => ({
     code: res.code.toString(),
     map: res.map ? res.map.toString() : undefined,
-    warnings: (res.warnings ?? []).map((w) => w.message),
-  };
+    warnings: [...(res.warnings ?? []).map((w) => w.message), ...extra],
+  });
+
+  try {
+    return toResult(run(false, true));
+  } catch (e) {
+    if (!keep || !/deserialize/i.test((e as Error).message)) throw e;
+    // Note: onSelector is not replayed on the retry; analysis passes never
+    // provide `keep`, so they cannot end up here.
+    return toResult(run(true, false), [
+      'a partially-used rule could not be round-tripped by Lightning CSS; ' +
+        'kept whole rules in this file (per-selector trimming skipped)',
+    ]);
+  }
 }

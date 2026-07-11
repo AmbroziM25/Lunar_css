@@ -70,6 +70,35 @@ describe('purging', () => {
     assert.equal(out.trim(), '.used{color:red}');
   });
 
+  test('rules with var()-valued custom properties survive purging', () => {
+    // Regression: `--a: var(--b)` cannot round-trip through the JS visitor
+    // (Lightning CSS "expected Specifier" bug). Untouched rules must be left
+    // alone rather than returned.
+    const css = ':root { --lunar-bg: var(--moon-950); } .used { color: var(--lunar-bg); } .unused { top: 0; }';
+    const out = purge(css, ['used']);
+    assert.match(out, /--lunar-bg:\s*var\(--moon-950\)/);
+    assert.match(out, /\.used/);
+    assert.doesNotMatch(out, /\.unused/);
+  });
+
+  test('coarse fallback keeps a partially-used rule that cannot round-trip', () => {
+    const css = '.used, .unused { --a: var(--b); } .gone { top: 0; }';
+    const res = transformCss({
+      filename: 'test.css',
+      code: css,
+      minify: true,
+      sourceMap: false,
+      cssModules: false,
+      keep: (sel) => selectorMatches(sel, (ref) => ref.name === 'used'),
+    });
+    // The partially-used rule is kept whole (dead selector text is harmless);
+    // fully-unused rules are still removed.
+    assert.match(res.code, /\.used/);
+    assert.match(res.code, /\.unused/);
+    assert.doesNotMatch(res.code, /\.gone/);
+    assert.ok(res.warnings.some((w) => /round-trip/.test(w)));
+  });
+
   test('purges inside @media and drops emptied blocks', () => {
     const css = '@media (min-width: 600px) { .unused { color: red; } } .used { top: 0; }';
     const out = purge(css, ['used']);

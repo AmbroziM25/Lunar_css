@@ -1,6 +1,6 @@
-/** Shape of css-compiler.config.json (all fields optional). */
+/** Shape of lunara.config.json (all fields optional). */
 export interface UserConfig {
-  /** Globs of TS/TSX source files to scan for class usage. */
+  /** Globs of HTML/TS/TSX/JS/JSX source files to scan for class usage. */
   content?: string | string[];
   /** Globs of CSS files to compile. */
   css?: string | string[];
@@ -28,6 +28,10 @@ export interface UserConfig {
   failOnUnused?: boolean;
   /** Delete previous .css/.css.map/manifest.json from outDir first (default false). */
   clean?: boolean;
+  /** Compile-server port (default 4321). */
+  port?: number;
+  /** Compile-server host (default 127.0.0.1; use 0.0.0.0 to expose on LAN). */
+  host?: string;
 }
 
 /** Fully-resolved configuration used by the pipeline. */
@@ -46,6 +50,8 @@ export interface ResolvedConfig {
   clean: boolean;
   watch: boolean;
   verbose: boolean;
+  port: number;
+  host: string;
 }
 
 /**

@@ -1,13 +1,77 @@
 import assert from 'node:assert/strict';
 import * as path from 'node:path';
 import { describe, test } from 'node:test';
-import { extractFile, mergeUsage, normalizePath } from '../src/extract.ts';
+import { extractFile, extractHtmlFile, mergeUsage, normalizePath } from '../src/extract.ts';
 
 const FILE = path.resolve('src/App.tsx');
 
 function extract(code: string) {
   return extractFile(FILE, code, process.cwd());
 }
+
+describe('HTML extraction', () => {
+  test('collects class attributes in any quoting style', () => {
+    const u = extractHtmlFile(
+      `<div class="hero glass">
+         <span class='chip chip-lg'></span>
+         <i class=solo></i>
+         <p CLASS="upper-case"></p>
+       </div>`,
+    );
+    assert.deepEqual(
+      [...u.classes].sort(),
+      ['chip', 'chip-lg', 'glass', 'hero', 'solo', 'upper-case'],
+    );
+  });
+
+  test('extractFile dispatches .html to the HTML extractor', () => {
+    const u = extractFile(path.resolve('index.html'), '<body class="starfield"></body>');
+    assert.ok(u.classes.has('starfield'));
+    assert.equal(u.warnings.length, 0);
+  });
+
+  test('ignores className= (JSX-only) and non-class attributes', () => {
+    const u = extractHtmlFile('<div id="hero" data-class="nope" className="jsx-only"></div>');
+    assert.ok(!u.classes.has('hero'));
+    assert.ok(!u.classes.has('nope'));
+    assert.ok(!u.classes.has('jsx-only'));
+  });
+});
+
+describe('DOM API extraction', () => {
+  test('classList.add / remove / toggle collect class names', () => {
+    const u = extract(`
+      declare const el: HTMLElement;
+      declare const on: boolean;
+      el.classList.add('is-open', 'backdrop');
+      el.classList.remove('is-closed');
+      el.classList.toggle('active', on);
+    `);
+    assert.deepEqual(
+      [...u.classes].sort(),
+      ['active', 'backdrop', 'is-closed', 'is-open'],
+    );
+    assert.equal(u.warnings.length, 0); // toggle's force flag is not a class
+  });
+
+  test('className assignment collects tokens', () => {
+    const u = extract(`
+      declare const el: HTMLElement;
+      el.className = 'nav nav-open';
+      el.className += ' scrolled';
+    `);
+    assert.deepEqual([...u.classes].sort(), ['nav', 'nav-open', 'scrolled']);
+  });
+
+  test("setAttribute('class', ...) is scanned", () => {
+    const u = extract(`
+      declare const el: HTMLElement;
+      el.setAttribute('class', 'moon moon-full');
+      el.setAttribute('data-x', 'not-a-class');
+    `);
+    assert.deepEqual([...u.classes].sort(), ['moon', 'moon-full']);
+  });
+});
 
 describe('static class extraction', () => {
   test('string className', () => {

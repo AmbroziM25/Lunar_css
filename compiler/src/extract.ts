@@ -55,7 +55,7 @@ export function extractFile(filePath: string, code: string, cwd = process.cwd())
  * HTML — plain markup is Lunara's no-build home turf.
  * ------------------------------------------------------------------ */
 
-const CLASS_ATTR_RE = /\bclass\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+))/gi;
+const CLASS_ATTR_RE = /(?<![\w-])class\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+))/gi;
 
 export function extractHtmlFile(code: string): FileUsage {
   const usage = emptyUsage();

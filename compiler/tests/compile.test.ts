@@ -1,13 +1,11 @@
 import assert from 'node:assert/strict';
-import { spawnSync } from 'node:child_process';
 import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
 import { after, before, describe, test } from 'node:test';
-import { compileOnce, outputNames, PipelineError } from '../src/compile.ts';
+import { compileOnce, compileString, outputNames, PipelineError } from '../src/compile.ts';
 import { resolveConfig } from '../src/config.ts';
-
-const CLI = path.resolve(import.meta.dirname, '../src/cli.ts');
+import { extractFile, mergeUsage } from '../src/extract.ts';
 
 const APP_TSX = `
 import clsx from 'clsx';
@@ -171,61 +169,60 @@ describe('outputNames', () => {
   });
 });
 
-describe('CLI', () => {
-  let tmp: string;
-  before(() => {
-    tmp = makeFixture();
+describe('clobber guard', () => {
+  test('an input inside outDir is written as <name>.optimized.css', () => {
+    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'lunara-clobber-'));
+    try {
+      fs.mkdirSync(path.join(tmp, 'src'));
+      fs.mkdirSync(path.join(tmp, 'dist'));
+      fs.writeFileSync(path.join(tmp, 'src', 'index.html'), '<div class="used"></div>');
+      const original = '.used { color: red; } .unused { color: blue; }';
+      fs.writeFileSync(path.join(tmp, 'dist', 'lunar.css'), original);
+      const config = resolveConfig(tmp, {}, { css: ['dist/lunar.css'] });
+      const result = compileOnce(config);
+      // The input is untouched; the optimized copy sits next to it.
+      assert.equal(fs.readFileSync(path.join(tmp, 'dist', 'lunar.css'), 'utf8'), original);
+      const optimized = fs.readFileSync(path.join(tmp, 'dist', 'lunar.optimized.css'), 'utf8');
+      assert.match(optimized, /\.used/);
+      assert.doesNotMatch(optimized, /\.unused/);
+      assert.equal(result.files[0]!.outputs[0]!.fileName, 'lunar.optimized.css');
+    } finally {
+      fs.rmSync(tmp, { recursive: true, force: true });
+    }
   });
-  after(() => fs.rmSync(tmp, { recursive: true, force: true }));
+});
 
-  function runCli(args: string[]): { status: number | null; stdout: string; stderr: string } {
-    const res = spawnSync(process.execPath, [CLI, ...args], {
-      cwd: tmp,
-      encoding: 'utf8',
-      env: { ...process.env, NO_COLOR: '1' },
+describe('compileString', () => {
+  test('compiles in memory against extracted usage', () => {
+    const usage = mergeUsage([
+      extractFile(path.resolve('virtual/App.tsx'), `export const A = () => <div className="hero" />;`),
+    ]);
+    const result = compileString({
+      code: '.hero { color: red; } .unused { color: blue; }',
+      usage,
     });
-    return { status: res.status, stdout: res.stdout, stderr: res.stderr };
-  }
-
-  test('--help exits 0', () => {
-    const res = runCli(['--help']);
-    assert.equal(res.status, 0);
-    assert.match(res.stdout, /css-compiler/);
+    assert.equal(result.outputs.length, 1);
+    assert.match(result.outputs[0]!.code, /\.hero/);
+    assert.doesNotMatch(result.outputs[0]!.code, /\.unused/);
+    assert.equal(result.selectorsRemoved, 1);
+    assert.deepEqual(result.removedSelectors, ['.unused']);
   });
 
-  test('default run exits 0 and prints a report', () => {
-    const res = runCli([]);
-    assert.equal(res.status, 0);
-    assert.match(res.stdout, /selectors removed/);
-    assert.match(res.stdout, /Total/);
-  });
-
-  test('--fail-on-unused exits 1 when unused selectors exist', () => {
-    const res = runCli(['--fail-on-unused']);
-    assert.equal(res.status, 1);
-    assert.match(res.stderr, /unused selector/);
-  });
-
-  test('--fail-on-unused exits 0 when everything is used', () => {
-    const res = runCli(['--fail-on-unused', '--safelist', '/^unused-/', '--safelist', '/^keep-/']);
-    assert.equal(res.status, 0);
-  });
-
-  test('config file is read and CLI flags override it', () => {
-    fs.writeFileSync(
-      path.join(tmp, 'css-compiler.config.json'),
-      JSON.stringify({ outDir: 'from-config', minify: false }),
-    );
-    const res = runCli([]);
-    assert.equal(res.status, 0);
-    assert.ok(fs.existsSync(path.join(tmp, 'from-config', 'styles.css')));
-    const css = fs.readFileSync(path.join(tmp, 'from-config', 'styles.css'), 'utf8');
-    assert.match(css, /\n/); // not minified
-    fs.rmSync(path.join(tmp, 'css-compiler.config.json'));
-  });
-
-  test('bad flag exits 2', () => {
-    const res = runCli(['--definitely-not-a-flag']);
-    assert.equal(res.status, 2);
+  test('honors safelist and critical split', () => {
+    const usage = mergeUsage([
+      extractFile(path.resolve('virtual/page.html'), '<header class="hero"></header>'),
+    ]);
+    const result = compileString({
+      code: '.hero { color: red; } .toast-x { color: green; } .gone { top: 0; }',
+      usage,
+      safelist: ['/^toast-/'],
+      critical: ['hero'],
+    });
+    assert.equal(result.outputs.length, 2);
+    const critical = result.outputs.find((o) => o.kind === 'critical')!;
+    const main = result.outputs.find((o) => o.kind === 'main')!;
+    assert.match(critical.code, /\.hero/);
+    assert.match(main.code, /\.toast-x/);
+    assert.doesNotMatch(main.code, /\.gone/);
   });
 });

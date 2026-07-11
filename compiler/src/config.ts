@@ -18,6 +18,8 @@ export const DEFAULTS = {
   hash: false,
   failOnUnused: false,
   clean: false,
+  port: 4321,
+  host: '127.0.0.1',
 };
 
 /**
@@ -55,6 +57,8 @@ const KNOWN_KEYS = new Set([
   'hash',
   'failOnUnused',
   'clean',
+  'port',
+  'host',
 ]);
 
 export class ConfigError extends Error {}
@@ -65,7 +69,7 @@ function toArray(v: string | string[] | undefined): string[] | undefined {
 }
 
 /**
- * Load css-compiler.config.json if present (or the explicitly given path).
+ * Load lunara.config.json if present (or the explicitly given path).
  * Returns the parsed config plus warnings for unknown keys.
  */
 export function loadConfigFile(
@@ -124,6 +128,8 @@ export function resolveConfig(
     clean: pick(cli.clean, fileConfig.clean, DEFAULTS.clean),
     watch: cli.watch ?? false,
     verbose: cli.verbose ?? false,
+    port: pick(cli.port, fileConfig.port, DEFAULTS.port),
+    host: pick(cli.host, fileConfig.host, DEFAULTS.host),
   };
 }
 

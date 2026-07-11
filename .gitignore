@@ -4,3 +4,9 @@ node_modules/
 Thumbs.db
 .claude/
 .docs/.next/
+
+# compile-server build output & artifacts of running it in this repo
+compiler/dist/
+dist/*.optimized.css
+dist/*.optimized.css.map
+dist/manifest.json
