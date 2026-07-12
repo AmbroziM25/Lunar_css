@@ -376,59 +376,53 @@ theme.
 
 ---
 
-## The compile server — your site, with the CSS sniped 🌒
+## The in-browser compiler — automatic while you build 🌒
 
 Lunara ships every utility so you can prototype with zero build step. When byte size starts to
-matter, the built-in **compile server** runs your website and snipes its CSS: it serves your
-project directory like any dev server, but every stylesheet the site references is intercepted
-and compiled on the fly — unused Lunara classes purged, the rest minified with Lightning CSS.
-Your HTML gets a live-reload client injected automatically, so open pages re-style themselves
-over WebSocket on every save. No bundler, no build script, no tag changes.
-
-```bash
-npm i -D @velo0-0/lunara-css lightningcss   # + typescript if you want .ts/.tsx/.js/.jsx scanned
-npx lunara                                  # then open http://127.0.0.1:4321/
-```
-
-Your page keeps its ordinary `<link rel="stylesheet" href="styles.css">` — the server answers
-that exact request with the optimized build (check the `x-lunara` response header for the
-savings). Serving this repo's own demo page: the 84.3 kB `dist/lunar.css` its `<link>` asks
-for arrives as **31.4 kB (-62.8 %)**. Optimized files are also written to `dist/` on every
-change, ready to deploy.
-
-Usage analysis scans `**/*.html` and `src/**/*.{ts,tsx,js,jsx}` (config: `lunara.config.json`)
-and understands `class="…"` in HTML, `className`/`clsx`/`cn` in JSX, template literals
-(`` `btn-${size}` `` keeps every `.btn-*`), `classList.add/remove/toggle`,
-`el.className = '…'`, `setAttribute('class', …)`, and CSS Modules. Anything it can't analyze
-is reported with `file:line` so you can add it to `"safelist"`.
-
-**Endpoints** (the server's own routes live under `/__lunara` so they never shadow your files)
-
-| Route | What it does |
-| --- | --- |
-| `GET /<any site file>` | your site — `.css` responses are optimized on the fly, HTML gets the live client |
-| `GET /__lunara` | dashboard: sizes, removed selectors, warnings |
-| `GET /__lunara/report` | full build report as JSON |
-| `GET /lunar.css` | optimized output by stable name (for pages served elsewhere) |
-| `POST /__lunara/compile` | `{ css, sources?, safelist?, critical?, minify?, sourceMap? }` → optimized CSS |
-| `WS /__lunara/ws` | `rebuild`/`cssupdate` broadcasts; send `{ "type": "compile", id, … }` to compile on demand |
-
-For a page served by another dev server, point it at the compiler instead:
+matter, add **one script tag** while you build your site — there is no CLI, no server, and
+nothing to start:
 
 ```html
-<link rel="stylesheet" href="http://127.0.0.1:4321/lunar.css">
-<script src="http://127.0.0.1:4321/__lunara/live.js"></script>
+<script src="node_modules/@velo0-0/lunara-css/lunar-compiler.js" defer></script>
+<!-- or from the CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@velo0-0/lunara-css@1/lunar-compiler.js" defer></script>
 ```
 
-`lunara.config.json` accepts `content`, `css`, `outDir`, `safelist`, `critical` (splits a
-`*.critical.css` for inlining), `minify`, `sourceMap`, `hash`, `clean`, `port`, `host` — plus
-the same as flags (`npx lunara --help`). Programmatic use:
-`import { startServer, resolveConfig } from '@velo0-0/lunara-css/server'`.
+The compiler runs automatically in the browser, on every page load, while the site is being
+built:
 
-The framework itself stays dependency-free: `lightningcss` and `typescript` are *optional*
-peers, loaded only when the server runs (TypeScript only if you scan script files). Requires
-Node 20+. Purging is conservative — selectors keyed on ids, tags, attributes, or `:not()` are
-never removed, and emptied `@layer` blocks are kept so cascade-layer order never changes.
+1. **Collects every class the page actually uses** — the rendered DOM, `<template>` contents,
+   and string literals in your same-origin scripts (`el.className = 'btn primary'`,
+   `classList.add('open')`, and `` `chip-${tone}` `` becomes a `chip-*` keep-pattern).
+2. **Swaps each stylesheet for a compiled copy** — unused Lunara classes purged — so the page
+   you are looking at is already running on optimized CSS. The original sheets stay in the
+   document, disabled, as the source of truth.
+3. **Keeps watching.** A menu opens, a toggle adds a class, your SPA renders a new view — any
+   class that appears later restores its rules within a tick. Nothing is ever lost for good.
+4. **Hands you the artifact.** A small badge shows the live savings
+   (`🌙 CSS −62% · 41/168 selectors · download`); one click downloads each optimized
+   stylesheet as `<name>.lunara.css`, ready to deploy. `window.lunara.report()` in the
+   console gives the full breakdown.
+
+Purging is conservative: selectors keyed on ids, tags, or attributes are never removed,
+classes inside `:not()`/`:is()`/`:where()` never cause a removal, rules using CSS nesting are
+kept whole, emptied `@media`/`@supports`/`@container` blocks are dropped, and emptied
+`@layer` blocks are kept so cascade-layer order never changes. Cross-origin stylesheets are
+left untouched.
+
+Options — attributes on the script tag and an optional safelist meta:
+
+```html
+<meta name="lunara-safelist" content="visually-hidden /^toast-/">
+<script src=".../lunar-compiler.js" defer data-badge="off" data-scripts="off"></script>
+```
+
+Remove the tag when you deploy — you ship the downloaded `*.lunara.css` files instead. For CI
+or Node-side pipelines, the underlying optimizer (Lightning CSS purge/minify, TS/TSX + HTML
+static analysis, HTTP compile endpoint) is still available programmatically:
+`import { startServer, compileOnce } from '@velo0-0/lunara-css/server'` — it needs the
+optional peers `lightningcss` (and `typescript` for script scanning); the framework itself
+stays dependency-free.
 
 ---
 

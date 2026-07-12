@@ -1,6 +1,6 @@
 {
   "name": "@velo0-0/lunara-css",
-  "version": "1.2.1",
+  "version": "2.0.0",
   "publishConfig": {
     "access": "public"
   },
@@ -30,11 +30,10 @@
     "./tailwind-plugin": "./tailwind-plugin.js",
     "./theme": "./theme.mjs",
     "./theme.mjs": "./theme.mjs",
+    "./compiler": "./lunar-compiler.js",
+    "./lunar-compiler.js": "./lunar-compiler.js",
     "./server": "./compiler/dist/index.js",
     "./package.json": "./package.json"
-  },
-  "bin": {
-    "lunara": "compiler/dist/serve.js"
   },
   "files": [
     "dist",
@@ -42,6 +41,7 @@
     "tailwind-preset.js",
     "tailwind-plugin.js",
     "theme.mjs",
+    "lunar-compiler.js",
     "compiler/dist",
     "compiler/package.json"
   ],

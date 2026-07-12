@@ -4,6 +4,139 @@ All notable changes to Lunara CSS are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project
 adheres to [Semantic Versioning](https://semver.org/).
 
+## [2.0.0] — 2026-07-12
+
+The compiler moves into the browser. The `lunara` CLI and its compile server are gone as
+user-facing tools; in their place, **one script tag compiles your CSS automatically while
+you build your site** — no command, no server, nothing to start or keep running.
+
+### Removed — the CLI (breaking)
+
+- **The `lunara` bin no longer exists.** `npx lunara` (the compile server: on-the-fly CSS
+  responses, live-reload injection, dashboard, `lunara.config.json`, CLI flags) is removed.
+  This is the breaking change behind the major version bump — the CSS itself is untouched.
+- The Node optimizer survives as a **programmatic API only**:
+  `import { startServer, compileOnce } from '@velo0-0/lunara-css/server'` still gives CI
+  pipelines the Lightning CSS purge/minify passes, TS/TSX + HTML static analysis, and the
+  HTTP compile endpoint (optional peers `lightningcss` / `typescript` unchanged).
+
+### Added — the in-browser compiler (`lunar-compiler.js`)
+
+```html
+<script src="node_modules/@velo0-0/lunara-css/lunar-compiler.js" defer></script>
+<!-- or -->
+<script src="https://cdn.jsdelivr.net/npm/@velo0-0/lunara-css@2/lunar-compiler.js" defer></script>
+```
+
+- **Compiles automatically on every page load while the site is being built.** It collects
+  every class the page actually uses — the rendered DOM, `<template>` contents, and string
+  literals in same-origin scripts (`classList.add('open')`, `el.className = 'btn primary'`;
+  `` `chip-${tone}` `` becomes a `chip-*` keep-pattern) — then swaps each stylesheet for a
+  purged copy, so the page immediately runs on compiled CSS. Originals stay in the document,
+  disabled, as the source of truth; replacements are inserted right after them, so cascade
+  order never changes.
+- **Self-healing.** A MutationObserver keeps watching: a menu opening, a JS toggle, an SPA
+  render — any class that appears later restores its rules within a tick. Purging can never
+  permanently break the page you are looking at.
+- **The artifact is one click away.** A floating badge shows live savings
+  (`🌙 CSS −62% · 41/168 selectors · download`) and downloads each optimized stylesheet as
+  `<name>.lunara.css`, ready to deploy. `window.lunara.report()` returns the full breakdown
+  (per-sheet CSS, selector counts, used classes, patterns).
+- **Conservative by design**, mirroring the Node optimizer: selectors keyed on ids, tags, or
+  attributes are never removed; classes inside `:not()`/`:is()`/`:where()`/attribute
+  brackets never cause a removal; rules using CSS nesting are kept whole; emptied
+  `@media`/`@supports`/`@container` blocks are dropped; emptied `@layer` blocks are kept
+  (cascade order); cross-origin stylesheets are left untouched.
+- **Options**: `<meta name="lunara-safelist" content="visually-hidden /^toast-/">` for
+  classes only reachable at runtime; `data-badge="off"` hides the badge;
+  `data-scripts="off"` skips script scanning.
+- **Zero everything**: a single classic script with no imports and no dependencies — works
+  from any static server and even `file://`, in any framework or none.
+- New package entries: `@velo0-0/lunara-css/compiler` and `./lunar-compiler.js` exports;
+  the file ships at the package root. Test suite grew to 124 tests, covering the browser
+  compiler's selector parsing, script scanning, safelist, and purge semantics.
+
+### Migration
+
+| 1.x | 2.0.0 |
+| --- | --- |
+| `npx lunara` while developing | `<script src=".../lunar-compiler.js" defer>` in the page |
+| optimized files written to `dist/` | click the badge (or `window.lunara.download()`) → `*.lunara.css` |
+| `lunara.config.json` `safelist` | `<meta name="lunara-safelist" content="…">` |
+| CLI in CI (`--fail-on-unused` etc.) | programmatic `@velo0-0/lunara-css/server` API |
+
+One workflow note: the in-browser artifact reflects the states your page has actually been
+in — click through your UI (or safelist what you cannot reach) before downloading. Purging
+in the page itself is always self-healing; this only matters for the downloaded file.
+
+### Changed
+
+- **No CSS changes** — classes, tokens, and computed styles are identical to 1.2.1; only the
+  version banner in the `dist/` file headers moved to 2.0.0.
+
+## [1.2.1] — 2026-07-12
+
+### Added — the compile server (`npx lunara`)
+
+Lunara still ships every utility with zero build step — but when byte size starts to matter,
+the package now includes a **compile server** that runs your website and snipes its CSS:
+
+```bash
+npm i -D @velo0-0/lunara-css lightningcss   # + typescript to scan .ts/.tsx/.js/.jsx
+npx lunara                                  # then open http://127.0.0.1:4321/
+```
+
+- Serves your project directory like any dev server, but **every stylesheet the site
+  references is intercepted and compiled on the fly** — unused Lunara classes purged, the
+  rest minified with Lightning CSS. Your ordinary
+  `<link rel="stylesheet" href="styles.css">` stays untouched; the server answers that exact
+  request with the optimized build (savings in the `x-lunara` response header). Serving this
+  repo's own demo page, the 84.3 KB `dist/lunar.css` its `<link>` asks for arrives as
+  **31.4 KB (−62.8 %)**. Optimized files are also written to the out directory (`dist/` by
+  default) on every change, ready to deploy.
+- **Live reload** — the server injects its client into served HTML automatically, and open
+  pages re-style themselves over WebSocket on every save. The WebSocket layer (handshake,
+  text frames, ping/pong, close) is implemented in-package — no runtime dependencies added.
+- **Usage analysis** scans `**/*.html` and `src/**/*.{ts,tsx,js,jsx}` and understands
+  `class="…"` in HTML, `className`/`clsx`/`cn` in JSX, template literals
+  (`` `btn-${size}` `` keeps every `.btn-*`), `classList.add/remove/toggle`,
+  `el.className = '…'`, `setAttribute('class', …)`, and CSS Modules. Anything it can't
+  analyze is reported with `file:line` so you can add a `"safelist"` entry.
+- **Purging is conservative by design** — selectors keyed on ids, tags, attributes, or
+  `:not()` are never removed, and emptied `@layer` blocks are kept so cascade-layer order
+  never changes.
+- **Endpoints** (the server's own routes live under `/__lunara`, so they never shadow your
+  files):
+
+  | Route | What it does |
+  | --- | --- |
+  | `GET /<any site file>` | your site — `.css` optimized on the fly, HTML gets the live client |
+  | `GET /__lunara` | dashboard: sizes, removed selectors, warnings |
+  | `GET /__lunara/report` | full build report as JSON |
+  | `GET /lunar.css` | optimized output by stable name (for pages served elsewhere) |
+  | `POST /__lunara/compile` | `{ css, sources?, safelist?, critical?, minify?, sourceMap? }` → optimized CSS |
+  | `WS /__lunara/ws` | `rebuild`/`cssupdate` broadcasts; send `{ "type": "compile", id, … }` to compile on demand |
+
+- **Configuration** — `lunara.config.json` accepts `content`, `css`, `outDir`, `safelist`,
+  `critical` (splits a `*.critical.css` for inlining), `minify`, `sourceMap`, `hash`,
+  `clean`, `port`, `host`; the same options exist as CLI flags (`npx lunara --help`).
+- **Programmatic API** — `import { startServer, resolveConfig } from
+  '@velo0-0/lunara-css/server'`; the package also gained the `lunara` bin.
+- **Test suite** — node:test coverage for config resolution, class extraction (HTML, JSX,
+  DOM APIs), globbing, purging, WebSocket framing, and the server end-to-end (109 tests,
+  run by `prepublishOnly` so a broken compiler can never be published).
+
+### Changed
+
+- New **optional** peer dependencies, loaded only when the compile server runs:
+  `lightningcss` ≥ 1.30.0 (purging/minifying) and `typescript` ≥ 5.0.0 (only needed to scan
+  script files). The framework itself is unchanged — pure CSS, zero runtime dependencies,
+  no build step required. The compile server needs Node 20+.
+- The npm package now ships the compiled server (`compiler/dist` + its `package.json`)
+  alongside the usual `dist/` CSS.
+- **No CSS changes** — classes, tokens, and computed styles are identical to 1.1.1; only the
+  version banner in the `dist/` file headers moved to 1.2.1.
+
 ## [1.1.1] — 2026-07-10
 
 ### Changed
